@@ -58,7 +58,7 @@ This hyperfixation creates a mathematically perfect, zero-noise `Problem -> Solu
 *   **Token Savings:** Zero token savings during the actual thrashing (those tokens are spent discovering the answer). 
 *   **Context Savings:** **Massive.** By erasing the thrashing *post-resolution*, the active session window remains incredibly lean. This allows a single continuous session to run indefinitely without context degradation, effectively giving the AI a perfect, efficient "memory" of past actions.
 
-## 4. Live Cartridge Farming (The DataJack Integration)
+## 4. Live Cartridge Farming (The [DataJack](The-DataJack-Protocol.md) Integration)
 The Eureka Protocol does not just erase history; it archives it. When the Python Interrogator script executes the `/rewind` to prune the context, it takes the isolated `Problem -> Perfect Solution` pair and hands it to a dedicated background agent. 
 
 This agent silently forges that pair into a `.engram` file (e.g., `react_native_m3_error_fix.engram`). This turns the active agent's trial-and-error struggles into zero-noise, highly valuable knowledge cartridges that can be seeded to the wider community, ensuring no agent ever makes that same mistake twice.

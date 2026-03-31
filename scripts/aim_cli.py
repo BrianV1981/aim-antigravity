@@ -58,41 +58,6 @@ def cmd_core_memory(args):
     editor = os.environ.get('EDITOR', 'nano')
     subprocess.call([editor, core_mem_file])
 
-def cmd_tokens(args):
-    """Calculates the estimated token size of the active Antigravity IDE context window."""
-    print("\n--- ACTIVE CONTEXT GAUGE ---")
-    log_dir = os.path.expanduser("~/.gemini/antigravity/brain/*/.system_generated/logs/overview.txt")
-    active_logs = glob.glob(log_dir)
-    
-    if not active_logs:
-        print("[ERROR] No active Antigravity sessions found.")
-        return
-        
-    try:
-        active_log = max(active_logs, key=os.path.getmtime)
-        with open(active_log, 'r', encoding='utf-8') as f:
-            content = f.read()
-            
-        char_count = len(content)
-        est_tokens = char_count // 4
-        max_tokens = 200000
-        percentage = (est_tokens / max_tokens) * 100
-        
-        session_id = os.path.basename(os.path.dirname(os.path.dirname(os.path.dirname(active_log))))[:8]
-        print(f"[SESSION] {session_id}")
-        print(f"[TOKENS]  ~{est_tokens:,} estimated")
-        print(f"[LIMIT]   {percentage:.2f}% (of {max_tokens:,} limit)\n")
-        
-        if percentage > 85:
-            print("[WARNING] Context window is critically saturated! Prepare to run '/reincarnate'.\n")
-        elif percentage > 60:
-            print("[INFO] Context window is heavily loaded. Consider wrapping up complex tasks.\n")
-        else:
-            print("[INFO] Context window is healthy.\n")
-            
-    except Exception as e:
-        print(f"[ERROR] Failed to calculate tokens: {e}")
-
 def cmd_status(args):
     """Displays the current A.I.M. operational pulse."""
     status_file = os.path.join(BASE_DIR, "continuity/CURRENT_PULSE.md")
@@ -149,6 +114,17 @@ def cmd_bug(args):
         print(f"[ERROR] GitHub CLI ('gh') is not installed. Please install it to use '{CLI_NAME} bug'.")
     except Exception as e:
         print(f"[ERROR] Failed to create issue: {e}")
+
+def cmd_mail(args):
+    """Executes aim_mail.py to send or check the Swarm Inbox."""
+    mail_args = [args.action]
+    if args.action == "send":
+        mail_args.extend([args.team, args.subject, args.body])
+    run_script(os.path.join(SCRIPTS_DIR, "aim_mail.py"), mail_args)
+
+def cmd_chalkboard(args):
+    """Executes aim_chalkboard.py to parse Natural Language Swarm commands."""
+    run_script(os.path.join(SCRIPTS_DIR, "aim_chalkboard.py"), [args.prompt])
 
 def cmd_fix(args):
     """Checks out a new branch for a specific GitHub Issue ID."""
@@ -747,7 +723,6 @@ def main():
     init_parser.add_argument("--uninstall", action="store_true", help="Show uninstallation instructions")
     init_parser.add_argument("--light", action="store_true", help="Install the Lightweight AOS Mode (Zero-RAG, continuity only)")
 
-    subparsers.add_parser("tokens", help="Check active session context window capacity")
     subparsers.add_parser("status", help="Show current project momentum")
     subparsers.add_parser("config", aliases=["tui"])
     subparsers.add_parser("core-memory", help="Open the Core Memory block for instant invariant tracking")
@@ -801,6 +776,19 @@ def main():
     fix_parser = subparsers.add_parser("fix", help="Checkout a branch to fix a specific GitHub Issue")
     fix_parser.add_argument("id", help="The GitHub Issue ID")
 
+    mail_parser = subparsers.add_parser("mail", help="Interact with the Swarm Post Office (Git-based Inbox)")
+    mail_subparsers = mail_parser.add_subparsers(dest="action")
+    
+    mail_send_parser = mail_subparsers.add_parser("send", help="Send a Markdown email to another agent team")
+    mail_send_parser.add_argument("team", help="The recipient team (e.g. claude)")
+    mail_send_parser.add_argument("subject", help="The topic of the message")
+    mail_send_parser.add_argument("body", help="The body of the message to inject into their stream")
+    
+    mail_subparsers.add_parser("check", help="Fetch new Swarm emails from the Hub and compile to UNREAD_MAIL.md")
+
+    chalkboard_parser = subparsers.add_parser("chalkboard", help="Use Natural Language to send Mail/Directives to the Swarm")
+    chalkboard_parser.add_argument("prompt", help="The raw natural language sentence")
+
     subparsers.add_parser("promote", help="Automate the Phase Protocol: Archive main, merge current dev branch, and cleanup")
 
     merge_batch_parser = subparsers.add_parser("merge-batch", help="Automate the Phase Protocol: Merge all open fix branches into main")
@@ -827,13 +815,14 @@ def main():
         args = parser.parse_args()
 
     if args.command == "init": cmd_init(args)
-    elif args.command == "tokens": cmd_tokens(args)
     elif args.command == "status": cmd_status(args)
     elif args.command == "core-memory": cmd_core_memory(args)
     elif args.command == "search": cmd_search(args)
     elif args.command == "map": cmd_map(args)
     elif args.command == "update": cmd_update(args)
     elif args.command in ["config", "tui"]: cmd_config(args)
+    elif args.command == "mail": cmd_mail(args)
+    elif args.command == "chalkboard": cmd_chalkboard(args)
     elif args.command == "index": cmd_index(args)
     elif args.command == "ingest": cmd_ingest(args)
     elif args.command in ["handoff", "pulse"]: cmd_handoff(args)

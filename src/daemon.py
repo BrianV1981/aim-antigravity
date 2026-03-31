@@ -86,30 +86,22 @@ def get_environmental_state():
 # --- THE PULSE INJECTOR ---
 
 def inject_pulse(prompt):
-    """Fires the autonomic prompt via State Engineering (Antigravity Workflows)."""
+    """Fires the autonomic prompt into the AI."""
     log(f"Injecting Pulse: {prompt}")
     
-    # Write the daemon pulse directly into the workflows directory with YAML frontmatter
-    workflow_dir = os.path.join(AIM_ROOT, ".agents", "workflows")
-    os.makedirs(workflow_dir, exist_ok=True)
-    pulse_file = os.path.join(workflow_dir, "daemon_pulse.md")
+    # We write the Daemon directive to a specific file so the AI has context
+    pulse_file = os.path.join(AIM_ROOT, "core/DAEMON_PULSE.md")
+    with open(pulse_file, "w") as f:
+        f.write(f"# AUTONOMIC HEARTBEAT\n*Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*\n\n**DIRECTIVE:**\n{prompt}\n")
+
+    # In a headless environment, we pipe the prompt directly into the Gemini CLI.
+    # We append the 'y' flag mentally, or let it rely on the operator's YOLO setting.
+    injection_command = f'echo "SYSTEM OVERRIDE: {prompt} Read core/DAEMON_PULSE.md for details." | gemini chat'
     
-    # Note: Description must establish it as a system status heartbeat so it triggers autonomically
-    content = f"""---
-description: Current Project Status and Autonomic Pulse. Read this constantly to understand the repository state.
----
-
-# AUTONOMIC HEARTBEAT
-*Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}*
-
-**DIRECTIVE:**
-{prompt}
-"""
     try:
-        with open(pulse_file, "w") as f:
-            f.write(content)
+        subprocess.Popen(injection_command, shell=True, cwd=AIM_ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     except Exception as e:
-        log(f"Failed to write pulse state to workflows: {e}")
+        log(f"Failed to inject pulse: {e}")
 
 # --- DAEMON MAIN LOOP ---
 

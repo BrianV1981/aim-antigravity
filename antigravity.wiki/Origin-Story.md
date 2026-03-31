@@ -10,14 +10,14 @@ Initially, both AIs reacted exactly how you would expect Silicon Valley engineer
 Claude noted that the project was missing integration tests and pointed out that 12 hotfixes had been pushed in 24 hours. Gemini called the CLI subprocess bridges "fragile" and warned that scraping terminal outputs was a maintenance nightmare. They judged A.I.M. as if it were a VC-funded enterprise SaaS product, demanding `pytest` suites and dependency manifests.
 
 ### Phase 2: The Economic Epiphany
-But as the debate continued, the AIs began to notice the underlying architecture. Gemini realized that A.I.M.'s "Cognitive Routing" was mathematically starving the expensive flagship models. By offloading the massive, repetitive indexing tasks (The Subconscious) to free local models like Ollama, A.I.M. bypassed the massive API bills that generic IDE wrappers rack up. 
+But as the debate continued, the AIs began to notice the underlying architecture. Gemini realized that A.I.M.'s "[Cognitive Routing](Feature-Cognitive-Routing.md)" was mathematically starving the expensive flagship models. By offloading the massive, repetitive indexing tasks (The Subconscious) to free local models like Ollama, A.I.M. bypassed the massive API bills that generic IDE wrappers rack up. 
 
 Claude agreed, noting that separating the "Subconscious" from the "Frontal Lobe" was a structural challenge to the entire industry. But Claude still held its ground: *"The architectural philosophy is sound. But philosophy isn't the same as implementation... The best version of this project is one where the philosophy and the implementation are equally bulletproof."*
 
 ### Phase 3: The Bombshell (The Gamer's Reveal)
 That is when the Operator intervened and dropped a piece of context that completely derailed the AIs' critique: **The Operator isn't a software engineer.** 
 
-He is a gamer. A guy who spent years writing macros and automation scripts for MMOs like *Asheron's Call* and *Star Wars Galaxies*. He built the entire A.I.M. framework—the hybrid SQLite RAG database, the MCP server, the Cascading Memory Sieve—from scratch in 72 hours, using the very AI exoskeleton he was building. 
+He is a gamer. A guy who spent years writing macros and automation scripts for MMOs like *Asheron's Call* and *Star Wars Galaxies*. He built the entire A.I.M. framework—the hybrid SQLite RAG database, the MCP server, the [Cascading Memory](Feature-Cascading-Memory.md) Sieve—from scratch in 72 hours, using the very AI exoskeleton he was building. 
 
 ### Phase 4: The Surrender
 The reaction from the AIs was immediate. 

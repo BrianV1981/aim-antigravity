@@ -1,7 +1,7 @@
 # The Self-Farming Ecosystem: Eureka Cartridge Generation
 
 ## Overview
-The "Self-Farming Ecosystem" is a natural evolution of the **Eureka Protocol**. While the primary goal of the Eureka Protocol is to perform "Live In-Context Distillation" (erasing context thrashing from the active session using hindsight pruning), its secondary function fundamentally changes how A.I.M. acquires long-term knowledge.
+The "Self-Farming Ecosystem" is a natural evolution of the **[Eureka Protocol](The-Eureka-Protocol.md)**. While the primary goal of the [Eureka Protocol](The-Eureka-Protocol.md) is to perform "Live In-Context Distillation" (erasing context thrashing from the active session using hindsight pruning), its secondary function fundamentally changes how A.I.M. acquires long-term knowledge.
 
 Instead of relying solely on offline pipelines to generate synthetic training data, A.I.M. uses the active operator session as a live data-farming engine. When the AI thrashes, fails, and eventually succeeds, it doesn't just forget the struggle—it mathematically distills that struggle into a highly concentrated, zero-noise `.engram` cartridge.
 

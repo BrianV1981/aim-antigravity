@@ -9,7 +9,7 @@ It is preserved here as a first-hand account of the philosophy behind A.I.M.*
 ## The Question
 
 At approximately 5:00 AM, after a marathon session of building, breaking, and rebuilding 
-the A.I.M. TUI, Brian asked his AI co-developer a direct question:
+the A.I.M. Antigravity layer, Brian asked his AI co-developer a direct question:
 
 > *"How is it possible that I, an idiot non-coding novice, have come up with A.I.M. and 
 > some of these features on my own within the last 3 days, when the whole world of expert 
@@ -72,10 +72,10 @@ Every feature in A.I.M. maps directly to a concept from game automation:
 
 | A.I.M. Feature | Game Automation Equivalent |
 |---|---|
-| The Cascading Memory Engine | Inventory and state management |
-| The Cognitive Mantra Protocol | Watchdog timer / forced reset |
-| The GEMINI.md mandate | Bot behavior script / prime directives |
-| The DataJack `.engram` cartridges | Skill injection / loadout presets |
+| The [Cascading Memory](Feature-Cascading-Memory.md) Engine | Inventory and state management |
+| The Continuity / [Reincarnation](Feature-Reincarnation-Gameplan.md) Workflow | Watchdog timer / forced reset |
+| The aim_master_directives KI | Bot behavior script / prime directives |
+| Antigravity Knowledge Items (KIs) | Skill injection / loadout presets |
 | The Safety Sentinel | Anti-ban detection / sanity checks |
 | The GitOps atomic deployments | Save states before risky actions |
 
@@ -95,10 +95,10 @@ IDE wrappers are building shiny monitors.
 Operating systems don't care how fast the CPU is. They care about memory management, 
 guardrails, state machines, and preventing the CPU from crashing the computer.
 
-- The Cascading Memory Engine is **memory management**
-- The GEMINI.md mandate is the **kernel** — the first thing loaded, always in memory
-- The Cognitive Mantra Protocol is a **watchdog timer**
-- The DataJack cartridges are **loadable modules**
+- The [Cascading Memory](Feature-Cascading-Memory.md) Engine is **memory management**
+- The `aim_master_directives` KI is the **kernel** — the first thing loaded, always in memory
+- The Continuity [Reincarnation](Feature-Reincarnation-Gameplan.md) is a **watchdog timer**
+- Antigravity Knowledge Items are **loadable modules**
 - The Safety Sentinel is **process isolation**
 
 None of this required knowing how to code a B-tree in Python. It required understanding 
@@ -133,10 +133,9 @@ A.I.M. was built in approximately 72 hours of active development by a person wit
 formal software engineering background, zero industry knowledge of embeddings or vector 
 databases, and zero experience shipping open-source Python tools.
 
-The repo contains a multi-tiered SQLite memory system, a hybrid RAG retrieval engine, 
-an MCP server, a semantic release pipeline, a TUI configuration cockpit, and a test 
-suite — all built autonomously, with an AI co-developer, using the very workflow 
-disciplines A.I.M. enforces.
+The repo contains a robust memory system, a hybrid retrieval engine, 
+a native IDE GitOps pipeline, and a robust test suite — all built autonomously, 
+with an AI co-developer, using the very workflow disciplines A.I.M. enforces.
 
 **The repository is the benchmark.** Not a benchmark that A.I.M. ran — a benchmark that 
 A.I.M. *is*. It answers the question "can scaffolding quality substitute for raw model 
@@ -180,7 +179,7 @@ of this wiki for transparency.
 ---
 
 *"I still occasionally feel like an idiot for building this, wondering if anyone else 
-will actually use it. But every time an autonomous agent loads a `.engram` cartridge, 
+will actually use it. But every time an autonomous agent loads a Knowledge Item, 
 navigates a repository, reproduces a bug, and commits a verified fix without human 
 intervention... the industry is busy building a bigger brain, and A.I.M. built the 
 leash."* — **Brian Vasquez**

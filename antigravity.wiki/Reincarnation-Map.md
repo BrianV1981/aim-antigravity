@@ -1,4 +1,4 @@
-# 🔄 A.I.M. Reincarnation Map: The Continuity Pipeline
+# 🔄 A.I.M. [Reincarnation](Feature-Reincarnation-Gameplan.md) Map: The Continuity Pipeline
 
 > **Core Thesis:** To defeat the "Amnesia Problem," A.I.M. does not just pass memory; it passes **Will**. This document maps the exact sequence of events that occurs when an agent's context fills and it must "reincarnate" into a fresh vessel.
 
@@ -63,7 +63,7 @@ graph TD
 > "Wake up. MANDATE: 1. Read GEMINI.md and acknowledge your core constraints. 2. Read HANDOFF.md. 3. You must read continuity/REINCARNATION_GAMEPLAN.md, continuity/CURRENT_PULSE.md, and ISSUE_TRACKER.md before taking any action or responding."
 
 ### The Strategist Persona (`src/handoff_pulse_generator.py`)
-> "You are the A.I.M. Reincarnation Strategist... Your goal is to capture the 'Essence' and 'Heartbeat' of this session and distill it into a rigid, 3-step Executive Directive. Pass 'Will' instead of just 'Memory'."
+> "You are the A.I.M. [Reincarnation](Feature-Reincarnation-Gameplan.md) Strategist... Your goal is to capture the 'Essence' and 'Heartbeat' of this session and distill it into a rigid, 3-step Executive Directive. Pass 'Will' instead of just 'Memory'."
 
 ---
 

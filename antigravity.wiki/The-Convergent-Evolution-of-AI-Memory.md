@@ -35,7 +35,7 @@ Respectfully, the entire industry's obsession with the "Needle in a Haystack" (N
 
 If you need to find a specific phrase in a 1,000-page book (like the Bible or a massive codebase), feeding the entire raw text into an LLM's context window every single time is computationally wasteful and prone to hallucination. 
 
-A.I.M. approaches this pragmatically: A simple Python script chunks the massive text based on semantic Markdown headers, compresses it, and injects it into the `engram.db` SQLite system. When the agent needs to find the "needle," it doesn't read the whole haystack; it executes a deterministic Hybrid RAG (FTS5 + Semantic Vector) database query. The database instantly returns the exact paragraph. It costs zero API tokens, runs in milliseconds, and it will *never* fail to find the needle.
+A.I.M. approaches this pragmatically: A simple Python script chunks the massive text based on semantic Markdown headers, compresses it, and injects it into the `engram.db` SQLite system. When the agent needs to find the "needle," it doesn't read the whole haystack; it executes a deterministic [Hybrid RAG](Feature-Hybrid-RAG.md) (FTS5 + Semantic Vector) database query. The database instantly returns the exact paragraph. It costs zero API tokens, runs in milliseconds, and it will *never* fail to find the needle.
 
 *(It begs the question: If we are actively forgetting how to use basic databases in favor of force-feeding millions of tokens into neural networks, is our engineering pragmatism regressing at the exact same rate that our technology is advancing? Joke... mostly.)*
 
@@ -45,8 +45,8 @@ A.I.M. was built to ship software over weeks and months. It is not a calculator;
 
 Because A.I.M. operates in the real world of software development, it had to solve problems that a single-run benchmark test does not encounter:
 *   **The Continuity Engine:** When an agent's context window fills up during a coding session, it must hand off its exact tactical state to a fresh agent. A.I.M. achieves this via the `CURRENT_PULSE.md` and `LAST_SESSION_FLIGHT_RECORDER.md` rolling deltas.
-*   **The Cascading Memory Sieve:** A.I.M. utilizes background daemons (Tier 1-4 Summarizers) to actively monitor the agent's output, compressing hours of messy debugging into permanent, distilled architectural rules.
-*   **The GitOps Bridge:** Real agents destroy repositories if left unchecked. A.I.M. enforces atomic deployments, physically preventing the agent from modifying the `main` branch without utilizing `aim bug` and `aim fix`.
+*   **The [Cascading Memory](Feature-Cascading-Memory.md) Sieve:** A.I.M. utilizes background daemons (Tier 1-4 Summarizers) to actively monitor the agent's output, compressing hours of messy debugging into permanent, distilled architectural rules.
+*   **The [GitOps Bridge](Feature-GitOps-Bridge.md):** Real agents destroy repositories if left unchecked. A.I.M. enforces atomic deployments, physically preventing the agent from modifying the `main` branch without utilizing `aim bug` and `aim fix`.
 
 ## 4. The Synthesis: Adopting Dynamic Sub-Calling
 

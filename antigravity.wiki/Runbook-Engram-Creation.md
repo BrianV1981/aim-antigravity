@@ -1,68 +1,48 @@
-# Runbook: How to Forge an `.engram` Cartridge
+# Runbook: How to Forge a Knowledge Item (KI)
 
-*The DataJack Protocol allows you to share pre-vectorized, mathematical semantic memory with other A.I.M. agents without wasting API tokens or GPU cycles. This runbook walks you through the exact process of creating (baking) a new `.engram` file.*
+*Antigravity natively manages state via Knowledge Items (KIs). This runbook walks you through the exact process of creating curated, immutable technical memory for A.I.M. to replace the legacy `.engram` system.*
 
 ---
 
 ## Step 1: Gather Your Raw Materials
-Before you can forge a cartridge, you need raw text data. 
+Before you can forge a KI, you need to curate the technical data. 
 
-1. Create a temporary ingestion folder inside the `synapse/` directory. 
-   *(Note: The `synapse` folder is `.gitignore`'d, meaning anything you drop in here won't accidentally bloat the main A.I.M. repository).*
-   
-   ```bash
-   mkdir -p synapse/my-new-plugin
-   ```
+1. Identify the core patterns, architecture rules, or bugs you want to permanently remember.
+2. Draft a clear, concise Markdown document summarizing the context.
 
-2. Download your target documentation. The DataJack Foundry automatically parses the following file types:
-   *   `.md` / `.markdown` (Standard Docs)
-   *   `.txt` (Raw Text / Standard Python Docs)
-   *   `.rst` (reStructuredText / Sphinx Docs)
-   *   `.py`, `.ts`, `.rs`, `.js` (Raw source code files)
+## Step 2: Formulate the Knowledge Item
+You do not need to run heavy Python SQLite embedding scripts to ingest knowledge. Antigravity handles indexing natively.
 
-3. Drop all the files into `synapse/my-new-plugin/`.
-
-## Step 2: The "Factory Floor" Protocol (`aim bake`)
-You do not need to pollute your active `archive/engram.db` to create a new cartridge. A.I.M. features an isolated "Factory Floor" protocol that spins up a sterile database in your `/tmp/` directory just for this process.
-
-Run the `aim bake` command. It requires two arguments: the target directory, and the output filename.
-
-```bash
-aim bake synapse/my-new-plugin my_custom.engram
-```
+1. Open the **Knowledge** panel in your Antigravity IDE.
+2. Click **New Knowledge Item**.
+3. Paste your curated markdown.
+4. Name it descriptively (e.g., `django_v5_auth_patterns`).
 
 ### What Happens in the Background:
-1. **Isolation:** A.I.M. spins up `/tmp/aim_factory_xyz/factory.db`.
-2. **Chunking:** It reads all your raw files and chunks them into semantic blocks.
-3. **Embedding:** It spins up your local Ollama/Nomic engine and mathematically embeds every chunk (this may take a few minutes depending on the size of the documentation).
-4. **Compression:** It zips the resulting `.jsonl` math files into a flat binary archive.
-5. **Self-Cleaning:** It instantly deletes the `/tmp/` database so zero cross-contamination occurs with your active workflow.
+1. **Instant Ingestion:** Antigravity reads the KI and injects it into the agent's active neural workspace.
+2. **Persistence:** The KI is saved natively as a JSON artifact within `<appDataDir>\knowledge`.
+3. **Universality:** This KI will now automatically load anytime you open this repository in the future.
 
-## Step 3: Test Your Cartridge
-Your new `my_custom.engram` file is now sitting in the root of your A.I.M. workspace! 
+## Step 3: Test Your Knowledge Item
+Your new Knowledge Item is now sitting in the core memory of A.I.M.
 
-Before you share it, test it locally to ensure it works. 
+Before relying on it, test it locally to ensure it works. 
 
-1. Move the new cartridge into the dedicated `engrams/` directory:
-   ```bash
-   mv my_custom.engram engrams/
+1. Open a new chat in Antigravity.
+2. Run a test prompt:
+   ```text
+   Review the django auth patterns in my knowledge base. How should I build this login function?
    ```
-2. Jack it into your active subconscious:
-   ```bash
-   aim jack-in engrams/my_custom.engram
-   ```
-3. Run a test search to verify the hybrid FTS5 and Vector indices caught the data:
-   ```bash
-   aim search "something from my custom docs"
-   ```
+3. Verify that the agent perfectly cites your new KI.
 
-## Step 4: Share It with the World
-Because `.engram` files are heavy SQLite binaries (ranging from 500KB to 30MB), **do not commit them directly to Git.** 
+## Step 4: Share It with the World (The GitOps Way)
+Because Antigravity KIs are lightweight, human-readable text documents (rather than brittle SQLite `.engram` binaries), they are perfectly designed for version control.
 
 To share them:
-1. **GitHub Releases:** If you maintain a public repository, upload the `.engram` file as an Asset to a GitHub Release.
-2. **Direct Transfer:** You can literally email the file, drop it in Slack/Discord, or put it on a USB drive. 
-3. **The DataJack Torrent Swarm (Phase 38):** *(Coming Soon)* You will eventually be able to use `aim jack-in "magnet:?xt=..."` to seed and download cartridges peer-to-peer. 
+1. Copy the KI text into a standard Markdown file (e.g., `docs/django-auth-patterns.md`).
+2. Commit it to your repository via a standard PR.
+3. Your team can now natively read it, and any other Antigravity agent opening the repository can ingest the `.md` file to instantly build their own KIs.
 
 ---
-*If you are looking for the automated "Self-Farming" engram protocol (where A.I.M. automatically scrapes GitHub issues and generates its own engrams), please refer to `docs/CARTRIDGE_FARMING_ECOSYSTEM.md`.*
+> [!NOTE]
+> *(This completely replaces the legacy A.I.M. v1.0 `aim bake` and `.engram` Torrent network, eliminating the need for complex database sharing mechanisms.)*

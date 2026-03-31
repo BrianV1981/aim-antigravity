@@ -6,9 +6,9 @@ A.I.M. solves the **Amnesia Problem** by ensuring that no technical progress is 
 
 ## 1. Layer 1: Executive Hand-off (MANDATORY)
 
-When an agent reaches the 30% context threshold, it initiates the **Reincarnation Protocol**. This is a surgical state-transfer designed to give the next agent laser-focused velocity without polluting its context with historical noise.
+When an agent reaches the 30% context threshold, it initiates the **[Reincarnation](Feature-Reincarnation-Gameplan.md) Protocol**. This is a surgical state-transfer designed to give the next agent laser-focused velocity without polluting its context with historical noise.
 
-### 1.1 The Reincarnation Gameplan
+### 1.1 The [Reincarnation](Feature-Reincarnation-Gameplan.md) Gameplan
 Before shutting down, the dying agent is prompted to write a **REINCARNATION_GAMEPLAN.md**.
 - **Intent:** Passing "Will" instead of "Memory." 
 - **Content:** Explicit, rigid directives for the next agent (e.g., "1. Fix the SQL trigger in Tier 5. 2. Verify with pytest. 3. Do not refactor the CLI.")

@@ -1,8 +1,15 @@
-# A.I.M. TUI Architecture Map
+# [DEPRECATED] A.I.M. TUI Architecture Map
 
-The **Sovereign Cockpit (TUI)** is the central control plane for the A.I.M. OS. It allows the operator to configure the cognitive routing, behavioral guardrails, and memory retention policies without manually editing JSON files.
+> [!WARNING]
+> **[DEPRECATED / HISTORICAL]**
+> The Sovereign Cockpit (`aim tui`) terminal interface was fully deprecated in A.I.M. v2.0.
+> All cognitive routing, behavioral guardrails, and memory retention policies are now configured natively via Google Antigravity Settings Panels or `aim_master_directives` Knowledge Items. 
+>
+> This document is preserved strictly for historical engineering context.
 
-The TUI is entirely executed via `scripts/aim_config.py`. Below is the technical mapping of every feature to its associated configuration file and system logic.
+The **Sovereign Cockpit (TUI)** was the central control plane for the legacy A.I.M. OS. It allowed the operator to configure the cognitive routing, behavioral guardrails, and memory retention policies without manually editing JSON files.
+
+The TUI was entirely executed via `scripts/aim_config.py`. Below is the historical technical mapping of every feature to its associated configuration file and system logic.
 
 ---
 
@@ -69,7 +76,7 @@ The TUI is entirely executed via `scripts/aim_config.py`. Below is the technical
     - **Cleanup Mode:** Toggles between `ARCHIVE` (move files to archive) and `DELETE` (hard purge) for scaffolding files consumed by the pipeline.
 - **Associated Files:** `core/CONFIG.json`, `src/memory_utils.py`.
 
-## 14. Reincarnation Protocol
+## 14. [Reincarnation](Feature-Reincarnation-Gameplan.md) Protocol
 - **Logic:** Toggles the `auto_rebirth` feature.
 - **Execution:** If enabled, A.I.M. will automatically prompt for a Gameplan and spawn a fresh terminal session when context is full.
 - **Associated Files:** `core/CONFIG.json`, `scripts/aim_reincarnate.py`.

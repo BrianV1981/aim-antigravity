@@ -4,7 +4,7 @@ This document serves as the single source of truth for the system prompts hardco
 
 ---
 
-## 1. The Cascading Memory Pipeline
+## 1. The [Cascading Memory](Feature-Cascading-Memory.md) Pipeline
 
 ### Tier 1: The Harvester (`hooks/session_summarizer.py`)
 **Objective:** Analyze a delta of project activity and propose updates for Durable Memory.

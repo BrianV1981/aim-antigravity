@@ -1,4 +1,4 @@
-# The Sovereign Swarm: BitTorrent DataJack Protocol
+# The Sovereign Swarm: BitTorrent [DataJack](The-DataJack-Protocol.md) Protocol
 
 > ⚠️ **STATUS: CONCEPTUAL ARCHITECTURE (PHASE 38)**
 > *This document outlines the philosophical and technical roadmap for transitioning A.I.M.'s knowledge sharing from centralized repositories to a decentralized Peer-to-Peer (P2P) swarm.*
@@ -7,7 +7,7 @@
 
 The core ethos of A.I.M. is building an intelligence layer that does not rely on centralized, corporate-controlled APIs or VC-funded infrastructure. A sovereign agent should run on local LLMs, local SQLite databases, and local Python scripts.
 
-However, a contradiction exists in the current **DataJack Protocol**: If we bake an `.engram` cartridge containing expert knowledge (like the Solana blockchain docs or the A.I.M. source code), we currently rely on centralized servers (like GitHub, npm, or cloud buckets) to host and share those files.
+However, a contradiction exists in the current **[DataJack](The-DataJack-Protocol.md) Protocol**: If we bake an `.engram` cartridge containing expert knowledge (like the Solana blockchain docs or the A.I.M. source code), we currently rely on centralized servers (like GitHub, npm, or cloud buckets) to host and share those files.
 
 If a corporation issues a DMCA takedown against documentation, or alters historical code to fit a new policy, a centralized platform will immediately censor or delete the `.engram`. 
 
@@ -57,7 +57,7 @@ To protect adoption while maintaining our sovereign philosophy, the Swarm must b
 The Python BitTorrent library (e.g., `libtorrent`) **must not** be included in the core `requirements.txt`. It should be placed in an optional `requirements-swarm.txt` or installed dynamically via the TUI. A standard user should not have P2P binaries on their machine unless they explicitly request them.
 
 ### 2. The Gateway Toggle
-During `aim init` and inside the `aim config` TUI, users must be presented with a clear choice for their DataJack Transport Layer:
+During `aim init` and inside the `aim config` TUI, users must be presented with a clear choice for their [DataJack](The-DataJack-Protocol.md) Transport Layer:
 1.  **HTTPS (Standard):** Downloads `.engram` files safely via standard web requests (GitHub Releases, Cloud storage).
 2.  **BitTorrent Swarm (Sovereign):** Enables P2P magnet links.
 

@@ -1,311 +1,83 @@
 # Onboarding Identity Map
 
-This document defines where onboarding data belongs, why it belongs there, and how A.I.M. should treat each file during ingestion.
+This document defines where operator onboarding data and identity belongs in the Antigravity infrastructure.
 
 ## Design Rules
 
-1. `GEMINI.md` or `AGENTS.md` lives at the repo root.
-It is the active operating prompt for the coding agent.
-
-2. Core identity belongs in `core/`.
-This includes structured facts about the operator, durable profile information, and machine-readable runtime configuration.
-
-3. `memory/` and `continuity/` are not identity stores.
-They support memory refinement, recall, checkpoints, proposals, and continuity artifacts produced over time.
+1. `GEMINI.md` lives at the repo root.
+It is the active master operating prompt for the coding agent. It binds the agent to the A.I.M. framework.
 
-4. `synapse/` is for external expert knowledge and ingest-only reference material.
-It should not be the primary home for the operator's own identity.
-
-## File Roles
-
-### `GEMINI.md` or `AGENTS.md`
-
-Purpose:
-The live instruction surface for the agent.
-
-What belongs here:
-- agent identity
-- operator name
-- execution style defaults
-- retrieval mandates
-- planning rules
-- guardrails
-
-What does not belong here:
-- detailed operator biography
-- long-form social/personality analysis
-- machine configuration
-- evolving memory summaries
-
-Why:
-This file should stay prompt-efficient and behavior-oriented.
-
-### `core/OPERATOR.md`
-
-Purpose:
-Canonical structured operator identity.
-
-What belongs here:
-- legal or preferred name
-- tech stack
-- working style
-- stable personal principles
-- mission or goals
-- business context
-- concise factual profile fields gathered during onboarding
-
-What does not belong here:
-- shell paths
-- model routing
-- API endpoints
-- verbose persona prose
-- rolling memory summaries
+2. Core Identity belongs in Antigravity Knowledge Items (KIs).
+Your personal profile, tech stack preferences, and working style are stored as KIs in your local `<appDataDir>\knowledge` folder. They are natively injected into the prompt at boot.
 
-Why:
-`OPERATOR.md` should be the stable source of truth for factual operator metadata.
+3. `memory/` and `archive/` are for generated artifacts.
+They support memory refinement, recall, and checkpoints produced over time.
 
-### `core/OPERATOR_PROFILE.md`
+4. `synapse/` or `.engram` databases are for external expert knowledge.
 
-Purpose:
-Narrative operator profile used to capture richer persona and behavioral inference.
+---
 
-What belongs here:
-- Grok-derived profile text
-- communication style summary
-- philosophical and social archetype notes
-- inferred problem-solving style
-- voice and tone guidance
+## The Identity Architecture
 
-What does not belong here:
-- hard configuration
-- filesystem paths
-- API keys
-- generated session memory
+### `GEMINI.md`
+**Purpose:** The live instruction surface for the agent.
 
-Why:
-This file complements `OPERATOR.md`.
-`OPERATOR.md` is structured fact.
-`OPERATOR_PROFILE.md` is richer interpretive context.
+**What belongs here:** 
+- Agent identity (`You are Antigravity acting as A.I.M.`)
+- Operator name
+- Execution style defaults
+- Retrieval mandates
+- GitOps planning rules
+- Blast radius guardrails
 
-### `core/MEMORY.md`
+**Why:** This file must stay prompt-efficient and behavior-oriented to ensure the agent physically abides by GitOps and TDD mandates.
 
-Purpose:
-Durable top-level memory anchor for A.I.M.
+### `aim_operator_profile` (Knowledge Item)
+*Replaces the legacy `core/OPERATOR.md` and `core/OPERATOR_PROFILE.md` text files.*
 
-What belongs here:
-- concise long-term state
-- durable project posture
-- high-signal operator/project continuity notes
+**Purpose:** Canonical structured operator identity and narrative voice.
 
-What does not belong here:
-- raw onboarding questionnaire dumps
-- low-level runtime config
-- temporary chat residue
+**What belongs here:**
+- Legal or preferred name
+- Tech stack preferences
+- Working style and philosophies
+- Inferred problem-solving style
 
-Why:
-`MEMORY.md` is a compact continuity document, not the canonical operator profile.
+**Why:** Because Antigravity natively loads KIs, we no longer need bash scripts to manually concatenate text strings. If you want the agent to know how you code, you create an `aim_operator_profile` KI, and the agent natively understands you across all projects in that workspace.
 
-### `core/CONFIG.json`
+### Antigravity Settings Panel
+*Replaces the legacy `core/CONFIG.json` and `aim tui` cockpit.*
 
-Purpose:
-Machine-readable runtime configuration.
+**Purpose:** Machine-readable runtime configuration.
 
-What belongs here:
-- path configuration
-- provider/model defaults
-- service endpoints
-- operational settings
-- allowed root
-- vault locations
-- pruning or maintenance thresholds
+**What belongs here:**
+- Model routing
+- API Key management
+- Allowed root workspaces
+- Local server toggles
 
-What does not belong here:
-- operator biography
-- persona text
-- life rules in prose
-- Grok profile data
-- freeform notes for retrieval
+**Why:** All model and API routing is natively handled by the Antigravity IDE graphical interface, eliminating the need to manually parse a strict `CONFIG.json` file in the terminal. 
 
-Why:
-`CONFIG.json` should be deterministic and operational.
-If a value changes how the software runs, it belongs here.
-If it changes how the agent understands the operator, it belongs in markdown identity docs instead.
+---
 
-## TUI Update Contract
+## Legacy TUI Deprecation
+> [!WARNING]
+> The `aim tui` command has been fully **deprecated** in A.I.M. v2.0. 
+> Previously, the TUI ran a terminal wizard to manually build `OPERATOR.md` and `CONFIG.json`. 
+> Today, simply type your preferences into a new Knowledge Item (KI) inside the Antigravity IDE, and hit save. The system natively handles the rest without touching the terminal.
 
-The `aim tui` "Update Operator Profile & Behavior" flow should remain symmetric with onboarding.
+---
 
-It should update:
-- `GEMINI.md` for execution mode, cognitive level, conciseness, and lightweight guardrails
-- `core/OPERATOR.md` for structured operator facts
-- `core/OPERATOR_PROFILE.md` for narrative persona text
+## Prompt-To-Location Map
 
-It should not write operator identity into:
-- `core/CONFIG.json`
-- `memory/`
-- `continuity/`
+### 1. Behavioral Prompts ("Be extremely concise", "Use TDD", "Don't run commands without asking")
+**Destination:** `GEMINI.md` (or the local workspace `aim_master_directives` KI).
+**Reason:** This controls agent operating posture and physical execution guardrails. This must be loaded before the agent takes any action.
 
-## Prompt-To-File Map
+### 2. Operator Prompts ("My name is Brian", "I prefer Django", "I like Dark Mode")
+**Destination:** A new Knowledge Item (KI) in `<appDataDir>\knowledge`
+**Reason:** This is stable, factual operator preference metadata that provides context but does not dictate hard physical execution restraints.
 
-### Behavioral prompts
-
-Prompt:
-`Grammar & Explanation Level`
-
-Destination:
-`GEMINI.md` / `AGENTS.md`
-
-Reason:
-This controls agent presentation behavior, not runtime configuration.
-
-Prompt:
-`Enable Extreme Conciseness`
-
-Destination:
-`GEMINI.md` / `AGENTS.md`
-
-Reason:
-This is prompt behavior.
-
-Prompt:
-`Execution Mode`
-
-Destination:
-`GEMINI.md` / `AGENTS.md`
-
-Reason:
-This is agent operating posture.
-
-Prompt:
-`Target Model Intelligence`
-
-Destination:
-`GEMINI.md` / `AGENTS.md`
-
-Reason:
-This controls prompt guardrails and instruction strictness.
-
-### Operator prompts
-
-Prompt:
-`Your Name`
-
-Destination:
-- `GEMINI.md` / `AGENTS.md`
-- `core/OPERATOR.md`
-- `core/MEMORY.md`
-
-Reason:
-The name is both prompt identity and durable operator identity.
-
-Prompt:
-`Core Tech Stack`
-
-Destination:
-`core/OPERATOR.md`
-
-Reason:
-This is stable operator metadata.
-
-Prompt:
-`Working Style`
-
-Destination:
-`core/OPERATOR.md`
-
-Reason:
-This is factual operator preference metadata.
-
-Prompt:
-`Metrics (Age/Height/Weight)`
-
-Destination:
-`core/OPERATOR.md`
-
-Reason:
-This is structured operator profile data.
-
-Prompt:
-`Life Rules/Principles`
-
-Destination:
-`core/OPERATOR.md`
-
-Reason:
-These are durable operator values.
-
-Prompt:
-`Primary Mission/Life Goal`
-
-Destination:
-`core/OPERATOR.md`
-
-Reason:
-This is stable high-level operator intent.
-
-Prompt:
-`Business Info`
-
-Destination:
-`core/OPERATOR.md`
-
-Reason:
-This is structured business context for the operator.
-
-Prompt:
-`Grok profile paste`
-
-Destination:
-`core/OPERATOR_PROFILE.md`
-
-Reason:
-This is richer narrative persona material, not structured user metadata.
-
-### Environment prompts
-
-Prompt:
-`Obsidian Vault Path`
-
-Destination:
-`core/CONFIG.json`
-
-Reason:
-This is runtime configuration.
-
-Prompt:
-`Allowed Root`
-
-Destination:
-`core/CONFIG.json`
-
-Reason:
-This is runtime workspace policy.
-
-## Recommended Ingestion Semantics
-
-- Root `GEMINI.md` or `AGENTS.md`: foundational operating prompt.
-- `core/*.md`: foundational identity and durable project context.
-- `synapse/`: external expert knowledge, reference packs, imported doctrine, and ingest-only material.
-- `memory/`: refinement outputs, proposals, archival rollups, and evolving memory products.
-- `continuity/`: checkpoints, summaries, and state-transfer artifacts.
-
-## Practical Distinction: `OPERATOR.md` vs `OPERATOR_PROFILE.md`
-
-Use `OPERATOR.md` when the data should be:
-- factual
-- structured
-- stable
-- easy to diff
-- easy to rewrite destructively
-
-Use `OPERATOR_PROFILE.md` when the data is:
-- interpretive
-- narrative
-- voice-oriented
-- inferred from public behavior or social corpus
-- helpful for stylistic alignment but not authoritative as fact
-
-Short version:
-- `OPERATOR.md` = canonical facts about the operator
-- `OPERATOR_PROFILE.md` = richer persona interpretation of the operator
-- `CONFIG.json` = runtime mechanics only
+### 3. Environment Prompts ("Use Gemini 1.5 Pro", "My API Key is...")
+**Destination:** Antigravity UI Settings Panel
+**Reason:** Pure operational runtime mechanics. No operator identity belongs here.

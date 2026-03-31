@@ -18,7 +18,7 @@ Instead of sending an HTTP request to an API, external scripts use `tmux send-ke
 
 To the AI agent, it looks and feels exactly as if a human is sitting at the server rack physically typing on the keyboard. This "Zero-API" approach unlocks massive automation capabilities:
 *   **Automated Assembly Lines:** Scripts can automatically type 60-turn architectural blueprints into the terminal while the human sleeps.
-*   **The Reincarnation Protocol:** The agent can autonomously spawn a new `tmux` window, type its own startup commands, and assassinate its old window to purge context bloat.
+*   **The [Reincarnation](Feature-Reincarnation-Gameplan.md) Protocol:** The agent can autonomously spawn a new `tmux` window, type its own startup commands, and assassinate its old window to purge context bloat.
 
 ---
 

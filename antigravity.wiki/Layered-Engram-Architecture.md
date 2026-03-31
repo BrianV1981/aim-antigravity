@@ -1,42 +1,37 @@
-# Layered Engram Architecture: Torrents vs. Live Polling
+# Layered Architecture: Knowledge Items vs. Root Directives
 
 ## The Architectural Conflict
-A.I.M. is driving toward two advanced knowledge-distribution features that are seemingly at odds:
+A.I.M. running autonomously requires two distinct knowledge-distribution paradigms that are seemingly at odds:
 
-1. **The Decentralized Torrent Registry (Phase 38):** `.engram` cartridges should be immutable, mathematically hashed SQLite binaries shared via a peer-to-peer torrent network. This requires the file to be static.
-2. **Self-Upgrading Engrams (Live Polling):** Background daemons should scrape GitHub and forums nightly to inject new bug fixes into the local knowledge base. This requires the file to be highly mutable.
+1. **The Immutable Root Directives:** Core project architecture and mandates (`GEMINI.md` or `aim_master_directives`) must remain strict, authoritative, and unchanging to enforce physical safety constraints like TDD and GitOps protocols.
+2. **Self-Upgrading Context (Live Polling):** As developers code, new insights, bug fixes, and external API documentation need to be continually injected into the active memory window.
 
-If local background daemons mutate the torrented `.engram` files, they break the cryptographic hash, destroying the torrent swarm and fragmenting the community's knowledge base.
+If local day-to-day coding discoveries constantly mutate the core `GEMINI.md` architecture file, the repository loses its structural integrity and suffers from severe context rot (agents hallucinating rules).
 
 ## The Solution: The Base vs. The Delta
-To resolve this, A.I.M. must adopt a **Layered RAG Architecture**—operating much like Docker image layers or Linux package managers (LTS core + daily security patches).
+To resolve this, A.I.M. natively adopts a **Layered Knowledge Architecture**—operating much like Docker image layers.
 
-### 1. The Immutable Base (The Master Cartridge)
-*   Generated via `aim bake`.
-*   Contains the vast bulk of foundational documentation (e.g., `django-v5-core.engram`).
-*   **Read-Only:** Once generated, this local SQLite table/file cannot be modified by the daemon.
-*   **Decentralized:** Because it is static, its hash is permanent, making it perfect for seeding to the decentralized torrent registry.
+### 1. The Immutable Base (The Root Prompt)
+*   Generated from the repository's `GEMINI.md` and indexed into the local `aim_master_directives` Knowledge Item (KI) inside Antigravity.
+*   Contains the vast bulk of foundational execution physical laws (e.g., TDD, GitOps constraints, and Identity).
+*   **Highly Stable:** Once initialized, this Knowledge Item is only manually modified by human operators during major architectural shifts.
 
-### 2. The Live Patch Ledger (The Mutable Delta)
-*   Managed by the `aim watch` Autonomous Daemon.
-*   When the daemon scrapes new solutions from GitHub, it does **not** insert them into the core cartridge.
-*   Instead, it inserts the vectorized data into a highly mutable, local-only SQLite table called `live_deltas` (or writes them to a designated `synapse/live_feed/` text directory).
+### 2. The Live Patch Ledger (The Workspace KI)
+*   When the operator or agent discovers a new proven pattern, they do *not* artificially append it to the `GEMINI.md` root.
+*   Instead, they update localized workspace Knowledge Items (e.g., `feature_login_patterns` or `api_bug_workarounds`).
+*   These localized KIs represent the highly mutable, local-only layer of context.
 
 ### 3. The Query Resolver (Execution Time)
-When the active AI agent executes `aim search "timeout bug"`, the `retriever.py` script queries **both** layers simultaneously:
-1. It searches the `live_deltas` table.
-2. It searches the read-only Base Cartridges.
-If a conflict or duplicate topic exists, the **Live Delta takes precedence**, effectively "patching" the outdated knowledge in the Base Cartridge at runtime.
+When the active Antigravity agent executes a file modification, its system prompt natively reads **both** layers simultaneously:
+1. It reads the active workspace KIs (The Mutable Delta).
+2. It reads the `aim_master_directives` (The Immutable Base).
 
-## The Community Minting Process
-This layered approach naturally creates an open-source lifecycle for knowledge:
+If a conflict or duplicate topic exists, the **Live Delta takes precedence for tactical tool execution**, while the **Immutable Base always overrides on physical safety/GitOps rules.**
 
-1. **The Daily Grind:** 1,000 operators run `aim watch` locally. Over 6 months, their `live_deltas` databases fill up with hundreds of new bug fixes.
-2. **The Minting:** A community maintainer decides it is time for an official release. They run:
-   `aim bake --merge-deltas django-v5.1.engram`
-3. **The Fusion:** The CLI takes the old immutable base, merges all the proven solutions from the `live_deltas` table, and mints a brand-new, officially hashed `.engram` file.
-4. **The Reset:** The new cartridge is uploaded to the torrent swarm. Users run `aim jack-in django-v5.1.engram`, which automatically wipes their local `live_deltas` table clean to begin the cycle anew.
+## The Minting Process (Upgrading the Repo)
+This layered approach naturally creates an open-source lifecycle for refining knowledge:
 
-## Implementation Requirements
-*   Update `src/forensic_utils.py` and the database schema to isolate core data from live delta data.
-*   Modify `src/retriever.py` to prioritize `live_deltas` results over core results in the final FTS5/Vector ranking algorithm.
+1. **The Daily Grind:** Operators iterate on code, rapidly updating their localized knowledge items with temporary fixes and API insights.
+2. **The Minting:** When a feature is complete, the operator (or agent) synthesizes the localized workspace KIs into a single, highly refined architectural block.
+3. **The Fusion:** The proven block is officially merged into the repository's standard documentation (e.g., updating the `wiki/` directory or `README.md`) using standard Pull Requests.
+4. **The Reset:** The localized, messy workspace KIs are deleted, and the agent continues with a clean slate, natively pulling the newly minted lore from the core repository files.

@@ -7,28 +7,23 @@ class NullKnowledgeProvider:
         self.error_msg = error_msg
         
     def get_knowledge_map(self):
-        return {"error": self.error_msg, "foundation_knowledge": [], "expert_knowledge": [], "session_history": []}
+        return {"error": self.error_msg}
         
-    def search_fragments(self, query, top_k=5, **kwargs):
-        return []
+    def semantic_search(self, query, top_k=5):
+        return [{"content": f"[SYSTEM OFFLINE] {self.error_msg}", "score": 0.0, "type": "error"}]
         
-    def search_lexical(self, query, top_k=5):
-        return []
-
-    def search_by_source_keyword(self, keyword):
+    def lexical_search(self, query, top_k=5):
         return []
         
     def close(self):
         pass
 
-def load_knowledge_provider(mode="all", target_db="history"):
-    """
-    The SafeLoad Factory. Attempts to load the heavy SQLite/Embedding DB.
-    Returns a NullProvider if dependencies or connections fail dynamically.
-    """
+def load_knowledge_provider():
+    """The SafeLoad Factory. Attempts to load the heavy SQLite/Embedding DB.
+    Returns a NullProvider if dependencies (like keyring or sqlite-vec) are missing."""
     try:
         from plugins.datajack.forensic_utils import ForensicDB
-        return ForensicDB(access_mode=mode, target_db=target_db)
+        return ForensicDB()
     except Exception as e:
         sys.stderr.write(f"\n[A.I.M. SAFE-LOAD] DataJack Engram system offline: {e}\n")
         return NullKnowledgeProvider(str(e))

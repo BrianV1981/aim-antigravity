@@ -75,57 +75,48 @@ def save_split_markdown(session_id, md_content, base_path, line_limit=2000):
     return chunks
 
 def scribe_all_sessions():
+    if not extract_signal:
+        print("[ERROR] extract_signal.py not found. Cannot scribe history.")
+        return
+
     db = HistoryDB()
     os.makedirs(HISTORY_DIR, exist_ok=True)
     
-    # 1. Antigravity IDE native text transcripts
-    ide_logs = glob.glob(os.path.expanduser("~/.gemini/antigravity/brain/*/.system_generated/logs/overview.txt"))
-    # 2. Legacy terminal JSON logs (if ported via Datajack)
-    legacy_logs = glob.glob(os.path.join(RAW_DIR, "*.json"))
-
-    print(f"--- History Scribe: Processing {len(ide_logs)} Antigravity sessions & {len(legacy_logs)} Legacy JSONs ---")
+    project_name = os.path.basename(AIM_ROOT)
+    native_cli_dir = os.path.expanduser(f"~/.gemini/tmp/{project_name}/chats/*.json")
+    
+    transcripts = glob.glob(native_cli_dir) + glob.glob(os.path.join(RAW_DIR, "*.json"))
+    
+    print(f"--- History Scribe: Processing {len(transcripts)} sessions ---")
     
     processed_count = 0
-    # Process Antigravity native overview texts directly
-    for txt_path in ide_logs:
+    for t_path in transcripts:
         try:
-            # Extract session UUID from path: ~/.gemini/antigravity/brain/<id>/.system_generated/logs/overview.txt
-            session_id = os.path.basename(os.path.dirname(os.path.dirname(os.path.dirname(txt_path))))
-            md_base_path = os.path.join(HISTORY_DIR, f"{session_id}.md")
+            with open(t_path, 'r') as f:
+                data = json.load(f)
             
-            if os.path.exists(md_base_path) or os.path.exists(md_base_path.replace(".md", "_part1.md")):
-                continue
-
-            with open(txt_path, 'r', encoding='utf-8') as f:
-                md_content = f.read()
-
-            save_split_markdown(session_id, md_content, md_base_path)
-            
-            # Index timestamp using file modified time
-            mtime = os.path.getmtime(txt_path)
-            ts = datetime.fromtimestamp(mtime).isoformat()
-            db.add_session(session_id, ts, md_content)
-            processed_count += 1
-        except Exception as e:
-            print(f"Error parsing Antigravity log {txt_path}: {e}")
-
-    # Process Legacy JSONs via extract_signal if available
-    for t_path in legacy_logs:
-        try:
-            with open(t_path, 'r') as f: data = json.load(f)
             session_id = data.get('sessionId') or data.get('session_id')
             if not session_id: continue
+            
             md_base_path = os.path.join(HISTORY_DIR, f"{session_id}.md")
+            
+            # Check if any part already exists to avoid redundant processing
             if os.path.exists(md_base_path) or os.path.exists(md_base_path.replace(".md", "_part1.md")):
                 continue
-            if extract_signal and skeleton_to_markdown:
-                skeleton = extract_signal(t_path)
-                if not skeleton: continue
-                md_content = skeleton_to_markdown(skeleton, session_id)
-                save_split_markdown(session_id, md_content, md_base_path)
-                ts = data.get('startTime') or datetime.now().isoformat()
-                db.add_session(session_id, ts, md_content)
-                processed_count += 1
+            
+            skeleton = extract_signal(t_path)
+            if not skeleton: continue
+            
+            md_content = skeleton_to_markdown(skeleton, session_id)
+            
+            # Split and Save Clean MD for Obsidian Mirroring
+            save_split_markdown(session_id, md_content, md_base_path)
+            
+            # Index full content in Dedicated History DB
+            ts = data.get('startTime') or datetime.now().isoformat()
+            db.add_session(session_id, ts, md_content)
+            processed_count += 1
+            
         except Exception:
             pass
             
