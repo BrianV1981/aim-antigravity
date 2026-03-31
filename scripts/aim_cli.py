@@ -127,8 +127,11 @@ def cmd_chalkboard(args):
     run_script(os.path.join(SCRIPTS_DIR, "aim_chalkboard.py"), [args.prompt])
 
 def cmd_postmaster(args):
-    """Executes aim_postmaster.py to automatically map explicit Chalkboard tags to GitHub Issues."""
-    run_script(os.path.join(SCRIPTS_DIR, "aim_postmaster.py"), [args.action])
+    """Executes aim_postmaster.py to map explicit Chalkboard tags to GitHub Issues or run the Spam Moderator."""
+    script_args = [args.action]
+    if args.action == "daemon" and args.interval:
+        script_args.extend(["--interval", str(args.interval)])
+    run_script(os.path.join(SCRIPTS_DIR, "aim_postmaster.py"), script_args)
 
 def cmd_fix(args):
     """Checks out a new branch for a specific GitHub Issue ID."""
@@ -793,8 +796,9 @@ def main():
     chalkboard_parser = subparsers.add_parser("chalkboard", help="Use Natural Language to send Mail/Directives to the Swarm")
     chalkboard_parser.add_argument("prompt", help="The raw natural language sentence")
 
-    postmaster_parser = subparsers.add_parser("postmaster", help="Execute the aim_postmaster daemon to scan and escalate tags to native GitHub Issues")
-    postmaster_parser.add_argument("action", choices=["escalate"], help="The routing action string")
+    postmaster_parser = subparsers.add_parser("postmaster", help="Execute the aim_postmaster daemon to scan and escalate tags to native GitHub Issues or Moderate spam loops")
+    postmaster_parser.add_argument("action", choices=["escalate", "daemon"], help="The routing action string")
+    postmaster_parser.add_argument("--interval", type=int, default=5, help="Minutes between Moderator sweeps (Daemon mode)")
 
     subparsers.add_parser("promote", help="Automate the Phase Protocol: Archive main, merge current dev branch, and cleanup")
 
