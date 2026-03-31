@@ -44,7 +44,7 @@ def ensure_hub_cloned(hub_repo):
         print(f"[*] Cloning Swarm Post Office ({hub_repo})...")
         os.makedirs(os.path.dirname(HUB_LOCAL_DIR), exist_ok=True)
         try:
-            subprocess.run(["gh", "repo", "clone", hub_repo, HUB_LOCAL_DIR], check=True)
+            subprocess.run(["git", "clone", f"https://github.com/{hub_repo}.git", HUB_LOCAL_DIR], check=True)
         except subprocess.CalledProcessError:
             print("[ERROR] Failed to clone. Make sure `gh` CLI is authenticated and repo exists.")
             sys.exit(1)

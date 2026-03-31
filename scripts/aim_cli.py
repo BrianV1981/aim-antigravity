@@ -126,6 +126,10 @@ def cmd_chalkboard(args):
     """Executes aim_chalkboard.py to parse Natural Language Swarm commands."""
     run_script(os.path.join(SCRIPTS_DIR, "aim_chalkboard.py"), [args.prompt])
 
+def cmd_postmaster(args):
+    """Executes aim_postmaster.py to automatically map explicit Chalkboard tags to GitHub Issues."""
+    run_script(os.path.join(SCRIPTS_DIR, "aim_postmaster.py"), [args.action])
+
 def cmd_fix(args):
     """Checks out a new branch for a specific GitHub Issue ID."""
     issue_id = args.id
@@ -789,6 +793,9 @@ def main():
     chalkboard_parser = subparsers.add_parser("chalkboard", help="Use Natural Language to send Mail/Directives to the Swarm")
     chalkboard_parser.add_argument("prompt", help="The raw natural language sentence")
 
+    postmaster_parser = subparsers.add_parser("postmaster", help="Execute the aim_postmaster daemon to scan and escalate tags to native GitHub Issues")
+    postmaster_parser.add_argument("action", choices=["escalate"], help="The routing action string")
+
     subparsers.add_parser("promote", help="Automate the Phase Protocol: Archive main, merge current dev branch, and cleanup")
 
     merge_batch_parser = subparsers.add_parser("merge-batch", help="Automate the Phase Protocol: Merge all open fix branches into main")
@@ -823,6 +830,7 @@ def main():
     elif args.command in ["config", "tui"]: cmd_config(args)
     elif args.command == "mail": cmd_mail(args)
     elif args.command == "chalkboard": cmd_chalkboard(args)
+    elif args.command == "postmaster": cmd_postmaster(args)
     elif args.command == "index": cmd_index(args)
     elif args.command == "ingest": cmd_ingest(args)
     elif args.command in ["handoff", "pulse"]: cmd_handoff(args)
