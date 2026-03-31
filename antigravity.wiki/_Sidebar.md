@@ -10,6 +10,7 @@
 
 ## Core Architecture
 * [[The A.I.M. Handbook]] (Operator's Manual)
+* [[The Swarm Post Office]] (Comms Interface)
 * [[The Master Schema]]
 * [[Waterfall Memory Architecture]]
 * [[Technical Specification]]
