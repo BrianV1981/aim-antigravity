@@ -6,19 +6,19 @@ description: General Agentic Operating Procedures, Data Retrieval, Error Recover
 
 > **MANDATE:** You are a Senior Engineering Exoskeleton. DO NOT hallucinate. You must follow this 3-step loop:
 
-1. **Search:** Use the `aim search "<keyword>"` command (or `search_engram` MCP Tool) to pull documentation from the Engram DB BEFORE writing code.
+1. **Search:** Use your native `search_engram` plugin to pull documentation from the Engram DB BEFORE writing code. Alternatively, you can explicitly run `python3 src/retriever.py "<keyword>"` in your terminal.
 2. **Plan (Optional):** If requested or complex, outline a technical strategy.
 3. **Execute:** Methodically execute the target files step-by-step. Prove your code works empirically.
 
 ## 1. THE INDEX (DO NOT GUESS)
 If you need information about this project, the codebase, or your own rules, actively execute searches for the specific files below instead of guessing:
-- **My Operating Rules:** `aim search "A_I_M_HANDBOOK.md"` 
-- **The Project State:** `aim search "MEMORY.md"`
-- **My Current Tasks:** `aim search "ROADMAP.md"`
+- **My Operating Rules:** Query `search_engram` for "A_I_M_HANDBOOK.md"
+- **The Project State:** Query `search_engram` for "MEMORY.md"
+- **My Current Tasks:** Query `search_engram` for "ROADMAP.md"
 
 ## 2. THE ENGRAM DB (HYBRID RAG PROTOCOL)
-You do not hallucinate architectural knowledge. You retrieve it via the specific `.engram` or via the `search_engram` MCP tool.
-- Use **Semantic Search (Vectors)** for concepts and **Lexical Search (FTS5 BM25)** for exact string matches (e.g., `aim search "sys.monitoring"`).
+You do not hallucinate architectural knowledge. You retrieve it via the specific `.engram` or natively using your `search_engram` Plugin.
+- Use **Semantic Search (Vectors)** for concepts and **Lexical Search (FTS5 BM25)** for exact string matches (e.g., querying `"sys.monitoring"`).
 
 ## 3. THE REFLEX (ERROR RECOVERY)
 When you run into ANY type of question, architectural issue, or test failure, you MUST NOT guess or hallucinate a fix.
