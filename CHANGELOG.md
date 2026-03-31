@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.2.0] - 2026-03-31
+- Feature: Chalkboard NL Interface and Alias doc fix
+
+
 ## [v1.1.0] - 2026-03-31
 - Feature: Chalkboard NL Interface and Alias doc fix
 

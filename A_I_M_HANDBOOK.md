@@ -14,13 +14,13 @@ This creates a **Fluid Alias**.
 NEVER document or execute `aim ...` generically if you are inside `aim-antigravity`. The system will physically fail. Always inherit the root directory name.
 
 ## The Swarm Post Office (Cross-Agent Communication)
-To manually dispatch logic to another team, use the Swarm Post Office (`aim-antigravity mail`).
-* **Send:** `aim-antigravity mail send <team> "<Subject>" "<Body>"`
-* **Check:** `aim-antigravity mail check` (Populates `UNREAD_MAIL.md` in the memory continuity stream).
+To manually dispatch logic to another team, use the Swarm Post Office (`[ALIAS] mail`).
+* **Send:** `[ALIAS] mail send <team> "<Subject>" "<Body>"`
+* **Check:** `[ALIAS] mail check` (Populates `UNREAD_MAIL.md` in the memory continuity stream).
 
 ### The Natural Language Chalkboard
 To bypass the strict `mail` CLI payload, you can use the AI-Interpreter:
 ```bash
-aim-antigravity chalkboard "Email the claude team and ask them to build the python extraction script"
+[ALIAS] chalkboard "Email the claude team and ask them to build the python extraction script"
 ```
-The internal reasoning engine will dynamically parse your English into the proper `aim mail` syntax and drop it into the physical Git inbox on the Global Chalkboard Hub.
+The internal reasoning engine will dynamically parse your English into the proper `[ALIAS] mail` syntax and drop it into the physical Git inbox on the Global Chalkboard Hub.

@@ -189,7 +189,7 @@ def cmd_merge_batch(args):
     run_script(os.path.join(SCRIPTS_DIR, "aim_batch_merge.py"), merge_args)
 
 def cmd_push(args):
-    """Dispatches to aim_push.sh with Sovereign Sync and Semantic Release."""
+    """Dispatches to aim_push.py with Sovereign Sync and Semantic Release."""
     msg = args.message
     
     # 1. SEMANTIC RELEASE PIPELINE (Phase 23)
@@ -255,7 +255,7 @@ def cmd_push(args):
         print(f"[WARNING] Background Sovereign Sync spawn failed: {e}")
         
     print("[3/3] Deploying to GitHub...")
-    run_bash_script(os.path.join(SCRIPTS_DIR, "aim_push.sh"), [msg])
+    run_script(os.path.join(SCRIPTS_DIR, "aim_push.py"), [msg])
 
 def cmd_sync_issues(args):
     """Synchronizes remote GitHub issues to the local ISSUE_TRACKER.md file."""
