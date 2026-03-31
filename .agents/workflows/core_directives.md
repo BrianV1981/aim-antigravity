@@ -29,5 +29,6 @@ When you run into ANY type of question, architectural issue, or test failure, yo
 
 ## 4. PREVIOUS SESSION CONTEXT (THE HANDOFF)
 You are part of a continuous, multi-agent relay race taking over from a previous session.
-Before you begin any new tactical work, **you must read the following file** to inherit the epistemic certainty:
-1. `HANDOFF.md` (The "Front Door" to the project's current state and directives).
+Before you begin any new tactical work, **you must read the following files** to inherit the epistemic certainty:
+1. `.agents/continuity/REINCARNATION_GAMEPLAN.md` (The explicit 3-step executive mandate).
+2. `.agents/continuity/CURRENT_PULSE.md` (The immediate Project Edge vector).
