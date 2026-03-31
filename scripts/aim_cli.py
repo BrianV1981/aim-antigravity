@@ -115,23 +115,48 @@ def cmd_bug(args):
     except Exception as e:
         print(f"[ERROR] Failed to create issue: {e}")
 
+def ensure_chalkboard_dependencies():
+    """Dynamically bootstraps the aim-chalkboard Swarm Hub repository if missing."""
+    hub_dir = os.path.join(AIM_ROOT, "archive", "swarm_hub")
+    if not os.path.exists(hub_dir):
+        print("[*] Decoupled Architecture detected. Bootstrapping aim-chalkboard logic node...")
+        try:
+            cfg_path = os.path.join(AIM_ROOT, "core", "CONFIG.json")
+            with open(cfg_path, 'r') as f:
+                import json
+                hub_repo = json.load(f).get("swarm_settings", {}).get("hub_repo")
+            if not hub_repo:
+                print("[ERROR] 'hub_repo' not found in CONFIG.json! Cannot acquire chalkboard routing.")
+                sys.exit(1)
+            subprocess.run(["git", "clone", f"https://github.com/{hub_repo}.git", hub_dir], check=True)
+        except Exception as e:
+            print(f"[ERROR] Failed to securely bootstrap Chalkboard Logic Node: {e}")
+            sys.exit(1)
+    
+    # Return the explicit decoupled directory path
+    return os.path.join(hub_dir, "scripts")
+
+
 def cmd_mail(args):
-    """Executes aim_mail.py to send or check the Swarm Inbox."""
+    """Executes aim_mail.py directly from decoupled Chalkboard origin."""
+    hub_scripts = ensure_chalkboard_dependencies()
     mail_args = [args.action]
     if args.action == "send":
         mail_args.extend([args.team, args.subject, args.body])
-    run_script(os.path.join(SCRIPTS_DIR, "aim_mail.py"), mail_args)
+    run_script(os.path.join(hub_scripts, "aim_mail.py"), mail_args)
 
 def cmd_chalkboard(args):
-    """Executes aim_chalkboard.py to parse Natural Language Swarm commands."""
-    run_script(os.path.join(SCRIPTS_DIR, "aim_chalkboard.py"), [args.prompt])
+    """Executes aim_chalkboard.py directly from decoupled Chalkboard origin."""
+    hub_scripts = ensure_chalkboard_dependencies()
+    run_script(os.path.join(hub_scripts, "aim_chalkboard.py"), [args.prompt])
 
 def cmd_postmaster(args):
-    """Executes aim_postmaster.py to map explicit Chalkboard tags to GitHub Issues or run the Spam Moderator."""
+    """Executes aim_postmaster.py directly from decoupled Chalkboard origin."""
+    hub_scripts = ensure_chalkboard_dependencies()
     script_args = [args.action]
     if args.action == "daemon" and args.interval:
         script_args.extend(["--interval", str(args.interval)])
-    run_script(os.path.join(SCRIPTS_DIR, "aim_postmaster.py"), script_args)
+    run_script(os.path.join(hub_scripts, "aim_postmaster.py"), script_args)
 
 def cmd_fix(args):
     """Checks out a new branch for a specific GitHub Issue ID."""
