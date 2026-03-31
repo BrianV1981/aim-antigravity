@@ -65,6 +65,6 @@
 
 ## Dunning-Kruger
 * [[The Dunning-Kruger Trap and First Principles Thinking|The-Dunning-Kruger-Trap-and-First-Principles]]
-* [[The MMO Botter's Advantage: A Case Study in the Curse of Knowledge]]
-* [[A.I.M.: Actual Intelligent Memory Review (Grok Conversation, March 25, 2026)]]
+* [[The MMO Botters Advantage A Case Study in the Curse of Knowledge|The-MMO-Botters-Advantage-A-Case-Study-in-the-Curse-of-Knowledge]]
+* [[A.I.M. Actual Intelligent Memory Review (Grok Conversation, March 25, 2026)|A.I.M.-Actual-Intelligent-Memory-Review-(Grok-Conversation,-March-25,-2026)]]
 * [[The Convergent Evolution of AI Memory]]
