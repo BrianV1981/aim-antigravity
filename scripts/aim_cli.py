@@ -58,6 +58,41 @@ def cmd_core_memory(args):
     editor = os.environ.get('EDITOR', 'nano')
     subprocess.call([editor, core_mem_file])
 
+def cmd_tokens(args):
+    """Calculates the estimated token size of the active Antigravity IDE context window."""
+    print("\n--- ACTIVE CONTEXT GAUGE ---")
+    log_dir = os.path.expanduser("~/.gemini/antigravity/brain/*/.system_generated/logs/overview.txt")
+    active_logs = glob.glob(log_dir)
+    
+    if not active_logs:
+        print("[ERROR] No active Antigravity sessions found.")
+        return
+        
+    try:
+        active_log = max(active_logs, key=os.path.getmtime)
+        with open(active_log, 'r', encoding='utf-8') as f:
+            content = f.read()
+            
+        char_count = len(content)
+        est_tokens = char_count // 4
+        max_tokens = 200000
+        percentage = (est_tokens / max_tokens) * 100
+        
+        session_id = os.path.basename(os.path.dirname(os.path.dirname(os.path.dirname(active_log))))[:8]
+        print(f"[SESSION] {session_id}")
+        print(f"[TOKENS]  ~{est_tokens:,} estimated")
+        print(f"[LIMIT]   {percentage:.2f}% (of {max_tokens:,} limit)\n")
+        
+        if percentage > 85:
+            print("[WARNING] Context window is critically saturated! Prepare to run '/reincarnate'.\n")
+        elif percentage > 60:
+            print("[INFO] Context window is heavily loaded. Consider wrapping up complex tasks.\n")
+        else:
+            print("[INFO] Context window is healthy.\n")
+            
+    except Exception as e:
+        print(f"[ERROR] Failed to calculate tokens: {e}")
+
 def cmd_status(args):
     """Displays the current A.I.M. operational pulse."""
     status_file = os.path.join(BASE_DIR, "continuity/CURRENT_PULSE.md")
@@ -712,6 +747,7 @@ def main():
     init_parser.add_argument("--uninstall", action="store_true", help="Show uninstallation instructions")
     init_parser.add_argument("--light", action="store_true", help="Install the Lightweight AOS Mode (Zero-RAG, continuity only)")
 
+    subparsers.add_parser("tokens", help="Check active session context window capacity")
     subparsers.add_parser("status", help="Show current project momentum")
     subparsers.add_parser("config", aliases=["tui"])
     subparsers.add_parser("core-memory", help="Open the Core Memory block for instant invariant tracking")
@@ -791,6 +827,7 @@ def main():
         args = parser.parse_args()
 
     if args.command == "init": cmd_init(args)
+    elif args.command == "tokens": cmd_tokens(args)
     elif args.command == "status": cmd_status(args)
     elif args.command == "core-memory": cmd_core_memory(args)
     elif args.command == "search": cmd_search(args)

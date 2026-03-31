@@ -1,26 +1,26 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-# A.I.M. Operator Terminal Overlay
-# Dynamically installs the `aim` alias interface into the local operator's user .bashrc.
+# Dynamically grab the absolute folder path and its basename (e.g., aim-antigravity, aim-claude)
+PROJECT_DIR="$PWD"
+ALIAS_NAME=$(basename "$PROJECT_DIR")
 
-if ! grep -q "aim()" ~/.bashrc; then
-  cat << 'EOF' >> ~/.bashrc
+echo "Installing '$ALIAS_NAME' bash function to ~/.bashrc"
 
-# A.I.M. Antigravity Global Environment Hook
-# Provides dynamic multi-project database interactions from arbitrary filesystem nodes.
-aim() {
-  if [ "$1" = "search" ]; then
+# We use EOF to dynamically inject the $ALIAS_NAME and $PROJECT_DIR path, 
+# while escaping \$1 and \$@ so they stay intact for the alias itself!
+cat << EOF >> ~/.bashrc
+
+# $ALIAS_NAME - Dynamic Forensic Retrieval and TUI Alias
+$ALIAS_NAME() {
+  if [ "\$1" = "search" ]; then
     shift
-    python3 "$HOME/aim-antigravity/src/retriever.py" "$@"
-  elif [ "$1" = "tui" ] || [ "$1" = "config" ]; then
-    python3 "$HOME/aim-antigravity/scripts/aim_cli.py" tui
+    python3 "$PROJECT_DIR/src/retriever.py" "\$@"
   else
-    echo "Unknown command. Available commands: aim search \"query\", aim tui"
+    python3 "$PROJECT_DIR/scripts/aim_cli.py" "\$@"
   fi
 }
 EOF
-  echo "[SUCCESS] A.I.M. terminal alias installed successfully into ~/.bashrc."
-  echo "Please run: 'source ~/.bashrc' or restart your terminal."
-else
-  echo "[INFO] The 'aim()' function is already mapped in your ~/.bashrc."
-fi
+
+echo "Installation complete!"
+echo "Please run: source ~/.bashrc"
+echo "You can now use '$ALIAS_NAME search' and '$ALIAS_NAME tui' directly from your terminal!"
