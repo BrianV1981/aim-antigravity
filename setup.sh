@@ -12,8 +12,10 @@ aim() {
   if [ "$1" = "search" ]; then
     shift
     python3 "$HOME/aim-antigravity/src/retriever.py" "$@"
+  elif [ "$1" = "tui" ] || [ "$1" = "config" ]; then
+    python3 "$HOME/aim-antigravity/scripts/aim_cli.py" tui
   else
-    echo "Unknown command. Available commands: aim search \"query\""
+    echo "Unknown command. Available commands: aim search \"query\", aim tui"
   fi
 }
 EOF
