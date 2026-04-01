@@ -19,7 +19,7 @@
 |---|---|---|
 | `bootstrap_brain.py` | **The Indexer.** Re-indexes `GEMINI.md`, `antigravity.wiki/`, and `core/` files into the `engram.db` on init. | ✅ Active |
 | `retriever.py` | **The Search Engine.** Handles vector embeddings (Nomic) + FTS5 lexical search against `engram.db`. Powers `aim search`. | ✅ Active |
-| `reasoning_utils.py` | LLM routing, token counting, and reasoning engine utilities. Originally multi-provider, now largely handled by Antigravity natively. | ⚠️ Legacy |
+| `reasoning_utils.py` | **The Brain.** Unified multi-provider LLM routing engine. Every memory tier (T1-T5), the session summarizer, aim delegate, deep forensic restore, and aim CLI merge all call `generate_reasoning()` through this. Supports 7 backends: Google (OAuth + API Key), Ollama, Codex CLI, OpenAI-compatible, OpenRouter, and Anthropic. Routes per-tier via `CONFIG.json` `models.tiers.*` config. **Without this, the entire cascading memory engine is dead.** | ✅ Critical |
 
 ### 1.3 Background Services
 | Script | Role | Status |
@@ -42,7 +42,7 @@
 |---|---|---|
 | `sovereign_sync.py` | **Outbound transport.** Converts SQLite tables into human-readable `.jsonl` files in `archive/sync/`. | ✅ Active |
 | `back-populator.py` | **Inbound transport.** Rebuilds a corrupted SQLite database from `.jsonl` backup files. | ✅ Active |
-| `config_utils.py` | Config path resolution, environment detection, and shared utilities. | ✅ Active |
+| `config_utils.py` | **The Shared Config Loader.** Provides `CONFIG` dict and `AIM_ROOT` path to 14+ scripts across `src/`, `scripts/`, `hooks/`, and `plugins/`. Every script that reads `core/CONFIG.json` goes through this. | ✅ Critical |
 | `memory_utils.py` | Helper functions for applying proposals to Core Memory blocks. | ✅ Active |
 
 ### 1.6 Plugins & Interfaces
@@ -67,7 +67,7 @@
 | `aim_doctor.py` | `[ALIAS] doctor` | Environment validator. Checks dependencies, database integrity, and configuration health. | ✅ Active |
 | `aim_router.py` | `[ALIAS] route` | Dynamic LLM routing configuration. Selects model providers based on task type. | ⚠️ Legacy |
 | `aim_vault.py` | `[ALIAS] vault` | Secure credential storage via Python `keyring`. Manages API keys. | ⚠️ Legacy |
-| `aim_delegate.py` | `[ALIAS] delegate` | Multi-agent task delegation using `concurrent.futures`. | ⚠️ Legacy |
+| `aim_delegate.py` | `[ALIAS] delegate` | Multi-agent task delegation using `concurrent.futures`. Calls `generate_reasoning()` per-task with tier-specific routing. Not currently wired in CLI but code is functional. | ✅ Active |
 | `aim_batch_merge.py` | `[ALIAS] batch-merge` | Utility for merging multiple pull requests or memory deltas simultaneously. | ✅ Active |
 | `aim_torrent.py` | `[ALIAS] torrent` | P2P [DataJack](The-DataJack-Protocol.md) daemon for sharing cartridges via `aria2c`. | ⚠️ Future |
 
