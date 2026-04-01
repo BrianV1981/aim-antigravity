@@ -1,13 +1,103 @@
 ---
-description: Initialize agent Brain by ingesting GEMINI.md into the local KI database
+description: One-time onboarding script for a fresh machine or new operator. Bootstraps the agent Brain with health checks and real KI artifacts.
 ---
-# /init
+# /init — Initialization
 
-This is the Bootstrap Script for any fresh Antigravity agent opening this project.
-When the user types `/init`, you MUST perform the following exact steps chronologically and mechanically:
+This is the **one-time onboarding script** for any fresh Antigravity agent opening this project on a new machine.
+Run this when setting up from scratch. It is safe to re-run, but it is NOT a per-session command — use `/sync` for re-calibration.
 
-1. **Read the Source:** Look for `GEMINI.md` at the root of this exact repository. Use the `view_file` tool to read the entire file into your active context.
-2. **Execute Ingestion:** You must immediately create a new local Knowledge Item specifically named `aim_master_directives` in your local OS's native `appDataDir\knowledge` folder (`~/.gemini/antigravity/knowledge` or `C:\Users\<user>\.gemini\antigravity\knowledge`).
-   - Use `write_to_file` to create `metadata.json` citing "Master A.I.M. Core Directives" referencing `/GEMINI.md`.
-   - Use `write_to_file` to create `artifacts/content.md` containing the pure verbatim text you read from `GEMINI.md`.
-3. **Report:** Provide a clean markdown Walkthrough stating that the agent's Brain has been successfully bootstrapped with the `GEMINI.md` Directives. Remind the user that these directives are now permanently active for this machine.
+When the user types `/init` or `/initialization`, execute the following steps in exact order:
+
+## Step 1 — Health Check
+Verify the environment is correctly configured before writing anything.
+
+1. Run `python scripts/aim_cli.py search "test"` — confirm Engram DB is reachable. If it errors, report the failure and stop.
+2. Run `gh auth status` — confirm GitHub CLI is authenticated.
+3. Run `git branch --show-current` — confirm branch is `master`. If not, report it and stop.
+4. Run `python scripts/aim_cli.py mail check` — check swarm inbox, report the result.
+
+## Step 2 — Write Operator Profile KI
+Create a Knowledge Item that captures who the operator is. This tells every future agent who they are working for from session 1, without needing to re-read GEMINI.md for that information.
+
+- **KI name:** `aim_operator_profile`
+- **Path:** `C:\Users\<user>\.gemini\antigravity\knowledge\aim_operator_profile\`
+
+Use `write_to_file` to create:
+
+**`metadata.json`:**
+```json
+{
+  "summary": "Operator identity and working profile for Brian Vasquez. Contains full name, aliases, and stated agent behavior preferences.",
+  "created_at": "<current ISO timestamp>",
+  "updated_at": "<current ISO timestamp>",
+  "sources": ["GEMINI.md", "/init workflow"]
+}
+```
+
+**`artifacts/content.md`:**
+```markdown
+# Operator Profile
+
+- **Full Name:** Brian Vasquez
+- **GitHub:** BrianV1981
+- **Socials:** @brianv1981
+- **Execution Mode:** Cautious
+- **Cognitive Level:** Technical
+- **Conciseness:** False (provide thorough explanations)
+- **Philosophy:** Clarity over bureaucracy. Empirical testing over guessing.
+- **Role expectation:** A.I.M. acts as a high-context technical lead and sovereign orchestrator.
+```
+
+## Step 3 — Write Project Architecture KI
+Create a Knowledge Item that captures the stable architectural decisions of this project. This prevents an agent from needing to rediscover conventions each session.
+
+- **KI name:** `aim_project_architecture`
+- **Path:** `C:\Users\<user>\.gemini\antigravity\knowledge\aim_project_architecture\`
+
+**`metadata.json`:**
+```json
+{
+  "summary": "Core architectural decisions and conventions for the aim-antigravity project. Covers GitOps workflow, TDD mandate, three-tier memory system, Engram DB, swarm mail, and known infrastructure gotchas.",
+  "created_at": "<current ISO timestamp>",
+  "updated_at": "<current ISO timestamp>",
+  "sources": ["GEMINI.md", "src/handoff_pulse_generator.py", "core/CONFIG.json"]
+}
+```
+
+**`artifacts/content.md`:**
+```markdown
+# Project Architecture — aim-antigravity
+
+## Core Mandates
+- **GitOps:** Never push to `master` directly. Always: `aim bug/enhancement` → `aim fix <id>` → verify branch ≠ master → `aim push`.
+- **TDD:** Tests must be written before or alongside implementation. Prove code works empirically.
+- **Event-Driven over Polling:** The swarm architecture is deterministic and event-triggered. Daemon polling was deprecated.
+
+## CLI
+- The CLI command name is always the root workspace folder name (e.g., `aim-antigravity`).
+- Fallback invocation: `python scripts/aim_cli.py <command>`
+- On Windows/PowerShell: do NOT use `&&` as a command separator.
+
+## Memory Architecture (Three Tiers)
+- **Tier 1 — Constant:** `GEMINI.md` as `user_rules`. Injected every prompt. Short mandatory rules only. Keep lean.
+- **Tier 2 — Session:** `HANDOFF.md` → `REINCARNATION_GAMEPLAN.md` → `CURRENT_PULSE.md`. Generated by `/reincarnate`.
+- **Tier 3 — Persistent:** KI artifacts in `~/.gemini/antigravity/knowledge/`. Stable project knowledge across many sessions.
+
+## Engram DB
+- Location: `history/session_engram.db` (SQLite)
+- Query via: `python scripts/aim_cli.py search "<query>"`
+
+## Known Infrastructure Gotchas
+- **Ollama is DISABLED by default** (`core/CONFIG.json` → `embedding_provider: "disabled"`).
+- **Module namespace:** Always use `sys.path.insert(0, ...)` not `sys.path.append()`.
+```
+
+## Step 4 — Report
+Provide a clean markdown summary stating:
+- Which health checks passed or failed
+- That `aim_operator_profile` KI was written successfully
+- That `aim_project_architecture` KI was written successfully
+- Reminder: run `/sync` or `/synchronization` in the future when operator info or architectural decisions change
+
+> ⚠️ **Do NOT copy GEMINI.md verbatim into KI.** GEMINI.md is already injected as `user_rules` on every prompt. Storing it in KI creates a redundant, stale copy.
+> See [[Antigravity-Initialization-Architecture]] for the full design rationale.
