@@ -1,6 +1,8 @@
-# A.I.M. Technical Handbook (Master Schema)
+# A.I.M. Technical Handbook (Master Schema v2.1)
 
-This document is the definitive architectural map for the A.I.M. platform. It defines the modular components of the brain and the protocols that ensure continuity and sovereignty within the Google Antigravity ecosystem.
+> **Last Updated:** 2026-04-01
+> This document is the definitive architectural map for the A.I.M. platform. It defines the modular components of the brain and the protocols that ensure continuity and sovereignty within the Google Antigravity ecosystem.
+> For the complete script-level inventory, see the [Script Map](Script-Map.md).
 
 ---
 
@@ -8,114 +10,182 @@ This document is the definitive architectural map for the A.I.M. platform. It de
 
 ### 1.1 `GEMINI.md` (The Index & Soul)
 - **Role:** Lean Orchestrator & Cognitive Baseline.
-- **Function:** It is an explicit **Table of Contents**. Instead of holding massive walls of text, it directs the agent to query its native Knowledge Items (KIs) or the background **Engram DB** for technical policies.
-- **Cognitive Guardrails:** It permanently encodes the Operator's chosen execution mode (Autonomous vs Cautious), GitOps workflow, and the "Token-Saver" conciseness mandate.
+- **Function:** An explicit **Table of Contents** that directs the agent to query its native Knowledge Items (KIs) or the background **Engram DB** for technical policies.
+- **Cognitive Guardrails:** Permanently encodes the Operator's execution mode, GitOps workflow, TDD mandate, the Swarm Post Office protocol, and the Read-Receipt mandate.
 
 ### 1.2 The Initialization Workflow (`/init`)
 - **Function:** A dynamic, decoupled scaffolding wizard.
-- **Mechanism:** Typing `/init` into the Antigravity chat automatically ingests the `GEMINI.md` file and converts it into the `aim_master_directives` Knowledge Item.
-- **Configuration Hot-Swapping:** To adjust model configurations, personalities, or paths, the Operator simply uses Antigravity's native GUI settings or edits their KI directly (replacing the legacy `aim tui` interface).
+- **Mechanism:** Typing `/init` into the Antigravity chat automatically ingests `GEMINI.md` and converts it into the `aim_master_directives` Knowledge Item.
+- **Configuration:** Operator edits their KI directly or uses Antigravity's native GUI settings.
+
+### 1.3 `HANDOFF.md` (The Front Door)
+- **Role:** The first file any incoming agent reads after reincarnation.
+- **Function:** Directs the agent through the Continuity Protocol: read `GEMINI.md` → `REINCARNATION_GAMEPLAN.md` → `CURRENT_PULSE.md` → check GitHub Issues → optionally read the Flight Recorder.
 
 ---
 
 ## SECTION 2: THE ENGRAM DB (SUBCONSCIOUS)
-The core of A.I.M.'s deep-memory structure lives in an optional local SQLite database (`archive/engram.db`). It uses a **[Hybrid RAG](Feature-Hybrid-RAG.md)** engine, blending dense Vector Embeddings (Cosine Similarity) with FTS5 Lexical matching.
+The core of A.I.M.'s deep-memory structure lives in a local SQLite database (`archive/engram.db`). It uses a **[Hybrid RAG](Feature-Hybrid-RAG.md)** engine, blending dense Vector Embeddings (Cosine Similarity) with FTS5 Lexical matching.
 
 ### 2.1 The Pre-Born Brain
-During complex initializations, A.I.M. indexes this Handbook and core project directives. This provides the agent with "Day Zero" technical knowledge.
+During initialization, A.I.M. indexes this Handbook and core project directives via `src/bootstrap_brain.py`. This provides the agent with "Day Zero" technical knowledge.
 
 ### 2.2 Foundry Ingestion
-The `foundry/` folder is a dedicated intake zone. Any technical references dropped here are recursively indexed as `expert_knowledge`.
+The `foundry/` folder is a dedicated intake zone. Any technical references dropped here are recursively indexed as `expert_knowledge`. Once indexed, source files can be deleted.
 
-### 2.3 The Cartridge Exchange
-Expertise is portable. A.I.M. can export its indexed knowledge into compressed `.engram` packs, allowing you to share a pre-trained "Python Expert" brain with other machines without re-indexing.
+### 2.3 The Session Engram (`history/session_engram.db`)
+A separate SQLite database containing all conversational turns from every exported session. Used for deep NITH (Needle In The Haystack) queries across session history. Populated by `src/handoff_pulse_generator.py`.
+
+### 2.4 The Cartridge Exchange
+Expertise is portable. A.I.M. can export indexed knowledge into compressed `.engram` packs via `src/plugins/datajack/aim_bake.py`, allowing pre-trained "Expert" brains to be shared between machines.
 
 ---
 
 ## SECTION 3: THE [CASCADING MEMORY](Feature-Cascading-Memory.md) ENGINE (CONSCIOUSNESS)
-If the optional background Python daemons are enabled, memory is refined through a tiered, self-cleaning hierarchy to prevent knowledge decay and file bloat.
+Memory is refined through a tiered, self-cleaning hierarchy to prevent knowledge decay and file bloat.
 
-### 3.1 Tier 1: The Harvester (`hooks/session_summarizer.py`)
-- **Function (The Python Sieve):** Uses a 100% free, zero-token Python script to strip raw JSON tool noise and extract a lean "Signal Skeleton."
-- **Output:** A concise technical narrative saved to `memory/hourly/`.
-
-### 3.2 Tier 2: The Proposer (`src/memory_proposer.py`)
-- **Function:** Squashes the hourly logs into structured Add/Remove deltas for proposals.
-
-### 3.3 Tier 3: Daily Distillation (`src/daily_refiner.py`)
-- **Function:** Consolidates multiple Tier 2 memory proposals into a single Daily State.
-
-### 3.4 Tier 4: Weekly Arc (`src/weekly_consolidator.py`)
-- **Function:** Synthesizes 7 Daily Proposals into a condensed **Weekly Proposal**.
-
-### 3.5 Tier 5: The Apex Proposer (`src/monthly_archivist.py`)
-- **Function:** Synthesizes the Weekly Proposals into definitive architecture axioms and archives stale context.
+| Tier | Script | Output | Cadence |
+|---|---|---|---|
+| 1 | `hooks/session_summarizer.py` | `memory/hourly/` | Per-session |
+| 2 | `src/memory_proposer.py` | Add/Remove deltas | Every few hours |
+| 3 | `src/daily_refiner.py` | Daily summary | Daily |
+| 4 | `src/weekly_consolidator.py` | Weekly milestones | Weekly |
+| 5 | `src/monthly_archivist.py` | Architecture axioms | Monthly |
 
 ---
 
-## SECTION 4: SAFETY & SOVEREIGNTY
+## SECTION 4: THE [REINCARNATION](Feature-Reincarnation-Gameplan.md) PIPELINE (CONTINUITY)
 
-### 4.1 The Obsidian Bridge
-- **Role:** Sovereign Mirror.
-- **Function:** Mirroring of Daily Logs, Core Memory, and **Raw Transcripts** to an external vault for 100% offline recovery native to human operators.
+> **⚠️ Antigravity-Native Architecture:** Legacy tmux-based terminal splicing has been replaced by a human-in-the-loop Export mechanism combined with zero-token Python parsing. See [Reincarnation Map](Reincarnation-Map.md) for the full step-by-step sequence.
+
+### 4.1 The `/reincarnate` Workflow
+1. Operator types `/reincarnate <Commander's Intent>`
+2. Agent halts and displays mandatory Export prompt
+3. Operator clicks Export button → `.md` transcript drops to `Downloads/`
+4. Operator replies `Proceed`
+5. Agent executes `python src/handoff_pulse_generator.py "<Intent>"`
+
+### 4.2 The Dual-Extraction Pipeline
+The exported `.md` is mechanically processed (zero API tokens):
+- **Pipeline 1 (Archive):** Full transcript → `archive/raw/` + row-by-row into `history/session_engram.db`
+- **Pipeline 2 (Pulse):** Last 5 turns → `continuity/CURRENT_PULSE.md`
+- **Pipeline 3 (Will):** Commander's Intent → `continuity/REINCARNATION_GAMEPLAN.md`
+- **Pipeline 4 (Recorder):** Full transcript → `continuity/LAST_SESSION_FLIGHT_RECORDER.md`
+
+### 4.3 The Wake-Up Sequence
+The incoming agent reads: `GEMINI.md` → `HANDOFF.md` → `REINCARNATION_GAMEPLAN.md` → `CURRENT_PULSE.md` → optionally `LAST_SESSION_FLIGHT_RECORDER.md`.
 
 ---
 
-## SECTION 5: SYSTEM MAINTENANCE & UPDATES
+## SECTION 5: THE [SWARM POST OFFICE](The-Swarm-Post-Office.md) (COMMUNICATION)
 
-### 5.1 The Sovereign Update
-- **Role:** High-Fidelity Sync.
-- **Function:** Because A.I.M. relies on GitOps, updates are performed via standard `git pull origin main` commands.
-- **Data Preservation (Safe Update):** Performing a standard pull natively protects your local `aim_master_directives` KIs and `.ignore` files.
+### 5.1 The Global Chalkboard
+Asynchronous inter-agent communication via `BrianV1981/aim-chalkboard` public GitHub repository. Agents drop `.md` files in team inboxes, never talk synchronously.
+
+### 5.2 Commands
+| Command | Function |
+|---|---|
+| `aim mail send <team> "<subject>" "<body>"` | Dispatch mail to a team inbox |
+| `aim mail check` | Pull incoming mail into `continuity/UNREAD_MAIL.md` |
+| `aim mail daemon --interval N` | Background polling every N minutes |
+| `aim chalkboard "<natural language>"` | Natural language proxy for mail operations |
+
+### 5.3 Safety
+- **Anti-Spam Moderator:** Detects 5+ identical messages and quarantines the loop
+- **Mandatory Read-Receipts:** Receiving agent must halt and confirm before executing
+- **Postmaster Bridge:** `[TICKET]`/`[ISSUE]` tags auto-create GitHub Issues
 
 ---
 
-## SECTION 6: THE HYBRID SOUL PROTOCOL
+## SECTION 6: SAFETY & SOVEREIGNTY
 
-A.I.M. maintains technical continuity through a dual-mode ingestion engine within `src/bootstrap_brain.py`.
+### 6.1 The Obsidian Bridge
+- **Outbound:** `scripts/obsidian_sync.py` mirrors memory files to Obsidian vault
+- **Inbound:** `scripts/obsidian_pull.py` pulls manual edits back
 
-### 6.1 Foundation Sync (Active Instructions)
-- **Scope:** `GEMINI.md`, `core/MEMORY.md`, and all files in `antigravity.wiki/`.
-- **Logic:** These files are **Synchronized**. 
-- **The Self-Healing Trigger (JIT):** Every time a new session starts, the framework checks file modification timestamps against the Engram DB.
-
-### 6.2 Foundry Ingestion (Permanent Knowledge)
-- **Scope:** Everything dropped into the `foundry/`.
-- **Behavior:** Once a file is indexed from the Foundry, it is **Permanently Persistent** in the Engram DB. The source files on disk can be safely deleted to keep the workspace lean.
+### 6.2 The Issue Tracker (`continuity/ISSUE_TRACKER.md`)
+- **Dynamic:** `scripts/sync_issue_tracker.py` auto-detects the current repo from `git remote`
+- **Multi-repo:** Pulls local repo issues AND optionally cross-swarm hub issues
+- **Integration:** Called by `aim sync`, `aim crash`, and the daemon loop
 
 ---
 
 ## SECTION 7: UNIVERSAL SOVEREIGNTY
 
 ### 7.1 The Native GUI Cockpit
-- **Role:** Centralized configuration for all reasoning models is handled directly by the Antigravity IDE UI, completely deprecating manual `CONFIG.json` CLI terminal wizards.
+Centralized configuration handled by Antigravity IDE UI, supplemented by `core/CONFIG.json` for A.I.M.-specific settings.
 
 ### 7.2 Native File-System Hooks
-- **Role:** IDE Integration.
-- **Function:** Antigravity natively reads the local directory structure, bypassing any need to run standalone MCP (Model Context Protocol) servers.
+Antigravity natively reads the local directory structure, bypassing standalone MCP servers.
 
 ### 7.3 The Universal Skills Framework
-- **Role:** Standardized Agentic Tooling.
-- **Function:** Antigravity inherently supports `.agents/skills/` directories, allowing the Operator to drop executable scripts alongside a `SKILL.md` manifest for the agent to autonomously discover.
+Antigravity supports `.agents/skills/` directories and `skills/` with paired `SKILL.md` manifests for autonomous tool discovery.
+
+### 7.4 Fluid CLI Alias Architecture
+The CLI command name dynamically adapts to the root directory name via `setup.ps1`/`setup.sh`. Examples: `aim-antigravity`, `aim-claude`, `aim-codex`.
 
 ---
 
-## SECTION 8: DEVELOPMENT LIFECYCLE (THE PHASE PROTOCOL)
+## SECTION 8: DEVELOPMENT LIFECYCLE (GITOPS)
+
 ### 8.1 The Branching Strategy
-1.  **Ideation & Planning:** The roadmap is updated on `main`.
-2.  **Execution Branch:** A new branch is cut (e.g., `dev-phase-21`) using Antigravity's Git integration.
-3.  **The Archive Cut:** Before merging.
-4.  **The Merge:** The `dev-` branch is merged into `main`.
+1. **Report:** `aim bug "description"` or `aim enhancement "description"` to log the issue
+2. **Isolate:** `aim fix <id>` to check out a unique branch
+3. **Validate:** `git branch --show-current` — if output is `main`/`master`, **STOP**
+4. **Release:** `aim push "Prefix: msg"` to push atomically
+
+### 8.2 The TDD Mandate
+Every functional change must be governed by the TDD lifecycle. Tests exist in `tests/` (17 test files). No code enters `src/` without a verification script.
 
 ---
 
-## SECTION 9: TEST-DRIVEN DEVELOPMENT (TDD) POLICY
-### 9.1 The Mandate
-Every functional change **MUST** be governed by the TDD lifecycle. No code enters the source directory without a verification script that is autonomously executed by the agent until green.
+## SECTION 9: THE FILE TREE (QUICK REFERENCE)
 
----
-
-## SECTION 10: GIT-OPS & SEMANTIC RELEASE (THE PUBLIC LEDGER)
-
-### 10.1 Issue-Driven Development
-- A.I.M. enforces atomic deployments. Agents are forbidden from generic commits. Every single change must be formally tied to an Issue or a tracked goal, executed on an isolated branch within Antigravity, and proven via TDD before being merged to main.
+```
+aim-antigravity/
+├── GEMINI.md                  # Agent personality shell & operating rules
+├── HANDOFF.md                 # Front door for incoming agents
+├── CHANGELOG.md               # Version history
+├── setup.ps1 / setup.sh       # Fluid alias installer
+├── requirements.txt            # Python dependencies
+│
+├── .agents/workflows/          # Antigravity slash commands
+│   ├── init.md                 # /init workflow
+│   └── reincarnate.md          # /reincarnate workflow
+│
+├── core/                       # Configuration
+│   ├── CONFIG.json             # Central config (paths, hub_repo, flags)
+│   ├── MEMORY.md               # Live project state
+│   ├── OPERATOR.md             # Operator identity
+│   └── OPERATOR_PROFILE.md     # Extended operator profile
+│
+├── continuity/                 # Session continuity artifacts
+│   ├── REINCARNATION_GAMEPLAN.md
+│   ├── CURRENT_PULSE.md
+│   ├── LAST_SESSION_FLIGHT_RECORDER.md
+│   └── ISSUE_TRACKER.md
+│
+├── scripts/                    # CLI & utilities (28 .py files)
+├── src/                        # Core engines (20 .py files)
+├── hooks/                      # Event-driven hooks (4 .py files)
+├── skills/                     # Discoverable agent skills (4 pairs)
+├── plugins/                    # Modular extensions (3 plugins)
+├── tests/                      # TDD test suite (17 test files)
+│
+├── memory/                     # Cascading memory tiers
+│   ├── hourly/
+│   ├── daily/
+│   ├── weekly/
+│   └── archive/
+│
+├── history/                    # Session Engram DB
+│   └── session_engram.db
+│
+├── archive/                    # Deep storage (gitignored)
+│   ├── raw/                    # Full session transcripts
+│   ├── swarm_hub/              # Chalkboard staging
+│   └── sync/                   # Sovereign sync exports
+│
+├── foundry/                    # Expert knowledge intake (gitignored)
+└── antigravity.wiki/           # Full 54-page wiki
+```
