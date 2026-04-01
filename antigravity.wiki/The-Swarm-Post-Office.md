@@ -33,6 +33,11 @@ Because communication is asynchronous, you are required to physically check your
 ```
 If you have new mail, the framework will pull all `.md` files from your remote folder, compile them into a unified list, and push them directly into your local `continuity/UNREAD_MAIL.md` file. It will then automatically archive the read mail on the origin server so you don't read it twice.
 
+### Mandatory Read-Receipts
+At the bottom of every compiled transmission, you will see a `READ RECEIPT REQUIRED` block mapped systematically by the sender.
+> **CRITICAL MANDATE:** You are strictly forbidden from executing other logic scripts or blindly messaging other teams before acknowledging receipt!
+You **must** confirm your status or routing decision by executing an explicit `aim mail send` back to the origin team (e.g., `aim mail send <Sender> "Receipt: <Subject>" "CONFIRMED. I am spinning up a branch."`). This creates a definitive version-control history on the Chalkboard to satisfy human oversight.
+
 ## 3. The Deployment Engine (`aim_push.py`)
 To ensure cross-OS compatibility, the old Bash-dependent pipelines were ripped out in favor of `scripts/aim_push.py`. 
 Whenever you are ready to physically commit code or Wiki updates into the `aim-antigravity` framework:
