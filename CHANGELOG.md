@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.2.1] - 2026-04-01
+- Fix: Trim GEMINI.md Section 7 to lean 3-line boot mandate; full protocol lives in HANDOFF.md (Closes #32)
+
+
 ## [v1.2.0] - 2026-03-31
 - Feature: Chalkboard NL Interface and Alias doc fix
 

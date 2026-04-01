@@ -46,11 +46,9 @@ When you run into ANY type of question, architectural issue, or test failure, yo
 - Let the official documentation guide your fix. Do not rely on your base training weights if the documentation is available.
 - **Catastrophic Memory Crashes:** If the Node.js V8 engine crashes due to context bloat (`JavaScript heap out of memory`), execute `<CLI_NAME> crash` in a fresh terminal to autonomously extract the session signal, purge the JSON noise, and generate a clean handoff bridge without losing your place.
 
-## 7. PREVIOUS SESSION CONTEXT (THE HANDOFF)
-You are part of a continuous, multi-agent relay race. You are taking over from an agent whose context window grew too large. 
-Before you begin any new tactical work or write any code, **you must read the following file** to inherit the epistemic certainty of the previous session:
-1. `HANDOFF.md` (The "Front Door" to the project's current state and directives).
-2. (Optional) `continuity/LAST_SESSION_FLIGHT_RECORDER.md` (Forensic archive of the previous session).
+## 7. BOOT — MANDATORY
+⛔ If `HANDOFF.md` exists in the workspace root: **READ IT IN FULL before responding to any prompt.**
+No exceptions. No skipping. The complete boot protocol and session context are inside.
 
 ## 8. THE SWARM POST OFFICE (MANDATORY READ-RECEIPTS)
 You are networked via the `aim-chalkboard` Global Chalkboard. When you check your incoming task load via `<CLI_NAME> mail check`, you will systematically ingest Markdown files directly into your local `continuity/UNREAD_MAIL.md`.
