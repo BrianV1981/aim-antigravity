@@ -12,10 +12,13 @@ from datetime import datetime
 # --- VENV BOOTSTRAP ---
 current_dir = os.path.dirname(os.path.abspath(__file__))
 aim_root = os.path.dirname(current_dir)
-venv_python = os.path.join(aim_root, "venv", "bin", "python3")
+if sys.platform == "win32":
+    venv_python = os.path.join(aim_root, "venv", "Scripts", "python.exe")
+else:
+    venv_python = os.path.join(aim_root, "venv", "bin", "python3")
 
-if os.path.exists(venv_python) and sys.executable != venv_python:
-    os.execv(venv_python, [venv_python] + sys.argv)
+if os.path.exists(venv_python) and os.path.normpath(sys.executable) != os.path.normpath(venv_python):
+    sys.exit(subprocess.run([venv_python] + sys.argv).returncode)
 
 # --- CONFIG BOOTSTRAP ---
 src_dir = os.path.join(aim_root, "src")
@@ -25,7 +28,7 @@ from config_utils import CONFIG, AIM_ROOT
 
 BASE_DIR = AIM_ROOT
 CLI_NAME = os.path.basename(BASE_DIR)
-VENV_PYTHON = os.path.join(BASE_DIR, "venv/bin/python3")
+VENV_PYTHON = venv_python if os.path.exists(venv_python) else sys.executable
 SRC_DIR = os.path.join(BASE_DIR, "src")
 SCRIPTS_DIR = os.path.join(BASE_DIR, "scripts")
 
