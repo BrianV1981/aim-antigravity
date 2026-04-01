@@ -4,5 +4,6 @@ __pycache__/
 env/
 venv/
 foundry/
-foundry/
 archive/
+*.db
+*Zone.Identifier
