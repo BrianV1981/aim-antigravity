@@ -65,6 +65,38 @@ def extract_signal(json_path):
     except Exception as e:
         return f"Extraction Error: {e}"
 
+def extract_signal_from_txt(txt_path):
+    """
+    Surgically extracts the architectural signal from an Antigravity overview.txt transcript.
+    Acts as a proxy for the legacy JSON-based extract_signal, maintaining logic structure.
+    """
+    try:
+        with open(txt_path, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+            
+        signal = []
+        in_noise_block = False
+        
+        for line in lines:
+            if "call:default_api:" in line or "response:default_api:" in line:
+                signal.append({"role": "system", "timestamp": "Unknown", "text": f"> **[SYSTEM TOOL CALL]** `{line.strip()}`"})
+                continue
+                
+            strip_line = line.strip()
+            if strip_line == '{' or (strip_line.startswith('{') and len(strip_line) < 50):
+                in_noise_block = True
+                continue
+            if in_noise_block and (strip_line == '}' or strip_line.startswith('}')):
+                in_noise_block = False
+                continue
+                
+            if not in_noise_block and strip_line:
+                signal.append({"role": "model", "timestamp": "Unknown", "text": strip_line})
+                
+        return signal
+    except Exception as e:
+        return f"Extraction Error: {e}"
+
 def skeleton_to_markdown(skeleton, session_id):
     """
     Converts a JSON signal skeleton into a beautifully formatted Obsidian-native Markdown string.

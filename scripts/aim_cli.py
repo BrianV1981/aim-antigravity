@@ -153,14 +153,6 @@ def cmd_chalkboard(args):
     chalkboard_args = [args.prompt]
     run_script(os.path.join(hub_scripts, "aim_chalkboard.py"), chalkboard_args)
 
-def cmd_continuity(args):
-    """Executes the Python-native Continuity Pipeline extraction"""
-    script_path = os.path.join(os.path.dirname(__file__), "aim_continuity.py")
-    continuity_args = [args.action]
-    if getattr(args, "intent", None):
-        continuity_args.extend(["--intent", args.intent])
-    run_script(script_path, continuity_args)
-
 def cmd_postmaster(args):
     """Executes aim_postmaster.py directly from decoupled Chalkboard origin."""
     hub_scripts = ensure_chalkboard_dependencies()
@@ -835,11 +827,6 @@ def main():
     chalkboard_parser = subparsers.add_parser("chalkboard", help="Use Natural Language to send Mail/Directives to the Swarm")
     chalkboard_parser.add_argument("prompt", help="The raw natural language sentence")
     
-    continuity_parser = subparsers.add_parser("continuity", help="Extract the exact historical Python-native Flight Recorder log out of Antigravity")
-    continuity_subparsers = continuity_parser.add_subparsers(dest="action", required=True)
-    extract_parser = continuity_subparsers.add_parser("extract", help="Aggressively parse the OS log buffer to syntheize LAST_SESSION_FLIGHT_RECORDER.md")
-    extract_parser.add_argument("--intent", help="Commander's Intent string to pipe into the Gameplan")
-
     postmaster_parser = subparsers.add_parser("postmaster", help="Execute the aim_postmaster daemon to scan and escalate tags to native GitHub Issues or Moderate spam loops")
     postmaster_parser.add_argument("action", choices=["escalate", "daemon"], help="The routing action string")
     postmaster_parser.add_argument("--interval", type=int, default=5, help="Minutes between Moderator sweeps (Daemon mode)")
@@ -879,7 +866,6 @@ def main():
     elif args.command == "mail": cmd_mail(args)
     elif args.command == "chalkboard": cmd_chalkboard(args)
     elif args.command == "postmaster": cmd_postmaster(args)
-    elif args.command == "continuity": cmd_continuity(args)
     elif args.command == "index": cmd_index(args)
     elif args.command == "ingest": cmd_ingest(args)
     elif args.command in ["handoff", "pulse"]: cmd_handoff(args)
