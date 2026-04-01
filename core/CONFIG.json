@@ -16,18 +16,18 @@
     "team_id": "antigravity"
   },
   "models": {
-    "embedding_provider": "local",
+    "embedding_provider": "disabled",
     "embedding": "nomic-embed-text",
     "embedding_endpoint": "http://localhost:11434/api/embeddings",
     "tiers": {
       "default_reasoning": {
-        "provider": "local",
+        "provider": "disabled",
         "model": "qwen3.5:cloud",
         "endpoint": "http://localhost:11434/api/generate",
         "auth_type": "api_key"
       },
       "tier1": {
-        "provider": "local",
+        "provider": "disabled",
         "model": "qwen3.5:cloud",
         "endpoint": "http://localhost:11434/api/generate",
         "auth_type": "api_key"
@@ -83,7 +83,7 @@
     "archive_retention_days": 30,
     "sentinel_mode": "full",
     "obsidian_vault_path": "",
-    "auto_distill_tier": "T3",
+    "auto_distill_tier": "OFF",
     "handoff_context_tail": 30,
     "auto_rebirth": false,
     "handoff_context_lines": 0
