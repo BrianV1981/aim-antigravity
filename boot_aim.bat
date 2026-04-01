@@ -18,7 +18,7 @@ REM Create an explicit virtual environment proxy launch if missing
 pip install mitmproxy >nul 2>&1
 
 echo [A.I.M] Spinning up mitmdump daemon background process...
-start "A.I.M. Proxy DataJack" cmd /c "mitmdump -s src/plugins/datajack/aim-proxy.py -p 8080 --set termlog_verbosity=error --set block_global=false"
+start "A.I.M. Proxy DataJack" cmd /c "python -c \"from mitmproxy.tools.main import mitmdump; mitmdump(['-s', 'src/plugins/datajack/aim-proxy.py', '-p', '8080', '--set', 'termlog_verbosity=error', '--set', 'block_global=false'])\""
 
 REM Allowing the proxy 2 seconds to bind its socket correctly
 timeout /t 2 /nobreak >nul

@@ -6,10 +6,10 @@ import glob
 from datetime import datetime
 AIM_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 try:
-    from extract_signal import extract_signal, extract_signal_from_txt, extract_signal_from_antigravity_steps, skeleton_to_markdown
+    from extract_signal import extract_signal, extract_signal_from_txt, extract_signal_from_antigravity_steps, skeleton_to_markdown, extract_latest_markdown_export
 except ImportError:
     sys.path.append(os.path.join(AIM_ROOT, "scripts"))
-    from extract_signal import extract_signal, extract_signal_from_txt, extract_signal_from_antigravity_steps, skeleton_to_markdown
+    from extract_signal import extract_signal, extract_signal_from_txt, extract_signal_from_antigravity_steps, skeleton_to_markdown, extract_latest_markdown_export
 
 # --- CONFIGURATION (Load from core/CONFIG.json) ---
 CONFIG_PATH = os.path.join(AIM_ROOT, "core/CONFIG.json")
@@ -81,68 +81,22 @@ def generate_reincarnation_gameplan(user_directive=""):
 def generate_handoff_pulse():
     """
     Fast, Short-Term Continuity Engine.
-    Reads the latest overview.txt transcript natively from the Antigravity backend,
-    extracts the signal via Python iteration, and zeroes the API cost.
+    Triggers the Windows desktop UI Hook to pull the chat directly
+    from Antigravity, then ingests the 0-token Markdown from Downloads.
     """
-    brain_dir = os.path.expanduser(r"~\.gemini\antigravity\brain")
-    if not os.path.exists(brain_dir):
-        brain_dir = r"C:\Users\kingb\.gemini\antigravity\brain"
-        
+    import subprocess
+    print("      [A.I.M] Triggering UI OS Handoff sequence...")
     try:
-        dirs = [os.path.join(brain_dir, d) for d in os.listdir(brain_dir) if os.path.isdir(os.path.join(brain_dir, d))]
-        if not dirs:
-            return
-        latest_dir = max(dirs, key=os.path.getmtime)
+        subprocess.run(["python", os.path.join(AIM_ROOT, "scripts", "auto_export.py")], check=True)
     except Exception as e:
-        print(f"Handoff Generator: Directory scan error: {e}")
-        return
-
-    latest_transcript = os.path.join(latest_dir, ".system_generated", "logs", "overview.txt")
+        print(f"      [A.I.M] Warning: auto_export.py failed ({e}). Proceeding with legacy/existing file.")
+        
+    print("      [A.I.M] Ingesting native OS transcript...")
+    transcript = extract_latest_markdown_export()
     
-    try:
-        if not os.path.exists(latest_transcript):
-            print(f"Handoff Generator: overview.txt not flushed. Executing dynamic active-state extraction from steps...")
-            skeleton = extract_signal_from_antigravity_steps(latest_dir)
-        else:
-            skeleton = extract_signal_from_txt(latest_transcript)
-            
-        # Write clean session artifact (Rolling Delta or Full History)
-        os.makedirs(CONTINUITY_DIR, exist_ok=True)
-        clean_path = os.path.join(CONTINUITY_DIR, "LAST_SESSION_FLIGHT_RECORDER.md")
-        
-        # Convert JSON skeleton into pure Markdown dialogue
-        session_id = os.path.basename(latest_transcript).replace('.json', '') if os.path.exists(latest_transcript) else os.path.basename(latest_dir)
-        md_content = skeleton_to_markdown(skeleton, session_id)
-        
-        # Load configurable line limit, default to 0 (Full History)
-        tail_lines = CONFIG.get('settings', {}).get('handoff_context_lines', 0)
-        
-        if tail_lines > 0:
-            md_lines = md_content.splitlines()
-            if len(md_lines) > tail_lines:
-                truncated_lines = md_lines[-tail_lines:]
-            else:
-                truncated_lines = md_lines
-                
-            clean_content = "# A.I.M. Session Flight Recorder (Rolling Delta)\n"
-            clean_content += f"*This is a noise-reduced flight recorder showing only the last {tail_lines} lines. NOT automatically injected into LLM context.*\n\n"
-            clean_content += '\n'.join(truncated_lines) + '\n'
-            atomic_write(clean_path, clean_content)
-        else:
-            clean_content = "# A.I.M. Session Flight Recorder (Full History)\n"
-            clean_content += f"*This is a noise-reduced flight recorder showing the entire session. NOT automatically injected into LLM context.*\n\n"
-            clean_content += md_content + '\n'
-            atomic_write(clean_path, clean_content)
-                
-        # --- PROJECT EDGE SYNTHESIS (High Fidelity) ---
-        # Capture only the last 10 turns of the filtered signal to identify the "Technical Edge"
-        # without polluting the context with the entire session history.
-        recent_skeleton = skeleton[-10:] if isinstance(skeleton, list) else skeleton
-        context_str = json.dumps(recent_skeleton, indent=2)
-
-    except Exception as e:
-        print(f"Handoff Generator: Signal extraction failure on {latest_transcript}: {e}")
-        return
+    os.makedirs(CONTINUITY_DIR, exist_ok=True)
+    clean_path = os.path.join(CONTINUITY_DIR, "LAST_SESSION_FLIGHT_RECORDER.md")
+    atomic_write(clean_path, transcript)
 
     # --- LITERALLY ZERO-API PROJECT EDGE SYNTHESIS ---
     try:
@@ -151,16 +105,14 @@ def generate_handoff_pulse():
         timestamp_str = now.strftime('%H:%M:%S')
         
         pulse_output = f"---\ndate: {date_str}\ntime: \"{timestamp_str}\"\ntype: handoff\n---\n\n"
-        pulse_output += f"# A.I.M. Context Pulse (Extracted by Zero-Token Backend Architecture)\n\n"
+        pulse_output += f"# A.I.M. Context Pulse (Zero-Token Native OS Handoff)\n\n"
         
-        # Map recent trajectory inherently from the skeleton tools
-        recent_skeleton = skeleton[-10:] if isinstance(skeleton, list) else []
-        tool_metrics = [t.get('text', '') for t in recent_skeleton if 'SYSTEM TOOL CALL' in t.get('text', '')]
         pulse_output += "### Immediate Hardware State Edge:\n"
-        for idx, tool in enumerate(tool_metrics[-5:]):
-             pulse_output += f"- {tool}\n"
-             
-        pulse_output += "\n\n---\n\"I explicitly executed identically without relying on a Large Language Model routing call.\" — **A.I.M. (Rigid Zero-Token Backend Pulse)**"
+        # Extract last ~1000 chars to represent the explicit project edge
+        edge_text = transcript[-1000:] if len(transcript) > 1000 else transcript
+        pulse_output += f"```markdown\n{edge_text}\n```\n"
+        
+        pulse_output += "\n\n---\n\"I bypassed the Antigravity backend natively using Win32 Desktop Hooks.\" — **A.I.M.**"
         
         pulse_path = os.path.join(CONTINUITY_DIR, "CURRENT_PULSE.md")
         atomic_write(pulse_path, pulse_output)

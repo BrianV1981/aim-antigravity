@@ -127,6 +127,38 @@ def extract_signal_from_antigravity_steps(brain_dir):
     except Exception as e:
         return f"Extraction Error: {e}"
 
+def extract_latest_markdown_export():
+    """
+    Crawls the Windows Downloads folder for the most recent Antigravity `.md` export,
+    strips the UI disclaimer framing, and returns the raw transcript string.
+    """
+    import glob
+    try:
+        downloads_path = os.path.expanduser(r"~\Downloads\*.md")
+        md_files = glob.glob(downloads_path)
+        if not md_files:
+            return "[A.I.M] No native markdown export found in Downloads."
+            
+        latest_file = max(md_files, key=os.path.getmtime)
+        
+        with open(latest_file, 'r', encoding='utf-8') as f:
+            lines = f.readlines()
+            
+        # Strip the standard Antigravity "purely the output" disclaimer
+        clean_lines = []
+        skip = False
+        for line in lines:
+            if "Note: _This is purely the output" in line:
+                skip = True
+            elif skip and line.strip() == "":
+                skip = False
+            elif not skip:
+                clean_lines.append(line)
+                
+        return "".join(clean_lines).strip()
+    except Exception as e:
+        return f"[A.I.M] Markdown Extraction Error: {e}"
+
 def skeleton_to_markdown(skeleton, session_id):
     """
     Converts a JSON signal skeleton into a beautifully formatted Obsidian-native Markdown string.
