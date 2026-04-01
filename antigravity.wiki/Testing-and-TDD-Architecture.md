@@ -2,13 +2,13 @@
 
 The A.I.M.-Antigravity integration brought a massive paradigm shift to testing infrastructure. Legacy iterations of the exoskeleton (`aim`, `aim-codex`, and `aim-claude`) assumed a Linux shell environment where tools inherently ran in sandboxed sub-processes and where session polling loops extracted raw JSONL files (`*.jsonl`). 
 
-In contrast, **A.I.M.-Antigravity leverages a Windows-first, event-driven Swarm webhook architecture**, reading raw unstructured `.txt` dumps directly from `.system_generated\logs\overview.txt`. Therefore, the fundamental testing architecture engineered for past A.I.M. daemon wrappers was completely overhauled.
+In contrast, **A.I.M.-Antigravity completely drops live CLI daemon polling in favor of parsing the explicitly exported session markdown (`.md`) from your local `Downloads/` folder.** Therefore, the fundamental testing architecture engineered for past A.I.M. daemon wrappers was completely overhauled.
 
 ## The GitOps Migration Constraint
 
 In earlier versions of A.I.M., tests (`test_full_session.py`, `test_hooks_session_summarizer.py`) validated complex daemon interactions. Because Antigravity leverages isolated execution (file-listening rather than daemon polling), those tests represented **Architectural Debt** and were deeply incompatible with the underlying ideology. 
 
-In this overhaul, all legacy CLI test suites relying on `jsonl` extraction have been permanently **quarantined or purged**. Tests now focus entirely on native hook registry mechanics.
+In this overhaul, all legacy CLI test suites relying on silent `jsonl` daemon polling over active shells have been permanently **quarantined or purged**. Tests now focus entirely on native hook registry mechanics and explicit file parsing.
 
 ---
 

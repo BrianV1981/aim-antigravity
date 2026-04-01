@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.2.4] - 2026-04-01
+- fix: Corrected architectural pipeline extraction target tracking
+
+
 ## [v1.2.3] - 2026-04-01
 - fix: Phase 2-4 TDD Pipeline, Sandbox Removal, and Wiki Overhaul
 
