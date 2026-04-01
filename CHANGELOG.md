@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.2.1] - 2026-04-01
+- Fix: Update Operator identity to Brian Vasquez with aliases BrianV1981 / @brianv1981 (Closes #30)
+
+
 ## [v1.2.0] - 2026-03-31
 - Feature: Chalkboard NL Interface and Alias doc fix
 
