@@ -147,6 +147,28 @@ def cmd_mail(args):
         mail_args.extend(["--interval", str(args.interval)])
     run_script(os.path.join(hub_scripts, "aim_mail.py"), mail_args)
 
+def check_mail_silently():
+    """Non-blocking event-driven mail check. Piggybacks on lifecycle events.
+    Returns True if check succeeded, False on any failure. Never crashes the parent operation."""
+    try:
+        hub_scripts = ensure_chalkboard_dependencies()
+        result = subprocess.run(
+            [VENV_PYTHON, os.path.join(hub_scripts, "aim_mail.py"), "check"],
+            capture_output=True, text=True, timeout=10
+        )
+        if result.returncode == 0:
+            # Check if any mail was found by scanning stdout
+            if "new" in result.stdout.lower() or "unread" in result.stdout.lower():
+                print("[MAIL] 📬 New mail detected. Check continuity/UNREAD_MAIL.md")
+            return True
+        return False
+    except subprocess.TimeoutExpired:
+        return False
+    except SystemExit:
+        return False
+    except Exception:
+        return False
+
 def cmd_chalkboard(args):
     """Executes aim_chalkboard.py directly from decoupled Chalkboard origin."""
     hub_scripts = ensure_chalkboard_dependencies()
@@ -292,13 +314,20 @@ def cmd_push(args):
     print("[3/3] Deploying to GitHub...")
     run_script(os.path.join(SCRIPTS_DIR, "aim_push.py"), [msg])
 
+    # Event-driven mail check (Issue #27)
+    check_mail_silently()
+
 def cmd_sync_issues(args):
     """Synchronizes remote GitHub issues to the local ISSUE_TRACKER.md file."""
     run_script(os.path.join(SCRIPTS_DIR, "sync_issue_tracker.py"), [])
+    # Event-driven mail check (Issue #27)
+    check_mail_silently()
 
 def cmd_crash(args):
     """Executes the crash recovery protocol to salvage interrupted sessions."""
     run_script(os.path.join(SCRIPTS_DIR, "aim_crash.py"), [])
+    # Event-driven mail check (Issue #27)
+    check_mail_silently()
 
 def cmd_reincarnate(args):
     """Triggers the automated reincarnate handoff loop."""
