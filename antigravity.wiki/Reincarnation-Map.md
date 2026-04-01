@@ -91,3 +91,25 @@ The exported `.md` is consumed by `handoff_pulse_generator.py` which performs **
 *   **No `.md` in Downloads:** If `handoff_pulse_generator.py` cannot locate a recent `.md` file in the Downloads folder, it prints a clear warning and aborts without corrupting existing continuity files.
 *   **Session Crash (No Clean Reincarnation):** If the Antigravity session crashes before `/reincarnate` is triggered, the Operator must manually export the session (if possible) or rely on the previous session's continuity files. The `LAST_SESSION_FLIGHT_RECORDER.md` from the *prior* clean handoff remains intact on disk.
 *   **Context Bloat during Gameplan:** The pulse generator only reads the last 50k characters of the session history to prevent the Python parser from running out of memory on extremely large sessions.
+
+---
+
+## 🔮 6. Future Option: Automated Export via Extension
+
+> [!NOTE]
+> **Status:** Shelved. Documented here so future agents don't waste cycles re-investigating.
+
+The [Antigravity Automation](https://open-vsx.org/extension/joecodecreations/antigravity-automation/1.5.0) extension (by JoeCodeCreations, $4.99–$9.99) injects a local communication bridge into the Antigravity IDE:
+- **REST API** (`localhost:5000`): `POST /send_command`, `POST /start-new-chat`, `GET /stats`, etc.
+- **WebSocket** (`localhost:9812`): Streams real-time chat content as `{"title": "...", "content": "..."}`
+- **Python SDK:** `pip install antigravity-automation`
+
+This would eliminate the manual Export bottleneck entirely — `/reincarnate` could grab chat content via the API, zero clicks. It would also enable live session scraping for the memory pipeline (Issue #26) and external prompt injection for Swarm orchestration.
+
+**Why it's shelved:**
+1. Paid extension ($10 for the Remote Control tier).
+2. Creates IDE vendor lock-in — `aim-claude`, `aim-codex`, `aim-vscode` would still need the file-based fallback.
+3. Building an open-source equivalent requires cracking the WebView sandbox, which has already been attempted and failed (see failed methods above).
+
+**If revisited:** The hybrid approach is recommended — use the extension API when available, fall back to manual Export when not. This preserves cross-IDE portability.
+
