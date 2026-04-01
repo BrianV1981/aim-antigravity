@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.2.3] - 2026-04-01
+- fix: Phase 2-4 TDD Pipeline, Sandbox Removal, and Wiki Overhaul
+
+
 ## [v1.2.2] - 2026-04-01
 - Fix: Restore TUI aim_config.py (all 14 handlers, real test_provider, setup_cognitive_tier); re-enable tier1/default_reasoning in CONFIG.json; fix Windows path compat in reasoning_utils.py; restore TUI wiki pages (Closes #35)
 

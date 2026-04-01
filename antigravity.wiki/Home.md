@@ -22,6 +22,8 @@
 
 📖 **Full Documentation:** [Read the Official GitHub Wiki](https://github.com/BrianV1981/aim/wiki)
 🛠️ **Engineers:** Hate biological metaphors? [Read the metaphor-free Technical Spec here](https://github.com/BrianV1981/aim/wiki/Technical-Specification).
+🧪 **Architecture Shifts:** Understand the shift to native Windows execution via the [Testing & TDD Architecture Guide](Testing-and-TDD-Architecture.md).
+🎛️ **The Cockpit:** Review the 14 interactive setup menus inside the [TUI Map](TUI-Map.md).
 
 ---
 

@@ -49,7 +49,7 @@
 | Script | Role | Status |
 |---|---|---|
 | `datajack_plugin.py` | Interface layer for [DataJack](The-DataJack-Protocol.md) cartridges. Contains `NullKnowledgeProvider` fallback. | ✅ Active |
-| `mcp_server.py` | FastMCP-based Model Context Protocol server. Antigravity reads local files natively, so this is supplementary. | ⚠️ Legacy |
+| `mcp_server.py` | FastMCP-based Model Context Protocol server. **Cross-platform native execution.** Bubblewrap sandboxing removed to support bare-metal Windows 11 execution. | ✅ Active |
 
 ---
 
@@ -61,7 +61,7 @@
 |---|---|---|---|
 | `aim_cli.py` | `[ALIAS]` | **The Central Router.** Routes all `aim *` subcommands to their target scripts. ~40 KB, handles `search`, `map`, `sync`, `push`, `fix`, `bug`, `mail`, `chalkboard`, etc. | ✅ Active |
 | `aim_init.py` | `[ALIAS] init` | Bootstraps a new A.I.M. deployment — scaffolds directories, indexes `GEMINI.md` into KIs, and wires the Engram DB. | ✅ Active |
-| `aim_config.py` | `[ALIAS] tui` | Interactive TUI cockpit for editing `CONFIG.json` settings. | ✅ Active |
+| `aim_config.py` | `[ALIAS] tui` | **The Primary Cockpit.** Interactive TUI for editing `CONFIG.json`, live testing reasoning providers, shifting cognitive tiers, and bootstrapping Vault parameters natively on Windows. | ✅ Active |
 | `aim_push.py` | `[ALIAS] push` | GitOps push wrapper. Validates branch, prevents direct `main` pushes, enforces commit message format. | ✅ Active |
 | `aim_crash.py` | `[ALIAS] crash` | Emergency recovery engine. Extracts signal from corrupted V8 heap crashes, rebuilds continuity files, syncs issue tracker. | ✅ Active |
 | `aim_doctor.py` | `[ALIAS] doctor` | Environment validator. Checks dependencies, database integrity, and configuration health. | ✅ Active |
@@ -74,7 +74,7 @@
 ### 2.2 Signal & Continuity
 | Script | Role | Status |
 |---|---|---|
-| `extract_signal.py` | **The Harvester.** Contains `extract_signal()` (JSON), `extract_signal_from_txt()` (Antigravity overview.txt), `extract_signal_from_antigravity_steps()` (mid-session step scraping), `extract_latest_markdown_export()` (Downloads folder), and `parse_markdown_transcript()` (dialogue segmentation). | ✅ Active |
+| `extract_signal.py` | **The Harvester.** Shifted specifically to target A.I.M.-Antigravity file logs natively. Parses unstructured `.system_generated\logs\overview.txt` dumps over legacy `jsonl` objects. Responsible for structural signal and step scraping. | ✅ Active |
 | `auto_export.py` | **UI Hook (Experimental).** Attempts `pywinauto`/`uiautomation` to auto-click the Export button. Fails on Antigravity due to stripped `aria-label` arrays. Falls back gracefully. | ⚠️ Blocked |
 | `sync_issue_tracker.py` | **Dynamic Issue Sync.** Auto-detects current repo from `git remote`, pulls open issues, optionally merges cross-swarm hub issues. Writes to `continuity/ISSUE_TRACKER.md`. | ✅ Active |
 
