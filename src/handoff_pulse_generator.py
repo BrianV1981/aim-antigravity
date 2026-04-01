@@ -6,10 +6,10 @@ import glob
 from datetime import datetime
 AIM_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 try:
-    from extract_signal import extract_signal, extract_signal_from_txt, extract_signal_from_antigravity_steps, skeleton_to_markdown, extract_latest_markdown_export
+    from extract_signal import extract_signal, extract_signal_from_txt, extract_signal_from_antigravity_steps, skeleton_to_markdown, extract_latest_markdown_export, parse_markdown_transcript
 except ImportError:
     sys.path.append(os.path.join(AIM_ROOT, "scripts"))
-    from extract_signal import extract_signal, extract_signal_from_txt, extract_signal_from_antigravity_steps, skeleton_to_markdown, extract_latest_markdown_export
+    from extract_signal import extract_signal, extract_signal_from_txt, extract_signal_from_antigravity_steps, skeleton_to_markdown, extract_latest_markdown_export, parse_markdown_transcript
 
 # --- CONFIGURATION (Load from core/CONFIG.json) ---
 CONFIG_PATH = os.path.join(AIM_ROOT, "core/CONFIG.json")
@@ -95,24 +95,57 @@ def generate_handoff_pulse():
     transcript = extract_latest_markdown_export()
     
     os.makedirs(CONTINUITY_DIR, exist_ok=True)
+    os.makedirs(ARCHIVE_RAW_DIR, exist_ok=True)
     clean_path = os.path.join(CONTINUITY_DIR, "LAST_SESSION_FLIGHT_RECORDER.md")
     atomic_write(clean_path, transcript)
 
-    # --- LITERALLY ZERO-API PROJECT EDGE SYNTHESIS ---
     try:
         now = datetime.now()
+        timestamp_slug = now.strftime('%Y%m%d_%H%M%S')
         date_str = now.strftime('%Y-%m-%d')
         timestamp_str = now.strftime('%H:%M:%S')
+
+        # --- PIPELINE 1: DEEP MEMORY ARCHIVE & SQLITE ---
+        archive_path = os.path.join(ARCHIVE_RAW_DIR, f"session_{timestamp_slug}.md")
+        atomic_write(archive_path, transcript)
         
+        # Segment into structural dictionaries
+        turns = parse_markdown_transcript(transcript)
+        
+        # SQLite Engram Mirroring
+        import sqlite3
+        history_dir = os.path.join(AIM_ROOT, "history")
+        os.makedirs(history_dir, exist_ok=True)
+        db_path = os.path.join(history_dir, "session_engram.db")
+        
+        conn = sqlite3.connect(db_path)
+        cur = conn.cursor()
+        cur.execute('''CREATE TABLE IF NOT EXISTS chat_history 
+                       (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                        session_id TEXT, 
+                        timestamp TEXT, 
+                        role TEXT, 
+                        content TEXT)''')
+        
+        session_id_val = f"session_{timestamp_slug}"
+        for turn in turns:
+            cur.execute("INSERT INTO chat_history (session_id, timestamp, role, content) VALUES (?, ?, ?, ?)",
+                        (session_id_val, now.strftime('%Y-%m-%d %H:%M:%S'), turn['role'], turn['text']))
+        conn.commit()
+        conn.close()
+        print(f"      [A.I.M] Archived {len(turns)} turns to SQLite Engram.")
+        
+        # --- PIPELINE 2: ZERO-API PROJECT EDGE SYNTHESIS ---
         pulse_output = f"---\ndate: {date_str}\ntime: \"{timestamp_str}\"\ntype: handoff\n---\n\n"
         pulse_output += f"# A.I.M. Context Pulse (Zero-Token Native OS Handoff)\n\n"
         
-        pulse_output += "### Immediate Hardware State Edge:\n"
-        # Extract last ~1000 chars to represent the explicit project edge
-        edge_text = transcript[-1000:] if len(transcript) > 1000 else transcript
-        pulse_output += f"```markdown\n{edge_text}\n```\n"
+        pulse_output += "### Immediate Hardware State Edge (Last 5 Exchanges):\n"
         
-        pulse_output += "\n\n---\n\"I bypassed the Antigravity backend natively using Win32 Desktop Hooks.\" — **A.I.M.**"
+        edge_turns = turns[-5:]
+        for et in edge_turns:
+            pulse_output += f"**[{et['role']}]**:\n```markdown\n{et['text']}\n```\n\n"
+        
+        pulse_output += "\n---\n\"I bypassed the Antigravity backend natively using Win32 Desktop Hooks.\" — **A.I.M.**"
         
         pulse_path = os.path.join(CONTINUITY_DIR, "CURRENT_PULSE.md")
         atomic_write(pulse_path, pulse_output)

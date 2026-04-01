@@ -159,6 +159,36 @@ def extract_latest_markdown_export():
     except Exception as e:
         return f"[A.I.M] Markdown Extraction Error: {e}"
 
+def parse_markdown_transcript(raw_md):
+    """
+    Slices the monolithic markdown text into an array of conversational dictionaries.
+    Returns: [{'role': 'USER', 'text': '...'}, {'role': 'A.I.M.', 'text': '...'}]
+    """
+    import re
+    turns = []
+    
+    # Split natively on the known Antigravity headers
+    blocks = re.split(r'### (User Input|Planner Response)', raw_md)
+    if not blocks:
+        return []
+        
+    current_role = "SYSTEM"
+    for block in blocks:
+        if block == "User Input":
+            current_role = "USER"
+        elif block == "Planner Response":
+            current_role = "A.I.M."
+        elif block.strip():
+            # If it's a content block, save it to the current role
+            text = block.strip()
+            # If the last turn was the same role, append to it, otherwise create new
+            if turns and turns[-1]['role'] == current_role:
+                turns[-1]['text'] += f"\n\n{text}"
+            else:
+                turns.append({"role": current_role, "text": text})
+                
+    return [t for t in turns if t['role'] in ['USER', 'A.I.M.']]
+
 def skeleton_to_markdown(skeleton, session_id):
     """
     Converts a JSON signal skeleton into a beautifully formatted Obsidian-native Markdown string.
