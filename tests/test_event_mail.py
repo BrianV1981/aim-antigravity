@@ -93,3 +93,16 @@ class TestMailCheckIntegrationPoints:
         from aim_cli import cmd_crash
         source = __import__('inspect').getsource(cmd_crash)
         assert "check_mail_silently" in source, "cmd_crash must call check_mail_silently()"
+
+    def test_cmd_init_calls_mail_check(self):
+        """cmd_init should check mail natively after finishing bootstrapping."""
+        from aim_cli import cmd_init
+        source = __import__('inspect').getsource(cmd_init)
+        assert "check_mail_silently" in source, "cmd_init must trigger background mail intercept"
+
+    def test_cmd_reincarnate_calls_mail_check(self):
+        """cmd_reincarnate should check mail natively during agent handoff sync."""
+        from aim_cli import cmd_reincarnate
+        source = __import__('inspect').getsource(cmd_reincarnate)
+        assert "check_mail_silently" in source, "cmd_reincarnate must trigger background mail intercept"
+

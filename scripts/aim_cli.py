@@ -331,6 +331,7 @@ def cmd_crash(args):
 def cmd_reincarnate(args):
     """Triggers the automated reincarnate handoff loop."""
     run_script(os.path.join(SCRIPTS_DIR, "aim_reincarnate.py"), [])
+    check_mail_silently()
 
 def cmd_delegate(args):
     """Dispatches to aim_delegate.py to spawn parallel sub-agents."""
@@ -445,6 +446,7 @@ def cmd_init(args):
     try:
         subprocess.run([VENV_PYTHON, os.path.join(SCRIPTS_DIR, "aim_init.py")] + init_args, check=True)
     except: pass
+    check_mail_silently()
 
 def cmd_ingest(args):
     """Pulls newer manual edits from the Obsidian Vault into A.I.M.'s workspace."""
