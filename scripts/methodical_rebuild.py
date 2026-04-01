@@ -7,7 +7,7 @@ import sys
 current_dir = os.path.dirname(os.path.abspath(__file__))
 aim_root = os.path.dirname(current_dir)
 src_dir = os.path.join(aim_root, 'src')
-if src_dir not in sys.path: sys.path.append(src_dir)
+if src_dir not in sys.path: sys.path.insert(0, src_dir)
 import shutil
 import re
 from datetime import datetime

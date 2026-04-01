@@ -8,7 +8,7 @@ AIM_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 try:
     from extract_signal import extract_signal, extract_signal_from_txt, extract_signal_from_antigravity_steps, skeleton_to_markdown, extract_latest_markdown_export, parse_markdown_transcript
 except ImportError:
-    sys.path.append(os.path.join(AIM_ROOT, "scripts"))
+    sys.path.insert(0, os.path.join(AIM_ROOT, "scripts"))
     from extract_signal import extract_signal, extract_signal_from_txt, extract_signal_from_antigravity_steps, skeleton_to_markdown, extract_latest_markdown_export, parse_markdown_transcript
 
 # --- CONFIGURATION (Load from core/CONFIG.json) ---

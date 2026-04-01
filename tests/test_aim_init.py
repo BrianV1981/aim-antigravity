@@ -7,7 +7,7 @@ import unittest
 from unittest import mock
 
 
-sys.path.append("/home/kingb/aim/scripts")
+sys.path.insert(0, "/home/kingb/aim/scripts")
 aim_init = importlib.import_module("aim_init")
 
 

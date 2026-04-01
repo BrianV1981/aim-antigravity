@@ -11,9 +11,9 @@ def find_aim_root():
     return current
 
 AIM_ROOT = find_aim_root()
-sys.path.append(AIM_ROOT)
-sys.path.append(os.path.join(AIM_ROOT, "src"))
-sys.path.append(os.path.join(AIM_ROOT, "scripts"))
+sys.path.insert(0, AIM_ROOT)
+sys.path.insert(0, os.path.join(AIM_ROOT, "src"))
+sys.path.insert(0, os.path.join(AIM_ROOT, "scripts"))
 
 from src.handoff_pulse_generator import atomic_write
 

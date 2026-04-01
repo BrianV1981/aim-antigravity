@@ -22,7 +22,7 @@ if os.path.exists(venv_python) and os.path.normpath(sys.executable) != os.path.n
 
 # --- CONFIG BOOTSTRAP ---
 src_dir = os.path.join(aim_root, "src")
-if src_dir not in sys.path: sys.path.append(src_dir)
+if src_dir not in sys.path: sys.path.insert(0, src_dir)
 
 from config_utils import CONFIG, AIM_ROOT
 
@@ -770,7 +770,7 @@ def ensure_hooks_mapped():
         if needs_update:
             # Re-register using the aim_init logic dynamically
             try:
-                sys.path.append(SCRIPTS_DIR)
+                sys.path.insert(0, SCRIPTS_DIR)
                 import aim_init
                 aim_init.register_hooks()
             except ImportError: pass

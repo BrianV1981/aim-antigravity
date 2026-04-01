@@ -3,7 +3,7 @@ import sys
 import shutil
 
 plugin_dir = os.path.join(os.path.dirname(__file__), "../plugins/run_skill")
-sys.path.append(plugin_dir)
+sys.path.insert(0, plugin_dir)
 import run
 
 def test_sandboxed_run_isolation(monkeypatch, tmp_path):

@@ -10,7 +10,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 aim_root = os.path.dirname(current_dir)
 hooks_dir = os.path.join(aim_root, "hooks")
 if hooks_dir not in sys.path:
-    sys.path.append(hooks_dir)
+    sys.path.insert(0, hooks_dir)
 
 # We have to mock sys.stdin before importing context_injector because it reads sys.stdin on import
 import io

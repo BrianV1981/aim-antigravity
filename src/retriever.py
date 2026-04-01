@@ -39,7 +39,7 @@ def find_aim_root():
 
 AIM_ROOT = find_aim_root()
 src_dir = os.path.join(AIM_ROOT, "src")
-if src_dir not in sys.path: sys.path.append(src_dir)
+if src_dir not in sys.path: sys.path.insert(0, src_dir)
 
 from config_utils import CONFIG
 from datajack_plugin import load_knowledge_provider

@@ -2,7 +2,7 @@ import os
 import sys
 
 # Append the source directory so we can natively import our background daemon
-sys.path.append(os.path.join(os.path.dirname(__file__), "../src"))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../src"))
 import daemon
 
 def test_inject_pulse(monkeypatch, tmp_path):

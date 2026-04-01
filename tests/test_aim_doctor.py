@@ -8,7 +8,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 aim_root = os.path.dirname(current_dir)
 scripts_dir = os.path.join(aim_root, "scripts")
 if scripts_dir not in sys.path:
-    sys.path.append(scripts_dir)
+    sys.path.insert(0, scripts_dir)
 
 import aim_doctor
 

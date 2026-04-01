@@ -8,8 +8,8 @@ import shutil
 
 # --- ROOT DISCOVERY ---
 AIM_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(os.path.join(AIM_ROOT, "src"))
-sys.path.append(os.path.join(AIM_ROOT, "scripts"))
+sys.path.insert(0, os.path.join(AIM_ROOT, "src"))
+sys.path.insert(0, os.path.join(AIM_ROOT, "scripts"))
 
 import handoff_pulse_generator
 

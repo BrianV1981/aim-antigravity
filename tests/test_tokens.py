@@ -4,7 +4,7 @@ import os
 # Append scripts directory to path for testing
 current_dir = os.path.dirname(os.path.abspath(__file__))
 scripts_dir = os.path.join(os.path.dirname(current_dir), "scripts")
-sys.path.append(scripts_dir)
+sys.path.insert(0, scripts_dir)
 
 import aim_cli
 

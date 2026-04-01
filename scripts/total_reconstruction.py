@@ -12,7 +12,7 @@ def find_aim_root():
 
 AIM_ROOT = find_aim_root()
 src_dir = os.path.join(AIM_ROOT, "src")
-if src_dir not in sys.path: sys.path.append(src_dir)
+if src_dir not in sys.path: sys.path.insert(0, src_dir)
 
 ARCHIVE_RAW_DIR = os.path.join(AIM_ROOT, "archive/raw")
 DAILY_LOG_DIR = os.path.join(AIM_ROOT, "memory")

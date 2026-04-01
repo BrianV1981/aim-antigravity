@@ -21,8 +21,8 @@ def find_aim_root():
     return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 AIM_ROOT = find_aim_root()
-sys.path.append(os.path.join(AIM_ROOT, "src"))
-sys.path.append(os.path.join(AIM_ROOT, "scripts"))
+sys.path.insert(0, os.path.join(AIM_ROOT, "src"))
+sys.path.insert(0, os.path.join(AIM_ROOT, "scripts"))
 
 try:
     from reasoning_utils import generate_reasoning

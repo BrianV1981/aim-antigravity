@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-sys.path.append("/home/kingb/aim/scripts")
+sys.path.insert(0, "/home/kingb/aim/scripts")
 aim_config = importlib.import_module("aim_config")
 
 

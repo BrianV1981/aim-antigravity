@@ -12,7 +12,7 @@ from datetime import datetime
 hook_dir = os.path.dirname(os.path.abspath(__file__))
 aim_root = os.path.dirname(hook_dir)
 src_dir = os.path.join(aim_root, "src")
-if src_dir not in sys.path: sys.path.append(src_dir)
+if src_dir not in sys.path: sys.path.insert(0, src_dir)
 
 from reasoning_utils import generate_reasoning, AIM_ROOT
 

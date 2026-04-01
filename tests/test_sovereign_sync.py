@@ -9,7 +9,7 @@ import struct
 current_dir = os.path.dirname(os.path.abspath(__file__))
 aim_root = os.path.dirname(current_dir)
 import sys
-sys.path.append(os.path.join(aim_root, "src"))
+sys.path.insert(0, os.path.join(aim_root, "src"))
 
 from plugins.datajack.forensic_utils import ForensicDB
 

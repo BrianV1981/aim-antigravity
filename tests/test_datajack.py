@@ -12,11 +12,11 @@ import zipfile
 current_dir = os.path.dirname(os.path.abspath(__file__))
 aim_root = os.path.dirname(current_dir)
 if aim_root not in sys.path:
-    sys.path.append(aim_root)
+    sys.path.insert(0, aim_root)
     
 src_dir = os.path.join(aim_root, "src")
 if src_dir not in sys.path:
-    sys.path.append(src_dir)
+    sys.path.insert(0, src_dir)
 
 # Now we can safely import the plugins
 from plugins.datajack import aim_exchange
