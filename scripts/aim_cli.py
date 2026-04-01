@@ -143,8 +143,6 @@ def cmd_mail(args):
     mail_args = [args.action]
     if args.action == "send":
         mail_args.extend([args.team, args.subject, args.body])
-    elif args.action == "daemon" and getattr(args, "interval", None):
-        mail_args.extend(["--interval", str(args.interval)])
     run_script(os.path.join(hub_scripts, "aim_mail.py"), mail_args)
 
 def check_mail_silently():
@@ -179,8 +177,6 @@ def cmd_postmaster(args):
     """Executes aim_postmaster.py directly from decoupled Chalkboard origin."""
     hub_scripts = ensure_chalkboard_dependencies()
     script_args = [args.action]
-    if args.action == "daemon" and args.interval:
-        script_args.extend(["--interval", str(args.interval)])
     run_script(os.path.join(hub_scripts, "aim_postmaster.py"), script_args)
 
 def cmd_fix(args):
@@ -850,15 +846,11 @@ def main():
     
     mail_subparsers.add_parser("check", help="Fetch new Swarm emails from the Hub and compile to UNREAD_MAIL.md")
 
-    mail_daemon_parser = mail_subparsers.add_parser("daemon", help="Synthesize an invisible background fetcher to silently pull Swarm context natively")
-    mail_daemon_parser.add_argument("--interval", type=int, default=10, help="Wait parameter between native fetches (minutes)")
-
     chalkboard_parser = subparsers.add_parser("chalkboard", help="Use Natural Language to send Mail/Directives to the Swarm")
     chalkboard_parser.add_argument("prompt", help="The raw natural language sentence")
     
-    postmaster_parser = subparsers.add_parser("postmaster", help="Execute the aim_postmaster daemon to scan and escalate tags to native GitHub Issues or Moderate spam loops")
-    postmaster_parser.add_argument("action", choices=["escalate", "daemon"], help="The routing action string")
-    postmaster_parser.add_argument("--interval", type=int, default=5, help="Minutes between Moderator sweeps (Daemon mode)")
+    postmaster_parser = subparsers.add_parser("postmaster", help="Execute the aim_postmaster script to scan and escalate tags to native GitHub Issues or Moderate spam loops")
+    postmaster_parser.add_argument("action", choices=["escalate"], help="The routing action string")
 
     subparsers.add_parser("promote", help="Automate the Phase Protocol: Archive main, merge current dev branch, and cleanup")
 
