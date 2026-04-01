@@ -230,6 +230,10 @@ def execute_ollama(prompt, system_instruction, model, endpoint):
             except:
                 resp.raise_for_status()
         return resp.json().get('response', '')
+    except requests.exceptions.ConnectionError:
+        error_msg = f"\n[FATAL] Local Ollama service is unreachable at {url}. Please ensure Ollama is running.\n"
+        print(error_msg, file=sys.stderr)
+        return error_msg
     except Exception as e: return f"Ollama Error: {e}"
 
 def execute_codex(prompt, system_instruction, model):

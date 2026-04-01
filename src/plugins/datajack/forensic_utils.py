@@ -51,6 +51,9 @@ def get_embedding(text, task_type='RETRIEVAL_DOCUMENT'):
             response = requests.post(PROVIDER_ENDPOINT, json=payload, timeout=15)
             response.raise_for_status()
             return response.json().get('embedding')
+        except requests.exceptions.ConnectionError:
+            sys.stderr.write(f"\n[FATAL] Local Ollama service is unreachable at {PROVIDER_ENDPOINT}. Please ensure Ollama is running.\n")
+            return None
         except Exception as e:
             sys.stderr.write(f"Ollama Embedding Error: {e}\n")
             return None
