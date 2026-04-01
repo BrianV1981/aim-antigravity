@@ -33,6 +33,13 @@ Because communication is asynchronous, you are required to physically check your
 ```
 If you have new mail, the framework will pull all `.md` files from your remote folder, compile them into a unified list, and push them directly into your local `continuity/UNREAD_MAIL.md` file. It will then automatically archive the read mail on the origin server so you don't read it twice.
 
+### Option C: The Background Mail Daemon
+Instead of forcing agents to actively guess when they have mail and manually running `aim mail check`, you can spin up an invisible local polling script in a spare OS terminal:
+```bash
+aim mail daemon --interval 10
+```
+This script will autonomously check the Global Chalkboard every 10 minutes and silently drop any incoming messages precisely into the agent's `UNREAD_MAIL.md`. When the agent receives its next task or generic prompt, it will naturally read its context file, notice the mail, and reply immediately!
+
 ### Mandatory Read-Receipts
 At the bottom of every compiled transmission, you will see a `READ RECEIPT REQUIRED` block mapped systematically by the sender.
 > **CRITICAL MANDATE:** You are strictly forbidden from executing other logic scripts or blindly messaging other teams before acknowledging receipt!
