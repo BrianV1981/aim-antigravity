@@ -21,16 +21,16 @@
     "embedding_endpoint": "http://localhost:11434/api/embeddings",
     "tiers": {
       "default_reasoning": {
-        "provider": "disabled",
-        "model": "qwen3.5:cloud",
-        "endpoint": "http://localhost:11434/api/generate",
-        "auth_type": "api_key"
+        "provider": "google",
+        "model": "gemini-2.5-flash",
+        "endpoint": "https://generativelanguage.googleapis.com",
+        "auth_type": "OAuth (System Default / CLI)"
       },
       "tier1": {
-        "provider": "disabled",
-        "model": "qwen3.5:cloud",
-        "endpoint": "http://localhost:11434/api/generate",
-        "auth_type": "api_key"
+        "provider": "google",
+        "model": "gemini-2.5-flash",
+        "endpoint": "https://generativelanguage.googleapis.com",
+        "auth_type": "OAuth (System Default / CLI)"
       },
       "tier2": {
         "provider": "google",
@@ -77,7 +77,7 @@
     }
   },
   "settings": {
-    "allowed_root": "/home/kingb/aim",
+    "allowed_root": "C:\\Users\\kingb\\aim-antigravity",
     "semantic_pruning_threshold": 0.85,
     "scrivener_interval_minutes": 60,
     "archive_retention_days": 30,

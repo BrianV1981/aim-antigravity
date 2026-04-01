@@ -1,9 +1,9 @@
 # TUI Architecture Handoff Report
 
-> [!WARNING]
-> **[DEPRECATED / HISTORICAL]**
-> This document pertains to the legacy `aim tui` terminal wizard, which was completely deprecated in A.I.M. v2.0. 
-> Google Antigravity now handles all provider switching, health checks, and API key management natively through its UI panels. This report is preserved strictly for historical context regarding the transition.
+> [!NOTE]
+> **[HISTORICAL — Archived March 2026]**
+> This document captures a specific bug-fix session (`fix/dev-tui`) from March 24, 2026, when the TUI's Cognitive Health Check was stabilized. The TUI (`aim tui`) is active and maintained.
+> See [[TUI-Map]] for the current architecture reference.
 
 **Date:** March 24, 2026
 **Current Branch Focus:** `dev-tui` / Bug Fix Integrations

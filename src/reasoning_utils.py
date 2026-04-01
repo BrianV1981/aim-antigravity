@@ -9,9 +9,12 @@ import keyring
 # --- CONFIG BOOTSTRAP ---
 def find_aim_root():
     current = os.path.dirname(os.path.abspath(__file__))
-    while current != '/':
+    while True:
         if os.path.exists(os.path.join(current, "core/CONFIG.json")): return current
-        current = os.path.dirname(current)
+        parent = os.path.dirname(current)
+        if parent == current:  # reached filesystem root (Windows or Unix)
+            break
+        current = parent
     return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 AIM_ROOT = find_aim_root()
@@ -73,8 +76,9 @@ def execute_google(prompt, system_instruction, model, auth_type="API Key", timeo
         # to avoid recursion loops and session pollution.
         env = os.environ.copy()
         if "default_reasoning" not in brain_type:
-            bg_tmp = "/tmp/aim_background_sessions"
-            bg_config = "/tmp/aim_background_config"
+            import tempfile
+            bg_tmp = os.path.join(tempfile.gettempdir(), "aim_background_sessions")
+            bg_config = os.path.join(tempfile.gettempdir(), "aim_background_config")
             os.makedirs(bg_tmp, exist_ok=True)
             os.makedirs(bg_config, exist_ok=True)
             env["GEMINI_CLI_TMP_DIR"] = bg_tmp

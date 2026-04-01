@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.2.2] - 2026-04-01
+- Fix: Restore TUI aim_config.py (all 14 handlers, real test_provider, setup_cognitive_tier); re-enable tier1/default_reasoning in CONFIG.json; fix Windows path compat in reasoning_utils.py; restore TUI wiki pages (Closes #35)
+
+
 ## [v1.2.1] - 2026-04-01
 - Fix: Update Operator identity to Brian Vasquez with aliases BrianV1981 / @brianv1981 (Closes #30)
 - Fix: Trim GEMINI.md Section 7 to lean 3-line boot mandate; full protocol lives in HANDOFF.md (Closes #32)
