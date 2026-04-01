@@ -12,7 +12,7 @@
 | Script | Role | Status |
 |---|---|---|
 | `handoff_pulse_generator.py` | **The Strategist.** Parses the exported `.md` transcript from `Downloads/`, then executes the dual-extraction pipeline: archives to `archive/raw/`, ingests into `history/session_engram.db`, extracts last 5 turns into `CURRENT_PULSE.md`, and formats `REINCARNATION_GAMEPLAN.md`. 100% zero-token. | ✅ Active |
-| `history_scribe.py` | Converts raw JSON transcripts into clean Markdown session logs. Legacy pipeline — partially superseded by the Export-based handoff. | ⚠️ Legacy |
+| `history_scribe.py` | **The Chunker (Refactoring — Issue #26).** Being repositioned from a live daemon to an event-driven stateless chunker. New role: receives the complete exported `.md` transcript at `/reincarnate` time, segments it into N-turn chunks, and writes each chunk to `memory/hourly/` for T1 summarization. No more daemon polling. | 🔄 Refactoring |
 
 ### 1.2 Engram DB & Retrieval
 | Script | Role | Status |
