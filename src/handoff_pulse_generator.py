@@ -6,10 +6,10 @@ import glob
 from datetime import datetime
 AIM_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 try:
-    from extract_signal import extract_signal, extract_signal_from_txt, skeleton_to_markdown
+    from extract_signal import extract_signal, extract_signal_from_txt, extract_signal_from_antigravity_steps, skeleton_to_markdown
 except ImportError:
     sys.path.append(os.path.join(AIM_ROOT, "scripts"))
-    from extract_signal import extract_signal, extract_signal_from_txt, skeleton_to_markdown
+    from extract_signal import extract_signal, extract_signal_from_txt, extract_signal_from_antigravity_steps, skeleton_to_markdown
 
 # --- CONFIGURATION (Load from core/CONFIG.json) ---
 CONFIG_PATH = os.path.join(AIM_ROOT, "core/CONFIG.json")
@@ -99,50 +99,50 @@ def generate_handoff_pulse():
 
     latest_transcript = os.path.join(latest_dir, ".system_generated", "logs", "overview.txt")
     
-    if not os.path.exists(latest_transcript):
-        print(f"Handoff Generator: {latest_transcript} not physically written to disk yet. Generating generic pulse.")
-        skeleton = []
-    else:
-        try:
+    try:
+        if not os.path.exists(latest_transcript):
+            print(f"Handoff Generator: overview.txt not flushed. Executing dynamic active-state extraction from steps...")
+            skeleton = extract_signal_from_antigravity_steps(latest_dir)
+        else:
             skeleton = extract_signal_from_txt(latest_transcript)
             
-            # Write clean session artifact (Rolling Delta or Full History)
-            os.makedirs(CONTINUITY_DIR, exist_ok=True)
-            clean_path = os.path.join(CONTINUITY_DIR, "LAST_SESSION_FLIGHT_RECORDER.md")
-            
-            # Convert JSON skeleton into pure Markdown dialogue
-            session_id = os.path.basename(latest_transcript).replace('.json', '')
-            md_content = skeleton_to_markdown(skeleton, session_id)
-            
-            # Load configurable line limit, default to 0 (Full History)
-            tail_lines = CONFIG.get('settings', {}).get('handoff_context_lines', 0)
-            
-            if tail_lines > 0:
-                md_lines = md_content.splitlines()
-                if len(md_lines) > tail_lines:
-                    truncated_lines = md_lines[-tail_lines:]
-                else:
-                    truncated_lines = md_lines
-                    
-                clean_content = "# A.I.M. Session Flight Recorder (Rolling Delta)\n"
-                clean_content += f"*This is a noise-reduced flight recorder showing only the last {tail_lines} lines. NOT automatically injected into LLM context.*\n\n"
-                clean_content += '\n'.join(truncated_lines) + '\n'
-                atomic_write(clean_path, clean_content)
+        # Write clean session artifact (Rolling Delta or Full History)
+        os.makedirs(CONTINUITY_DIR, exist_ok=True)
+        clean_path = os.path.join(CONTINUITY_DIR, "LAST_SESSION_FLIGHT_RECORDER.md")
+        
+        # Convert JSON skeleton into pure Markdown dialogue
+        session_id = os.path.basename(latest_transcript).replace('.json', '') if os.path.exists(latest_transcript) else os.path.basename(latest_dir)
+        md_content = skeleton_to_markdown(skeleton, session_id)
+        
+        # Load configurable line limit, default to 0 (Full History)
+        tail_lines = CONFIG.get('settings', {}).get('handoff_context_lines', 0)
+        
+        if tail_lines > 0:
+            md_lines = md_content.splitlines()
+            if len(md_lines) > tail_lines:
+                truncated_lines = md_lines[-tail_lines:]
             else:
-                clean_content = "# A.I.M. Session Flight Recorder (Full History)\n"
-                clean_content += f"*This is a noise-reduced flight recorder showing the entire session. NOT automatically injected into LLM context.*\n\n"
-                clean_content += md_content + '\n'
-                atomic_write(clean_path, clean_content)
-                    
-            # --- PROJECT EDGE SYNTHESIS (High Fidelity) ---
-            # Capture only the last 10 turns of the filtered signal to identify the "Technical Edge"
-            # without polluting the context with the entire session history.
-            recent_skeleton = skeleton[-10:] if isinstance(skeleton, list) else skeleton
-            context_str = json.dumps(recent_skeleton, indent=2)
+                truncated_lines = md_lines
+                
+            clean_content = "# A.I.M. Session Flight Recorder (Rolling Delta)\n"
+            clean_content += f"*This is a noise-reduced flight recorder showing only the last {tail_lines} lines. NOT automatically injected into LLM context.*\n\n"
+            clean_content += '\n'.join(truncated_lines) + '\n'
+            atomic_write(clean_path, clean_content)
+        else:
+            clean_content = "# A.I.M. Session Flight Recorder (Full History)\n"
+            clean_content += f"*This is a noise-reduced flight recorder showing the entire session. NOT automatically injected into LLM context.*\n\n"
+            clean_content += md_content + '\n'
+            atomic_write(clean_path, clean_content)
+                
+        # --- PROJECT EDGE SYNTHESIS (High Fidelity) ---
+        # Capture only the last 10 turns of the filtered signal to identify the "Technical Edge"
+        # without polluting the context with the entire session history.
+        recent_skeleton = skeleton[-10:] if isinstance(skeleton, list) else skeleton
+        context_str = json.dumps(recent_skeleton, indent=2)
 
-        except Exception as e:
-            print(f"Handoff Generator: Signal extraction failure on {latest_transcript}: {e}")
-            return
+    except Exception as e:
+        print(f"Handoff Generator: Signal extraction failure on {latest_transcript}: {e}")
+        return
 
     # --- LITERALLY ZERO-API PROJECT EDGE SYNTHESIS ---
     try:
