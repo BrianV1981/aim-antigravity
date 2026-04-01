@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.2.1] - 2026-04-01
+- Fix: Redesign /init (health check + real KIs); add /sync, /synchronization, /initialization workflows; replace aim_master_directives KI with operator_profile + project_architecture (Closes #33)
+
+
 ## [v1.2.0] - 2026-03-31
 - Feature: Chalkboard NL Interface and Alias doc fix
 
