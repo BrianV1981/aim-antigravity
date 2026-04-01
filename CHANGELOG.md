@@ -3,6 +3,7 @@
 ## [v1.2.1] - 2026-04-01
 - Fix: Update Operator identity to Brian Vasquez with aliases BrianV1981 / @brianv1981 (Closes #30)
 - Fix: Trim GEMINI.md Section 7 to lean 3-line boot mandate; full protocol lives in HANDOFF.md (Closes #32)
+- Fix: Redesign /init (health check + real KIs); add /sync, /synchronization, /initialization workflows; replace aim_master_directives KI with operator_profile + project_architecture (Closes #33)
 
 
 ## [v1.2.0] - 2026-03-31
