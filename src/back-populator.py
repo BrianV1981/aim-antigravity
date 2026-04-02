@@ -12,7 +12,10 @@ CONFIG_PATH = os.path.join(AIM_ROOT, "core/CONFIG.json")
 
 TMP_CHATS_DIR = CONFIG['paths']['tmp_chats_dir']
 SUMMARIZER_PATH = os.path.join(CONFIG['paths']['hooks_dir'], "session_summarizer.py")
-VENV_PYTHON = os.path.join(AIM_ROOT, "venv/bin/python3")
+if sys.platform == "win32":
+    VENV_PYTHON = os.path.join(AIM_ROOT, "venv", "Scripts", "python.exe")
+else:
+    VENV_PYTHON = os.path.join(AIM_ROOT, "venv", "bin", "python3")
 
 def back_populate():
     """Scans the tmp folder for session JSONs and runs the summarizer on them."""

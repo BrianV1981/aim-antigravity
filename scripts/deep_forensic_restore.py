@@ -16,7 +16,13 @@ if src_dir not in sys.path: sys.path.insert(0, src_dir)
 
 from reasoning_utils import generate_reasoning, AIM_ROOT
 
-VENV_PYTHON = os.path.join(AIM_ROOT, "venv/bin/python3")
+if sys.platform == "win32":
+
+    VENV_PYTHON = os.path.join(AIM_ROOT, "venv", "Scripts", "python.exe")
+
+else:
+
+    VENV_PYTHON = os.path.join(AIM_ROOT, "venv", "bin", "python3")
 from config_utils import CONFIG
 from memory_utils import commit_proposal
 CHATS_DIR = CONFIG['paths'].get('tmp_chats_dir')
@@ -95,4 +101,8 @@ def restore():
     print("\n[SUCCESS] Total Memory Restoration Complete.")
 
 if __name__ == "__main__":
+    import sys
+    if "--help" in sys.argv or "-h" in sys.argv:
+        print("Usage: deep_forensic_restore.py\nDeep forensic restoration from transcripts.")
+        sys.exit(0)
     restore()

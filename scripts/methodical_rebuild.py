@@ -15,7 +15,10 @@ from datetime import datetime
 # --- CONFIG ---
 from config_utils import CONFIG, AIM_ROOT
 from memory_utils import commit_proposal
-VENV_PYTHON = os.path.join(AIM_ROOT, "venv/bin/python3")
+if sys.platform == "win32":
+    VENV_PYTHON = os.path.join(AIM_ROOT, "venv", "Scripts", "python.exe")
+else:
+    VENV_PYTHON = os.path.join(AIM_ROOT, "venv", "bin", "python3")
 TMP_CHATS_DIR = CONFIG['paths'].get('tmp_chats_dir')
 SUMMARIZER_PATH = os.path.join(AIM_ROOT, "hooks/tier1_hourly_summarizer.py")
 DISTILLER_PATH = os.path.join(AIM_ROOT, "src/handoff_pulse_generator.py")
@@ -94,4 +97,8 @@ def rebuild():
     print("\n[SUCCESS] Methodical rebuild complete.")
 
 if __name__ == "__main__":
+    import sys
+    if "--help" in sys.argv or "-h" in sys.argv:
+        print("Usage: methodical_rebuild.py\nMethodically rebuilds memory from transcripts.")
+        sys.exit(0)
     rebuild()

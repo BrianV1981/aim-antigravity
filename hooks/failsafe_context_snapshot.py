@@ -8,7 +8,10 @@ import subprocess
 # --- VENV BOOTSTRAP ---
 hook_dir = os.path.dirname(os.path.abspath(__file__))
 aim_root = os.path.dirname(hook_dir)
-venv_python = os.path.join(aim_root, "venv/bin/python3")
+if sys.platform == "win32":
+    venv_python = os.path.join(aim_root, "venv", "Scripts", "python.exe")
+else:
+    venv_python = os.path.join(aim_root, "venv", "bin", "python3")
 
 input_data = sys.stdin.read()
 
