@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.2.5] - 2026-04-02
+- Fix: Implement TDD Architecture Purge & Isolation (Closes #46)
+
+
 ## [v1.2.4] - 2026-04-01
 - fix: Corrected architectural pipeline extraction target tracking
 
