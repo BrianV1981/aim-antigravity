@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.2.7] - 2026-04-02
+- Fix: Port DataJack test pipeline from aim-claude (Closes #43)
+
+
 ## [v1.2.6] - 2026-04-02
 - Fix: Port aim_exchange.py from legacy WSL repository (Closes #42)
 
