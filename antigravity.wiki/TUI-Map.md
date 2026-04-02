@@ -1,22 +1,24 @@
 # A.I.M. TUI Architecture Map
 
-The **Sovereign Cockpit (TUI)** is the central control plane for the A.I.M. OS. It allows the operator to configure the cognitive routing, behavioral guardrails, and memory retention policies without manually editing JSON files.
+> 🟡 **STATUS: SUNSET / ORPHANED ARCHITECTURE**
+> *The Monolithic Sovereign Cockpit (`aim tui` / `scripts/aim_config.py`) was structurally incompatible with the Antigravity IDE workflow. It has been permanently sunset. This document serves as a historical map of the legacy configuration options, which are now managed either directly via `core/CONFIG.json` or via IDE `/sync` Knowledge Items.*
 
-The TUI is entirely executed via `scripts/aim_config.py`. Below is the technical mapping of every feature to its associated configuration file and system logic.
+The **Sovereign Cockpit (TUI)** was the central control plane for the legacy A.I.M. Linux OS. It allowed the operator to configure cognitive routing, behavioral guardrails, and memory retention policies without manually editing JSON files.
+
+Below is the technical mapping of every legacy feature to its associated configuration file (which you can now edit directly).
 
 ---
 
 ## 1. Run Cognitive Health Check (Test All)
-- **Logic:** Iterates through all 6 cognitive tiers (Primary, Harvester, Proposer, Refiner, Consolidator, Archivist) defined in `core/CONFIG.json`.
+- **Status:** Replaced by IDE `/init` Workflow health checks.
 - **Execution:** Calls `generate_reasoning("Respond with 'OK'")` in `src/reasoning_utils.py` for each active tier.
-- **Associated Files:** `core/CONFIG.json`, `src/reasoning_utils.py`, `scripts/aim_config.py`.
+- **Associated Files:** `core/CONFIG.json`, `src/reasoning_utils.py`.
 
 ## 2. Manage Secret Vault (API Keys)
-- **Logic:** Interfaces directly with the underlying Linux/macOS keyring to securely store, retrieve, or delete API credentials. 
-- **Execution:** Uses the Python `keyring` library (wrapped in `scripts/aim_vault.py`). 
-- **Associated Files:** `scripts/aim_vault.py`.
+- **Status:** Retired. Native IDE Agents manage their own API keys via the IDE Settings interface.
 
 ## 3 & 4. Configure Brain / Cognitive Pipeline (T1-T5)
+- **Status:** Edited natively in `core/CONFIG.json`.
 - **Logic:** Configures the `provider`, `model`, `endpoint`, and `auth_type` for the reasoning engine.
 - **Tiers:** 
   - `default_reasoning`: The primary brain for interactive tasks.
@@ -25,51 +27,35 @@ The TUI is entirely executed via `scripts/aim_config.py`. Below is the technical
   - `tier3`: Tier 3: Refiner
   - `tier4`: Tier 4: Weekly Consolidator
   - `tier5`: Tier 5: Archivist
-- **Associated Files:** `core/CONFIG.json`, `src/reasoning_utils.py`.
 
 ## 5. Manage MCP Server (IDE Integration)
-- **Logic:** Manages the FastMCP server for IDE integration (Cursor/VS Code).
-- **Execution:** Uses `subprocess` to launch `src/mcp_server.py`.
-- **Associated Files:** `src/mcp_server.py`, `skills/*`.
+- **Status:** FastMCP still active (`src/mcp_server.py`), but managed natively via Antigravity `run_command` tools rather than a TUI menu.
 
 ## 6. Update Operator Profile & Behavior
-- **Logic:** Asks the user for both operator identity fields and behavioral guardrails.
-- **Execution:** Rewrites `core/OPERATOR.md`, `core/OPERATOR_PROFILE.md`, and updates `GEMINI.md`.
-- **Associated Files:** `GEMINI.md`, `core/OPERATOR.md`, `core/OPERATOR_PROFILE.md`.
+- **Status:** Replaced by **Tier 3 Knowledge Items (KIs)**.
+- **Execution:** `aim_operator_profile` is synchronized effortlessly via the `/sync` slash workflow.
 
 ## 7. Update Obsidian Vault Path
-- **Logic:** Sets the absolute path to a local Obsidian Markdown vault.
-- **Execution:** Writes the path to `["settings"]["obsidian_vault_path"]` in `core/CONFIG.json`. 
+- **Status:** Edited natively in `core/CONFIG.json` under `["settings"]["obsidian_vault_path"]`.
 
 ## 8. Archive Retention
-- **Logic:** Configures how many days the system should keep raw JSON transcripts and old proposals.
-- **Execution:** Writes an integer to `["settings"]["archive_retention_days"]`.
+- **Status:** Edited natively in `core/CONFIG.json` under `["settings"]["archive_retention_days"]`.
 
 ## 9. Auto-Memory Distillation
-- **Logic:** Determines if the system should automatically condense its own memories without human intervention.
-- **Execution:** Writes the target tier (e.g., "tier5") to `["settings"]["auto_distill_tier"]`.
+- **Status:** Edited natively in `core/CONFIG.json` under `["settings"]["auto_distill_tier"]`.
 
 ## 10. Set Agent Persona (Specialty Mandate)
-- **Logic:** Injects a specialized mandate (e.g., Frontend Architect) into the top of the AI's system prompt.
-- **Associated Files:** `GEMINI.md`.
+- **Status:** Replaced by `aim_project_architecture` KI rules and direct `GEMINI.md` system prompts.
 
 ## 11. Configure Cognitive Mantra (Anti-Drift)
-- **Logic:** Configures the `cognitive_mantra.py` watchdog timer to prevent behavioral drift.
-- **Associated Files:** `core/CONFIG.json`, `hooks/cognitive_mantra.py`.
+- **Status:** Edited natively in `core/CONFIG.json`.
 
 ## 12. Configure Handoff Context Tail
-- **Logic:** Determines the maximum number of lines the Continuity Engine preserves during handoff.
-- **Special Case:** Setting to `0` enables **Full Session History** (no truncation).
-- **Associated Files:** `core/CONFIG.json`, `src/handoff_pulse_generator.py`.
+- **Status:** Handled via the `/reincarnate` IDE Slash Workflow.
 
 ## 13. Configure Waterfall Pipeline
-- **Logic:** Manages the "Consume & Clean" memory refinement hierarchy.
-- **Sub-Options:**
-    - **Tier Intervals:** Sets the wait-time (in Hours) for each of the 6 refinement tiers.
-    - **Cleanup Mode:** Toggles between `ARCHIVE` (move files to archive) and `DELETE` (hard purge) for scaffolding files consumed by the pipeline.
-- **Associated Files:** `core/CONFIG.json`, `src/memory_utils.py`.
+- **Status:** Edited natively in `core/CONFIG.json`.
+- **Logic:** Manages the "Consume & Clean" memory refinement hierarchy by editing Tier Intervals and Cleanup Mode (`ARCHIVE` vs `DELETE`).
 
 ## 14. Reincarnation Protocol
-- **Logic:** Toggles the `auto_rebirth` feature.
-- **Execution:** If enabled, A.I.M. will automatically prompt for a Gameplan and spawn a fresh terminal session when context is full.
-- **Associated Files:** `core/CONFIG.json`, `scripts/aim_reincarnate.py`.
+- **Status:** Legacy Terminal multiplexing (tmux) has been eliminated. Reincarnation is explicitly triggered via manual `/reincarnate` IDE Workflows.
