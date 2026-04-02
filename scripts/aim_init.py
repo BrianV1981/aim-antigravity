@@ -10,7 +10,7 @@ from datetime import datetime
 # --- CONFIG BOOTSTRAP ---
 def find_aim_root(start_dir):
     current = os.path.abspath(start_dir)
-    while current != '/':
+    while current != os.path.dirname(current):
         if os.path.exists(os.path.join(current, "core/CONFIG.json")): return current
         if os.path.exists(os.path.join(current, "setup.sh")): return current
         current = os.path.dirname(current)

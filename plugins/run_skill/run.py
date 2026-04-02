@@ -8,7 +8,7 @@ from pathlib import Path
 
 def find_aim_root():
     current = os.path.dirname(os.path.abspath(__file__))
-    while current != '/':
+    while current != os.path.dirname(current):
         if os.path.exists(os.path.join(current, "core/CONFIG.json")): return current
         current = os.path.dirname(current)
     return os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

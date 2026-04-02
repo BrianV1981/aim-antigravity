@@ -12,7 +12,7 @@ from rich import print as rprint
 # --- DYNAMIC ROOT DISCOVERY ---
 def find_aim_root():
     current = os.path.abspath(os.getcwd())
-    while current != '/':
+    while current != os.path.dirname(current):
         if os.path.exists(os.path.join(current, "core", "CONFIG.json")):
             return current
         current = os.path.dirname(current)
