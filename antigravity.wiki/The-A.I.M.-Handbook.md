@@ -63,7 +63,7 @@ Memory is refined through a 5-stage, self-cleaning hierarchy to prevent knowledg
 
 ### 4.1 The History Scribe (`src/history_scribe.py`)
 - **Role:** Parallel Persistence.
-- **Function:** Background process that scrubs raw JSON noise and converts sessions to Markdown.
+- **Function:** Event-driven processor that scrubs raw IDE arrays by natively parsing exported session `.md` files directly from the Windows `Downloads/` directory, rather than relying on legacy daemon JSON polling.
 - **The 2000-Line Rule:** Automatically splits massive sessions into manageable chunks to prevent file-size bloat.
 - **Search:** Full-text search across all historical sessions via `aim search-sessions`.
 

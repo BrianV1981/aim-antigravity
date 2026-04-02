@@ -17,11 +17,11 @@ A.I.M. takes a pragmatic, engineering-first approach: Deterministic Python scrip
     *   *What it is:* The replacement for monolithic terminal Python scripts. File-based Markdown instructions that the IDE Agent executes natively.
     *   *Why it is important:* It integrates cleanly into the Antigravity environment, replacing legacy Linux `aim_init.py` and `aim_config.py` setups.
 
-*   **The Cockpit / TUI (`aim_config.py`) [🟡 SUNSET]**
-    *   *Status:* Retired. The rich interactive terminal UI was structurally incompatible with IDE agent paradigms. Configuration now lives natively in Tier 3 Knowledge Items (KIs).
+*   **The Cockpit / TUI (`aim_config.py`) [🟢 PRESERVED]**
+    *   *Status:* Active. Following Commander's Intent (Issue #52), the 453-line rich interactive terminal UI was preserved as a primary configuration interface for power users, fully co-existing with IDE workflows.
 
-*   **The Background Daemon (`daemon.py`) [🔴 DECAPITATED]**
-    *   *Status:* Comatose. The persistent background process relied heavily on Linux `nohup` execution and daemon polling loops, which broke during the Windows migration (Issue #49). Transitioning to IDE-native event hooks.
+*   **The Background Daemon (`daemon.py`) [🟢 RESTORED]**
+    *   *Status:* Active. The daemon was refactored for Windows-native execution (Issue #49). It now operates as a 4-hour background state machine that dynamically checks Pytest runtimes and GitHub issues before injecting autonomic pulses into the active workspace.
 
 ## 2. The Cascading Memory Engine (Tier 5 Autonomic)
 

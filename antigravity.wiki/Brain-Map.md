@@ -24,7 +24,7 @@ This document maps the complete anatomical structure of the A.I.M. "Brain."
 *   **Function:** Hybrid RAG (Semantic Vectors + Lexical FTS5).
 
 ## 5. Eternal Recall (History Search)
-*   **Trigger:** Background scribing via `src/history_scribe.py`.
+*   **Trigger:** Event-driven native parsing of `.md` exports in the `Downloads/` folder via `src/extract_signal.py` (The Scribe).
 *   **Storage:** `archive/history/` (Markdown) and `archive/history.db` (SQLite).
 *   **Splitting:** Massive sessions are split at the 2000-line threshold.
 *   **Function:** Dedicated keyword search across the entire project history.
