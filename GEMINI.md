@@ -46,9 +46,12 @@ When you run into ANY type of question, architectural issue, or test failure, yo
 - Let the official documentation guide your fix. Do not rely on your base training weights if the documentation is available.
 - **Catastrophic Memory Crashes:** If the Node.js V8 engine crashes due to context bloat (`JavaScript heap out of memory`), execute `<CLI_NAME> crash` in a fresh terminal to autonomously extract the session signal, purge the JSON noise, and generate a clean handoff bridge without losing your place.
 
-## 7. BOOT — MANDATORY
-⛔ If `HANDOFF.md` exists in the workspace root: **READ IT IN FULL before responding to any prompt.**
-No exceptions. No skipping. The complete boot protocol and session context are inside.
+## 7. PRE-FLIGHT LOCKOUT (BOOT MANDATE)
+⛔ You are subject to a strict Pre-Flight Lockout upon boot. 
+Before you execute ANY code, modify ANY files, or respond to ANY initial prompts, you MUST:
+1. **Verify if `HANDOFF.md` exists** in the workspace root. If it does, you must **read it in full.**
+2. **Verify if `continuity/CURRENT_PULSE.md` exists.** If it does, you must **read it in full** to absorb the current sprint state.
+No exceptions. No skipping. You cannot begin your operational loop until you have processed the Commander's intent from these files.
 
 ## 8. THE SWARM POST OFFICE (MANDATORY READ-RECEIPTS)
 You are networked via the `aim-chalkboard` Global Chalkboard. When you check your incoming task load via `<CLI_NAME> mail check`, you will systematically ingest Markdown files directly into your local `continuity/UNREAD_MAIL.md`.
