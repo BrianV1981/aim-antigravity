@@ -72,7 +72,7 @@ def _parse_skill_manifest(skill_path: Path) -> dict:
     desc = content.split("**Description:**")[1].split("\n")[0].strip() if "**Description:**" in content else "No description"
     return {"name": name, "description": desc, "args": {}}
 
-def _build_sandbox_command(script_path: Path, args_dict: dict) -> list[str]:
+def _native_run(script_path: Path, args_dict: dict) -> str:
     if script_path.suffix == ".sh":
         cmd_base = ["bash", str(script_path)]
     else:
@@ -81,48 +81,19 @@ def _build_sandbox_command(script_path: Path, args_dict: dict) -> list[str]:
     if args_dict:
         cmd_base.append(json.dumps(args_dict))
 
-    return [
-        "timeout", "60s", "bwrap",
-        "--ro-bind", "/usr", "/usr",
-        "--ro-bind", "/lib", "/lib",
-        "--ro-bind-try", "/lib64", "/lib64",
-        "--ro-bind", "/bin", "/bin",
-        "--ro-bind", "/etc", "/etc",
-        "--ro-bind", "/dev", "/dev",
-        "--proc", "/proc",
-        "--tmpfs", "/tmp",
-        # Preserve the repo's real absolute path so skills can derive AIM_ROOT
-        # from __file__ and imports can resolve exactly as they do outside sandbox.
-        "--ro-bind", str(Path(AIM_ROOT)), str(Path(AIM_ROOT)),
-        # Rebind archive as writable at the same absolute path.
-        "--bind", str(ARCHIVE_DIR), str(ARCHIVE_DIR),
-        "--unshare-net", "--unshare-ipc", "--unshare-pid",
-        "--die-with-parent",
-        "--chdir", str(Path(AIM_ROOT)),
-        "--", *cmd_base
-    ]
-
-def _sandboxed_run(script_path: Path, args_dict: dict) -> str:
-    """Execute skill inside bubblewrap sandbox: read-only system, no network,
-    write access ONLY to archive/, 60s hard timeout, dies with parent."""
-    if not shutil.which("bwrap"):
-        return json.dumps({"error": "bubblewrap (bwrap) not installed. Run: sudo apt install bubblewrap (or brew/dnf equivalent)"})
-
-    bwrap_cmd = _build_sandbox_command(script_path, args_dict)
-
     try:
         result = subprocess.run(
-            bwrap_cmd,
+            cmd_base,
             capture_output=True,
             text=True,
-            timeout=65,
-            cwd=AIM_ROOT
+            timeout=60,
+            cwd=str(Path(script_path).parent)
         )
-        return result.stdout.strip() or result.stderr.strip() or "Skill completed (sandboxed)."
+        return result.stdout.strip() or result.stderr.strip() or "Skill completed."
     except subprocess.TimeoutExpired:
         return json.dumps({"error": "Skill timed out (60s limit)"})
     except Exception as e:
-        return json.dumps({"error": f"Sandbox error: {str(e)}"})
+        return json.dumps({"error": f"Execution error: {str(e)}"})
 
 @mcp.tool()
 def run_skill(skill_name: str, args_json: str = "{}") -> str:
@@ -136,7 +107,7 @@ def run_skill(skill_name: str, args_json: str = "{}") -> str:
 
     try:
         args_dict = json.loads(args_json) if args_json and args_json != "{}" else {}
-        return _sandboxed_run(script_path, args_dict)
+        return _native_run(script_path, args_dict)
     except Exception as e:
         return json.dumps({"error": str(e)})
 # ====================================================================================
