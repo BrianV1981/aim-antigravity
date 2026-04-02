@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.2.8] - 2026-04-02
+- Fix: Harden pre-flight lockout protocol in GEMINI.md (Closes #31)
+
+
 ## [v1.2.7] - 2026-04-02
 - Fix: Port DataJack test pipeline from aim-claude (Closes #43)
 
