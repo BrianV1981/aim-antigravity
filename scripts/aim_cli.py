@@ -4,6 +4,7 @@ import subprocess
 import sys
 import os
 import glob
+import signal
 import shutil
 import re
 import sqlite3
@@ -624,7 +625,10 @@ def cmd_daemon(args):
         print("--- A.I.M. AUTONOMOUS DAEMON ---")
         print("[INFO] Igniting the Heartbeat Engine...")
         # Run in background
-        proc = subprocess.Popen(["nohup", VENV_PYTHON, daemon_script], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
+        if sys.platform == "win32":
+            proc = subprocess.Popen([VENV_PYTHON, daemon_script], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, creationflags=subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.CREATE_NO_WINDOW)
+        else:
+            proc = subprocess.Popen(["nohup", VENV_PYTHON, daemon_script], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
         with open(pid_file, "w") as f:
             f.write(str(proc.pid))
         print(f"[SUCCESS] Daemon is now running in the background (PID {proc.pid}).")
@@ -634,7 +638,7 @@ def cmd_daemon(args):
             with open(pid_file, "r") as f:
                 pid = f.read().strip()
             try:
-                subprocess.run(["kill", pid], check=False)
+                os.kill(int(pid), signal.SIGTERM)
                 os.remove(pid_file)
                 print(f"[SUCCESS] Daemon (PID {pid}) terminated.")
             except Exception:
@@ -647,16 +651,29 @@ def cmd_daemon(args):
             with open(pid_file, "r") as f:
                 pid = f.read().strip()
             # Check if process actually exists
+            is_alive = False
             try:
-                os.kill(int(pid), 0)
+                if sys.platform == "win32":
+                    output = subprocess.check_output(["tasklist", "/FI", f"PID eq {pid}"], stderr=subprocess.DEVNULL).decode()
+                    is_alive = str(pid) in output
+                else:
+                    os.kill(int(pid), 0)
+                    is_alive = True
+            except OSError:
+                is_alive = False
+                
+            if is_alive:
                 print(f"[ACTIVE] Daemon is running (PID {pid}).")
                 log_file = os.path.join(BASE_DIR, "archive/daemon.log")
                 if os.path.exists(log_file):
                     print("\nLatest Pulse:")
-                    subprocess.run(["tail", "-n", "3", log_file])
-            except OSError:
+                    with open(log_file, "r") as lf:
+                        lines = lf.readlines()
+                        print("".join(lines[-3:]).strip())
+            else:
                 print("[DEAD] PID file exists but process is dead. Cleaning up.")
-                os.remove(pid_file)
+                try: os.remove(pid_file)
+                except: pass
         else:
             print("[INACTIVE] Daemon is completely offline.")
 
