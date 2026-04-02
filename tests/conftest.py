@@ -7,6 +7,12 @@ import os
 import tempfile
 import pytest
 
+# Inject root directories so pytest can import seamlessly
+aim_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(aim_root, "src"))
+sys.path.insert(0, os.path.join(aim_root, "scripts"))
+sys.path.insert(0, os.path.join(aim_root, "plugins", "run_skill"))
+
 @pytest.fixture(autouse=True)
 def _restore_reasoning_utils():
     """Restore reasoning_utils.generate_reasoning after each test."""

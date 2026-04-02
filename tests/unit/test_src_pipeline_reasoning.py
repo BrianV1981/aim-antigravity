@@ -37,6 +37,7 @@ def _build_requests_stub():
             self.response = response
 
     exc_sub.HTTPError = _HTTPError
+    exc_sub.ConnectionError = ConnectionError
     mod.exceptions = exc_sub
     return mod
 
@@ -205,7 +206,7 @@ class TestExecuteOllama(unittest.TestCase):
     def test_returns_error_on_exception(self):
         with patch(_RU_REQUESTS_POST, side_effect=ConnectionError("refused")):
             result = ru.execute_ollama('p', 's', 'm', 'http://localhost:11434/api/generate')
-        self.assertIn('Ollama Error', result)
+        self.assertIn('FATAL', result)
 
 
 # ===========================================================================

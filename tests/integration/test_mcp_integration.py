@@ -6,9 +6,8 @@ Covers:
 - search_engram and run_skill tools are defined on the loaded module
 - search_engram() returns formatted results when perform_search is mocked
 - run_skill() with a non-existent skill returns proper error JSON
-- run_skill() with a real skill name (advanced_memory_search.py) attempts _sandboxed_run
-- _build_sandbox_command produces a bwrap invocation for .py and .sh skills
-- _sandboxed_run handles bwrap absence and timeout gracefully
+- run_skill() with a real skill name (advanced_memory_search.py) attempts _native_run
+- _native_run executes Python and shell scripts gracefully and handles timeouts
 
 No real LLM, network, or subprocess calls are made.
 """
@@ -43,9 +42,8 @@ _fastmcp_mod = types.ModuleType("fastmcp")
 _fastmcp_mod.FastMCP = _fake_mcp_class
 sys.modules["fastmcp"] = _fastmcp_mod
 
-# Stub heavy deps
-for _m in ["keyring", "requests", "google", "google.genai"]:
-    sys.modules.setdefault(_m, types.ModuleType(_m))
+# Stub heavy deps cleanly inside the loader to prevent cross-test pollution
+_stubs = {m: types.ModuleType(m) for m in ["keyring", "requests", "google", "google.genai"]}
 
 AIM_SRC = str(Path(__file__).parent.parent.parent / "src")
 AIM_ROOT = str(Path(AIM_SRC).parent)
@@ -71,7 +69,8 @@ def _load_mcp_server():
     retriever_stub = types.ModuleType("retriever")
     retriever_stub.perform_search = MagicMock(return_value=[])
     with patch.dict(sys.modules, {"retriever": retriever_stub,
-                                   "config_utils": _config_stub}):
+                                   "config_utils": _config_stub,
+                                   **_stubs}):
         spec.loader.exec_module(mod)
     return mod
 
@@ -247,73 +246,44 @@ class TestRunSkillRealSkill(unittest.TestCase):
         self.assertTrue(skill_path.exists(),
                         f"Expected skill at {skill_path}")
 
-    def test_run_skill_attempts_sandboxed_run_for_existing_skill(self):
-        """run_skill() should reach _sandboxed_run when the skill file exists."""
-        with patch.object(mcp, "_sandboxed_run", return_value='{"status": "ok"}') as mock_run:
+    def test_run_skill_attempts_native_run_for_existing_skill(self):
+        """run_skill() should reach _native_run when the skill file exists."""
+        with patch.object(mcp, "_native_run", return_value='{"status": "ok"}') as mock_run:
             result = mcp.run_skill("advanced_memory_search", args_json="{}")
         mock_run.assert_called_once()
         skill_arg = mock_run.call_args[0][0]
         self.assertEqual(skill_arg.name, "advanced_memory_search.py")
 
     def test_run_skill_passes_empty_dict_for_empty_args(self):
-        with patch.object(mcp, "_sandboxed_run", return_value="ok") as mock_run:
+        with patch.object(mcp, "_native_run", return_value="ok") as mock_run:
             mcp.run_skill("advanced_memory_search", args_json="{}")
         _, args_dict = mock_run.call_args[0]
         self.assertEqual(args_dict, {})
 
     def test_run_skill_passes_parsed_args_dict(self):
-        with patch.object(mcp, "_sandboxed_run", return_value="ok") as mock_run:
+        with patch.object(mcp, "_native_run", return_value="ok") as mock_run:
             mcp.run_skill("advanced_memory_search", args_json='{"query": "test query"}')
         _, args_dict = mock_run.call_args[0]
         self.assertEqual(args_dict, {"query": "test query"})
 
-    def test_run_skill_returns_sandboxed_run_output(self):
-        with patch.object(mcp, "_sandboxed_run", return_value='{"results": []}'):
+    def test_run_skill_returns_native_run_output(self):
+        with patch.object(mcp, "_native_run", return_value='{"results": []}'):
             result = mcp.run_skill("advanced_memory_search")
         self.assertEqual(result, '{"results": []}')
 
 
 # ---------------------------------------------------------------------------
-# 5. _build_sandbox_command (Native Execution)
+# 5. _native_run (Native Execution)
 # ---------------------------------------------------------------------------
 
-class TestBuildSandboxCommand(unittest.TestCase):
-
-    def test_python_skill_uses_sys_executable(self):
-        cmd = mcp._build_sandbox_command(Path("/tmp/skill.py"), {})
-        self.assertIn(sys.executable, cmd)
-
-    def test_shell_skill_uses_bash(self):
-        cmd = mcp._build_sandbox_command(Path("/tmp/skill.sh"), {})
-        self.assertIn("bash", cmd)
-
-    def test_args_dict_serialised_to_json_string(self):
-        cmd = mcp._build_sandbox_command(Path("/tmp/skill.py"), {"key": "val"})
-        self.assertIn('{"key": "val"}', cmd)
-
-    def test_no_json_arg_when_args_dict_empty(self):
-        cmd_with = mcp._build_sandbox_command(Path("/tmp/skill.py"), {"k": "v"})
-        cmd_without = mcp._build_sandbox_command(Path("/tmp/skill.py"), {})
-        self.assertGreater(len(cmd_with), len(cmd_without))
-
-    def test_skill_path_appears_in_command(self):
-        skill = Path("/tmp/unique_skill_path.py")
-        cmd = mcp._build_sandbox_command(skill, {})
-        self.assertIn(str(skill), cmd)
-
-
-# ---------------------------------------------------------------------------
-# 6. _sandboxed_run (Native wrapper now)
-# ---------------------------------------------------------------------------
-
-class TestSandboxedRunIntegration(unittest.TestCase):
+class TestNativeRunIntegration(unittest.TestCase):
 
     def test_returns_stdout_on_success(self):
         mock_proc = MagicMock()
         mock_proc.stdout = '{"result": "success"}'
         mock_proc.stderr = ""
         with patch("subprocess.run", return_value=mock_proc):
-            result = mcp._sandboxed_run(Path("/tmp/skill.py"), {})
+            result = mcp._native_run(Path("/tmp/skill.py"), {})
         self.assertEqual(result, '{"result": "success"}')
 
     def test_falls_back_to_stderr_when_stdout_empty(self):
@@ -321,7 +291,7 @@ class TestSandboxedRunIntegration(unittest.TestCase):
         mock_proc.stdout = ""
         mock_proc.stderr = "stderr warning"
         with patch("subprocess.run", return_value=mock_proc):
-            result = mcp._sandboxed_run(Path("/tmp/skill.py"), {})
+            result = mcp._native_run(Path("/tmp/skill.py"), {})
         self.assertEqual(result, "stderr warning")
 
     def test_returns_completed_message_when_both_outputs_empty(self):
@@ -329,19 +299,19 @@ class TestSandboxedRunIntegration(unittest.TestCase):
         mock_proc.stdout = ""
         mock_proc.stderr = ""
         with patch("subprocess.run", return_value=mock_proc):
-            result = mcp._sandboxed_run(Path("/tmp/skill.py"), {})
+            result = mcp._native_run(Path("/tmp/skill.py"), {})
         self.assertIn("completed", result)
 
     def test_returns_error_json_on_timeout(self):
-        with patch("subprocess.run", side_effect=subprocess.TimeoutExpired("script", 65)):
-            result = mcp._sandboxed_run(Path("/tmp/skill.py"), {})
+        with patch("subprocess.run", side_effect=subprocess.TimeoutExpired("script", 60)):
+            result = mcp._native_run(Path("/tmp/skill.py"), {})
         data = json.loads(result)
         self.assertIn("error", data)
         self.assertIn("timed out", data["error"])
 
     def test_returns_error_json_on_os_error(self):
         with patch("subprocess.run", side_effect=OSError("permission denied")):
-            result = mcp._sandboxed_run(Path("/tmp/skill.py"), {})
+            result = mcp._native_run(Path("/tmp/skill.py"), {})
         data = json.loads(result)
         self.assertIn("error", data)
 
@@ -350,7 +320,7 @@ class TestSandboxedRunIntegration(unittest.TestCase):
         mock_proc.stdout = "done"
         mock_proc.stderr = ""
         with patch("subprocess.run", return_value=mock_proc) as mock_run:
-            mcp._sandboxed_run(Path("/tmp/skill.py"), {})
+            mcp._native_run(Path("/tmp/skill.py"), {})
         call_args = mock_run.call_args[0][0]
         self.assertIn(sys.executable, call_args)
 
