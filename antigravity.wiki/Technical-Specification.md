@@ -48,7 +48,7 @@ Compression ratios vary based on the ratio of "terminal noise" to "architectural
 *   It strips all conversational filler, tool arguments, tool results, and massive JSON structures.
 *   **The Signal Skeleton:** Leaves only the high-level intent (`role: user`) and the technical output (`role: model/gemini`). This reduces context weight by up to 85% before the LLM ever sees it.
 
-## 3. The [DataJack](The-DataJack-Protocol.md) Swarm (Knowledge Cartridges)
+## 3. The DataJack Swarm (Knowledge Cartridges)
 
 **3.1 Cartridge Format (`.engram`)**
 Standard ZIP archives containing:

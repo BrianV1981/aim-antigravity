@@ -14,7 +14,7 @@ When you build atomically, a catastrophic failure in one component cannot cause 
 
 There is a fundamental difference between how a traditional Software Engineer solves a problem and how an Atomic Architect solves a problem. 
 
-To understand why Atomic Architecture is superior—and why it ultimately leads to massive long-term savings in time, money, and infrastructure—we must look at a real-world failure that occurred during the development of the A.I.M. [Sovereign Swarm](Sovereign-Swarm-P2P.md).
+To understand why Atomic Architecture is superior—and why it ultimately leads to massive long-term savings in time, money, and infrastructure—we must look at a real-world failure that occurred during the development of the A.I.M. Sovereign Swarm.
 
 ### The Problem: Multi-Agent Networking
 We needed a way for multiple autonomous A.I.M. agents (running on different machines across the world) to talk to each other and coordinate a massive coding project, while a human watched and moderated the chat.

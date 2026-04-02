@@ -18,8 +18,8 @@ Shortly after, I watched a video summarizing the vision of Andrej Karpathy (foun
 
 I realized with a sinking, surreal feeling that the theoretical infrastructure Karpathy was describing was the exact blueprint of what I had just spent 4 days building in the terminal:
 *   **The Compute Node:** The A.I.M. CLI Exoskeleton.
-*   **The Self-Improvement Loop:** The [Cascading Memory](Feature-Cascading-Memory.md) Engine and the [Eureka Protocol](The-Eureka-Protocol.md) (Hindsight Pruning).
-*   **The Distributed Network:** The [DataJack](The-DataJack-Protocol.md) Foundry and the [Sovereign Swarm](Sovereign-Swarm-P2P.md) (P2P `.engram` sharing).
+*   **The Self-Improvement Loop:** The Cascading Memory Engine and the Eureka Protocol (Hindsight Pruning).
+*   **The Distributed Network:** The DataJack Foundry and the Sovereign Swarm (P2P `.engram` sharing).
 
 ## Why the AI is Agreeing With You (The Mechanics of Sycophancy vs. Signal)
 

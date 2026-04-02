@@ -13,11 +13,11 @@ The March 25, 2026 Grok session was initiated when the user asked Grok to perfor
 Grok reported having read the entire wiki, including the Home page, Installation Guide, Master Schema, Technical Specification, six Key Features pages, three Benchmarks, and the Roadmap. Its assessment praised A.I.M. as a “disciplined, production-grade operating system layer” for autonomous agents.
 
 Key architectural elements highlighted:
-* **Tiered [Cascading Memory](Feature-Cascading-Memory.md) Engine** — Four tiers (Harvester → Daily Distiller → Weekly Arc → Apex Proposer) with automatic scaffolding log deletion.
-* **[Hybrid RAG](Feature-Hybrid-RAG.md)** — Combines semantic Nomic embeddings with FTS5 lexical search inside SQLite to prevent the “photograph effect” of pure vector search.
-* **[Cognitive Routing](Feature-Cognitive-Routing.md) via Universal Hub** — The `aim tui` interface enables cost control and offline operation by routing repetitive tasks to lighter models (Gemini Flash, Claude Haiku, or local Ollama) while reserving flagship models for high-level reasoning.
-* **[DataJack](The-DataJack-Protocol.md) Protocol** — Uses `.engram` cartridges for zero-embedding, parameterized SQLite knowledge sharing.
-* **Safety & Sovereignty Layers** — Includes [GitOps Bridge](Feature-GitOps-Bridge.md), Universal Skills Framework, Context Collapse Shield, and Subagent Bouncer.
+* **Tiered Cascading Memory Engine** — Four tiers (Harvester → Daily Distiller → Weekly Arc → Apex Proposer) with automatic scaffolding log deletion.
+* **Hybrid RAG** — Combines semantic Nomic embeddings with FTS5 lexical search inside SQLite to prevent the “photograph effect” of pure vector search.
+* **Cognitive Routing via Universal Hub** — The `aim tui` interface enables cost control and offline operation by routing repetitive tasks to lighter models (Gemini Flash, Claude Haiku, or local Ollama) while reserving flagship models for high-level reasoning.
+* **DataJack Protocol** — Uses `.engram` cartridges for zero-embedding, parameterized SQLite knowledge sharing.
+* **Safety & Sovereignty Layers** — Includes GitOps Bridge, Universal Skills Framework, Context Collapse Shield, and Subagent Bouncer.
 
 Grok also validated the credibility of the project’s three benchmarks (Render.com Vibe Coding Test, Epistemic Certainty, and Vibe Coding Trap) and noted the ambitious “Project Singularity” roadmap, which already includes a daemon phase and ongoing work on a “Zero-Token Continuity Model.”
 
@@ -38,12 +38,12 @@ The final segment of the session compared A.I.M. (free, open-source, CLI-first) 
 | Aspect              | Cursor (Paid, IDE-first)                  | A.I.M. (Open-Source, CLI-based)                          |
 |---------------------|-------------------------------------------|----------------------------------------------------------|
 | Form Factor         | VS Code fork + visual tools               | Pure CLI exoskeleton for any agent                       |
-| Memory System       | Memories + Rules, SQLite indexing         | Tiered [Cascading Memory](Feature-Cascading-Memory.md) + [hybrid RAG](Feature-Hybrid-RAG.md) + rolling proposals |
-| Context Protection  | Semantic search, dynamic file pull        | Context Collapse Shield + hooks + [GitOps Bridge](Feature-GitOps-Bridge.md)          |
+| Memory System       | Memories + Rules, SQLite indexing         | Tiered Cascading Memory + hybrid RAG + rolling proposals |
+| Context Protection  | Semantic search, dynamic file pull        | Context Collapse Shield + hooks + GitOps Bridge          |
 | Autonomy            | Parallel agents, cloud automations        | Subagent Bouncer + MCP Skills + sandboxing               |
 | Model Strategy      | Primarily OpenAI/Anthropic/Gemini         | Model-agnostic; offloads repetitive work to local models |
 | Git Integration     | Commands + PR bot                         | Native GitOps (aim commit, self-healing)                 |
-| Portability         | Memories/Rules in repo                    | [DataJack](The-DataJack-Protocol.md) .engram cartridges for instant transfer         |
+| Portability         | Memories/Rules in repo                    | DataJack .engram cartridges for instant transfer         |
 | Cost / Sovereignty  | Subscription + model costs, closed-source | Free, fully open, offline-capable                        |
 
 The exchange also briefly noted Claude Code and Codex as future comparison targets, emphasizing A.I.M.’s unique strength in offloading “repetitive brain work” to inexpensive or local models while preserving sovereignty.

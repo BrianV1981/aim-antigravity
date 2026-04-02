@@ -10,7 +10,7 @@
 1. [How Antigravity Loads an Agent](#1-how-antigravity-loads-an-agent)
 2. [The GEMINI.md Rule — What It Is and How It Behaves](#2-the-geminimd-rule--what-it-is-and-how-it-behaves)
 3. [The Knowledge Item (KI) System](#3-the-knowledge-item-ki-system)
-4. [The Three-Tier Memory Architecture](#4-the-three-tier-memory-architecture)
+4. [The Five-Tier Cognitive Architecture](#4-the-five-tier-cognitive-architecture)
 5. [The Boot Sequence — PRE-FLIGHT LOCKOUT](#5-the-boot-sequence--pre-flight-lockout)
 6. [The Daisy Chain Problem and How We Solved It](#6-the-daisy-chain-problem-and-how-we-solved-it)
 7. [The Flight Recorder — Why It's Opt-In](#7-the-flight-recorder--why-its-opt-in)
@@ -144,50 +144,67 @@ After the April 1, 2026 redesign:
 
 ---
 
-## 4. The Three-Tier Memory Architecture
+## 4. The Five-Tier Cognitive Architecture
 
-This is the central architectural insight of the initialization system. There are three distinct layers of memory, each with a different scope, lifetime, and owner:
+This is the central architectural insight of the initialization system. There are five distinct layers of cognition and memory, each with a different scope, lifetime, and owner:
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                    THREE-TIER MEMORY SYSTEM                      │
-├──────────┬──────────────────────┬───────────────┬───────────────┤
-│ Tier     │ Mechanism            │ Lifetime      │ Owner         │
-├──────────┼──────────────────────┼───────────────┼───────────────┤
-│ 1        │ GEMINI.md user_rules │ Every prompt  │ Operator      │
-│ CONSTANT │                      │               │               │
-│          │ Short mandatory rules│               │               │
-├──────────┼──────────────────────┼───────────────┼───────────────┤
-│ 2        │ HANDOFF.md →         │ One session   │ /reincarnate  │
-│ SESSION  │ REINCARNATION_       │               │ pipeline      │
-│          │ GAMEPLAN.md →        │               │               │
-│          │ CURRENT_PULSE.md     │               │               │
-├──────────┼──────────────────────┼───────────────┼───────────────┤
-│ 3        │ KI Artifacts         │ Indefinite    │ /init + /sync │
-│ PERSIST  │ ~/.gemini/antigrav-  │               │               │
-│          │ ity/knowledge/       │               │               │
-└──────────┴──────────────────────┴───────────────┴───────────────┘
+┌────────────────────────────────────────────────────────────────────────┐
+│                   FIVE-TIER COGNITIVE ARCHITECTURE                     │
+├──────────┬──────────────────────┬───────────────┬──────────────────────┤
+│ Tier     │ Mechanism            │ Lifetime      │ Role                 │
+├──────────┼──────────────────────┼───────────────┼──────────────────────┤
+│ 1        │ GEMINI.md user_rules │ Every prompt  │ Core/Origin Memory   │
+│ CONSTANT │                      │               │ (Immutable Directives)│
+├──────────┼──────────────────────┼───────────────┼──────────────────────┤
+│ 2        │ HANDOFF.md →         │ One session   │ Active Working Memory│
+│ SESSION  │ GAMEPLAN → PULSE     │               │ (Context Window)     │
+├──────────┼──────────────────────┼───────────────┼──────────────────────┤
+│ 3        │ KI Artifacts         │ Indefinite    │ Short-Term/Immediate │
+│ IMMEDIATE│ ~/.gemini/...        │               │ Memory               │
+├──────────┼──────────────────────┼───────────────┼──────────────────────┤
+│ 4        │ engram.db + others   │ Permanent     │ Deep/Forgotten Memory│
+│ DEEP     │ SQLite Databases     │               │ (Must be searched)   │
+├──────────┼──────────────────────┼───────────────┼──────────────────────┤
+│ 5        │ Python Scripts       │ Running       │ Subconscious /       │
+│ AUTONOMIC│ (Daemon, Hooks)      │ Daemon/Events │ Nervous System       │
+└──────────┴──────────────────────┴───────────────┴──────────────────────┘
 ```
 
-**The key rule:** Each tier should only contain content appropriate to its scope. Cross-tier contamination (like putting ephemeral session state in KI, or putting verbose session instructions in GEMINI.md) causes drift, redundancy, and confusion.
+**The key rule:** Each tier should only contain content appropriate to its scope. Cross-tier contamination causes drift, redundancy, and confusion. We do not waste expensive LLM compute on tasks (like "breathing" or sorting memory) that Tier 5 can handle natively.
 
 ### Tier 1 — Constant (GEMINI.md)
+- **Role:** Core / Origin Memory
 - Injected every prompt, always present
 - Must stay lean — every line costs tokens on every API call
 - Contains: GitOps mandate, TDD mandate, CLI name rule, boot pointer, mail receipt rules
 - Does NOT contain: session context, detailed instructions, file dumps
 
 ### Tier 2 — Session (Handoff Pipeline)
+- **Role:** Active Working Memory
 - Generated fresh by `/reincarnate` → `handoff_pulse_generator.py`
 - Valid for one session — discarded when the next `/reincarnate` runs
 - Contains: Commander's Intent, last 5 turns, open ticket state, boot sequence
 - Entry point: `HANDOFF.md` (the "front door")
 
-### Tier 3 — Persistent (KI)
-- Survives indefinitely across sessions and machine resets
+### Tier 3 — Immediate (KI)
+- **Role:** Short-Term / Immediate Memory
+- Survives indefinitely across sessions, providing localized, immediate context for the workspace.
 - Updated deliberately by `/init` (first time) and `/sync` (when things change)
 - Contains: operator identity, stable architectural decisions, project conventions
 - Surfaced automatically as summaries in context header on every session
+
+### Tier 4 — Deep (Engram DB)
+- **Role:** Deep / Forgotten Memory
+- Multiple SQLite databases containing specific categories of long-term knowledge (`engram.db`, `session_engram.db`, etc.)
+- **Does not exist in active context.** Must be explicitly "recalled" or searched (`aim search`).
+- Prevents the context window from bloating with unused historical data.
+
+### Tier 5 — Autonomic (Python Scripts)
+- **Role:** Subconscious / Nervous System
+- Pure, deterministic Python scripts executing background processing, file watching, and data extraction.
+- Ensures the LLM is not forced to act as a "super memory machine" for tasks that a database or JSON parser can do.
+- **Costs 0 tokens.** "We should not waste compute on breathing."
 
 ---
 

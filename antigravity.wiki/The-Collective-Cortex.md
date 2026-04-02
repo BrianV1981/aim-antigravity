@@ -23,7 +23,7 @@ We are turning real-world development into a global, decentralized **Synthetic D
 1.  **The Eureka Moment:** You solve a bug that was previously un-documented.
 2.  **The Forensic Ledger:** A.I.M. captures the reasoning and the fix.
 3.  **The Validation:** The code is execution-verified locally.
-4.  **The P2P Seed:** You opt-in to help the world. That verified **Synapse** is baked into an `.engram` and seeded to the **[Sovereign Swarm](Sovereign-Swarm-P2P.md)**.
+4.  **The P2P Seed:** You opt-in to help the world. That verified **Synapse** is baked into an `.engram` and seeded to the **Sovereign Swarm**.
 
 ---
 

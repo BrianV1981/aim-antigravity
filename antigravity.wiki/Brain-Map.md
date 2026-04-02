@@ -21,7 +21,7 @@ This document maps the complete anatomical structure of the A.I.M. "Brain."
 ## 4. The Central Engram DB (The Subconscious)
 *   **Trigger:** Automatic re-indexing via `src/bootstrap_brain.py` and `aim ingest`.
 *   **Storage:** `archive/engram.db` (Local SQLite).
-*   **Function:** [Hybrid RAG](Feature-Hybrid-RAG.md) (Semantic Vectors + Lexical FTS5).
+*   **Function:** Hybrid RAG (Semantic Vectors + Lexical FTS5).
 
 ## 5. Eternal Recall (History Search)
 *   **Trigger:** Background scribing via `src/history_scribe.py`.

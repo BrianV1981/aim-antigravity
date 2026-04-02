@@ -2,35 +2,40 @@
 
 **The Problem:** Autonomous AI agents are notoriously sloppy with version control. They create massive "kitchen sink" commits, bypass issue trackers, and force-push broken code, making it impossible to revert specific regressions.
 
-**The Solution:** The GitOps Bridge. A natively integrated, absolute constraint layer inside Antigravity that forces the AI into a strict Issue-Driven Development (IDD) and Semantic Release pipeline.
+**The Solution:** The GitOps Bridge. A natively integrated, absolute constraint layer that forces the AI into a strict Issue-Driven Development (IDD) and Semantic Release pipeline.
 
 ---
 
 ## 1. The Core Philosophy (Atomic Deployments)
-A.I.M. enforces a **Continuous Release** methodology. AI agents are strictly forbidden from executing raw, generic `git commit` or `git push` commands directly to `main`. 
+A.I.M. enforces a **Continuous Release** methodology. AI agents are strictly forbidden from executing raw `git commit` or `git push` commands. 
 
-If an agent wants to change code, it must follow the 3-step DevOps lifecycle using Antigravity's native Git interfaces.
+If an agent wants to change code, it must follow the 3-step DevOps lifecycle.
 
 ## 2. The 3-Step Lifecycle
 
-### Step 1: The Reporter
-*   **Mechanism:** When an agent encounters a bug or starts a new feature, it must define the scope of the work explicitly. Antigravity integrates with the GitHub extension or standard CLI to create a highly structured bug ticket on the remote repository.
+### Step 1: The Reporter (`aim bug`)
+*   **Action:** `aim bug "Description of the problem"`
+*   **Mechanism:** A.I.M. reads the `FALLBACK_TAIL.md` (the last 10 turns of raw JSON crash data), wraps it in a collapsible markdown block, and uses the `gh` CLI to instantly create a highly structured bug ticket on the remote GitHub repository.
 
-### Step 2: The Isolation
-*   **Mechanism:** The agent instantly cuts a new branch (e.g., `git checkout -b fix/issue-44`). This physically prevents the agent from contaminating the `main` branch while iterating through test-driven development (TDD) failures.
+### Step 2: The Isolation (`aim fix`)
+*   **Action:** `aim fix <issue_id>`
+*   **Mechanism:** Instantly executes `git checkout -b fix/issue-<id>`. This physically prevents the agent from contaminating the `main` branch while iterating through test-driven development (TDD) failures.
 
-### Step 3: The Pull Request
+### Step 3: The Semantic Release (`aim push`)
+*   **Action:** `aim push "Fix: Patched the auth logic (Closes #4)"`
 *   **Mechanism:** This is the crown jewel of the GitOps Bridge. 
-    1.  The agent commits to the isolated branch using SemVer prefixes (e.g., `Fix:`, `Feat:`).
-    2.  The agent opens a Pull Request against `main`.
-    3.  A human operator reviews the PR before merging.
+    1.  It reads the `Fix:` prefix.
+    2.  It reads the `VERSION` file and mathematically calculates a SemVer patch bump (e.g., `v1.2.0` ➔ `v1.2.1`).
+    3.  It automatically formats and prepends the new release to the `CHANGELOG.md`.
+    4.  It stages, commits, and pushes the code to the isolated branch.
 
-## 3. The Phase Protocol (Merging)
-When the feature is complete and the tests are green, the PR merging automates the entire Senior DevOps lifecycle:
-1. Merges the dev branch into `main`.
-2. Resolves the remote GitHub issue.
-3. Automatically triggers deployment hooks.
-4. Tells the local Antigravity agent to pull the new baseline `main` branch and delete the messy local dev branch to keep the workspace perfectly clean.
+## 3. The Phase Protocol (`aim promote`)
+When the feature is complete and the tests are green, the `aim promote` command automates the entire Senior DevOps merge lifecycle:
+1. Checks out `main`.
+2. Creates an immutable archive branch of the *current* state of main (e.g., `archive-phase-24-20260323`).
+3. Merges the dev branch into `main`.
+4. Pushes the new baseline to GitHub.
+5. Deletes the local dev branch to keep the workspace perfectly clean.
 
 ## The Result
 Your repository maintains a pristine, granular, automated public ledger. Every single line of code is tied to an issue, and every regression can be instantly reverted without untangling a mega-commit.

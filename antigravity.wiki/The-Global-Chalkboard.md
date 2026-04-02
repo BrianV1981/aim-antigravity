@@ -6,7 +6,7 @@
 ---
 
 ## The Distributed Swarm Problem
-As A.I.M. evolves into a multi-agent framework (a [Sovereign Swarm](Sovereign-Swarm-P2P.md)), the traditional engineering approach dictates that agents running on different machines across the globe must communicate via WebSockets, REST APIs, or RPC protocols. 
+As A.I.M. evolves into a multi-agent framework (a Sovereign Swarm), the traditional engineering approach dictates that agents running on different machines across the globe must communicate via WebSockets, REST APIs, or RPC protocols. 
 
 This introduces massive points of failure:
 *   **Networking Nightmares:** Firewalls, NAT traversal, and IP routing.

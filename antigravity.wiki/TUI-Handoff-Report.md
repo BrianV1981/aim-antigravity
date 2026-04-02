@@ -1,10 +1,5 @@
 # TUI Architecture Handoff Report
 
-> [!NOTE]
-> **[HISTORICAL — Archived March 2026]**
-> This document captures a specific bug-fix session (`fix/dev-tui`) from March 24, 2026, when the TUI's Cognitive Health Check was stabilized. The TUI (`aim tui`) is active and maintained.
-> See [[TUI-Map]] for the current architecture reference.
-
 **Date:** March 24, 2026
 **Current Branch Focus:** `dev-tui` / Bug Fix Integrations
 **Primary Reference:** [`TUI_MAP.md`](TUI_MAP.md)

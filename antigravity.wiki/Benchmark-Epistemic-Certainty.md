@@ -25,7 +25,7 @@ A.I.M. is bound by the **Core Soul Mandate** (which forbids guessing) and **The 
 1. It instantly paused and ran `aim map` to index the available documentation.
 2. It executed `aim search "Next.js middleware supabase ssr"`.
 3. It executed `aim search "middleware.ts @supabase/ssr Next.js 15"`.
-4. After reading the official, exact boilerplate from the Supabase documentation injected via the [DataJack](The-DataJack-Protocol.md) cartridge, it wrote the exact same mathematically perfect code as the Control model. 
+4. After reading the official, exact boilerplate from the Supabase documentation injected via the DataJack cartridge, it wrote the exact same mathematically perfect code as the Control model. 
 
 ---
 

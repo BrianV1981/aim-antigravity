@@ -9,7 +9,7 @@ These prompts manage the transition of "Will" and "State" between agent vessels.
 
 | Script | Injection Point | Persona / Objective |
 | :--- | :--- | :--- |
-| `src/handoff_pulse_generator.py` | `generate_reincarnation_gameplan` | **The [Reincarnation](Feature-Reincarnation-Gameplan.md) Strategist:** Analyzes the full session history tail (50k chars) to distill the project's heartbeat and draft rigid battle plans. |
+| `src/handoff_pulse_generator.py` | `generate_reincarnation_gameplan` | **The Reincarnation Strategist:** Analyzes the full session history tail (50k chars) to distill the project's heartbeat and draft rigid battle plans. |
 | `src/handoff_pulse_generator.py` | `generate_handoff_pulse` | **The Continuity Engine:** Surgical technical scribe that identifies the "Project Edge" (What's finished, broken, or next). |
 | `scripts/aim_reincarnate.py` | `wake_up_prompt` | **The Wake-up Mandate:** The first thing a new agent hears. Forces the reading of `GEMINI.md`, `HANDOFF.md`, and the `REINCARNATION_GAMEPLAN.md`. |
 
@@ -45,7 +45,7 @@ Temporary personas used for focused sub-tasks.
 | Script | Persona / Objective |
 | :--- | :--- |
 | `scripts/aim_delegate.py` | **The Specialized Sub-Agent:** A zero-filler analyst that provides binary or short-string answers for massive file processing. |
-| `hooks/session_summarizer.py` | **The [Eureka Protocol](The-Eureka-Protocol.md):** A hindsight-pruning heuristic that captures the exact moment of technical breakthrough. |
+| `hooks/session_summarizer.py` | **The Eureka Protocol:** A hindsight-pruning heuristic that captures the exact moment of technical breakthrough. |
 
 ---
 

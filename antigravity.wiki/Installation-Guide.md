@@ -1,43 +1,75 @@
-# Getting Started with A.I.M. (Antigravity Native)
+# Getting Started with A.I.M. (Native Linux)
 
-Welcome to **Actual Intelligent Memory**, moving from a fragmented CLI script to an indestructible, Windows-native state machine.
+Welcome to **Actual Intelligent Memory**, your sovereign context layer for the Gemini CLI.
 
-## 🚀 The Seamless Deployment Manual
+## 🚀 The Sovereign Deployment Manual
 
-### 1. The IDE Engine
-Because A.I.M. v2.0 is natively integrated into Google Antigravity, you no longer need to manage Node.js, bash aliases, or Python dependency hell. Antigravity acts as the graphical exoskeleton for our Knowledge Items (KIs).
-
-1. Ensure you have the **Google Antigravity IDE** installed on your system (Windows, Mac, or Linux).
-2. Authenticate the IDE with your AI provider.
-
-### 2. A.I.M. Installation
-Simply clone the A.I.M. repository directly to your local file system.
+### 1. Environment Hardening
+Remove restricted "Snap" utilities and install native tools to ensure full system permissions.
 
 ```bash
-git clone https://github.com/BrianV1981/aim-antigravity.git
-cd aim-antigravity
+sudo snap remove curl
+sudo apt update && sudo apt install -y curl git python3-venv libfuse2t64 xdg-utils
 ```
 
-### 3. The Boot Sequence
-Open the `aim-antigravity` folder inside the Google Antigravity IDE.
+### 2. Node.js & Gemini CLI
+We use `nvm` to manage Node.js versions, ensuring we stay on v20+.
 
-In the AI chat interface, trigger the bootstrap script by typing:
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+source ~/.bashrc
+nvm install 20 && nvm use 20
+npm install -g @google/gemini-cli
 ```
-/init
+
+**🚨 CRITICAL: Log into GEMINI CLI before going any further 🚨**
+
+```bash
+gemini login
+```
+*OAuth Troubleshooting:* If `gemini login` fails to open a browser (common in WSL/Headless), use the direct API key method:
+1. Get a key from [Google AI Studio](https://aistudio.google.com/).
+2. Run `gemini --auth` and select "Use a Gemini API key".
+
+### 3. Sovereign Infrastructure
+
+**Ollama (Local Embeddings)**
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+ollama pull nomic-embed-text
 ```
 
-**What this does:**
-- The agent natively reads the `.agents/workflows/init.md` macro.
-- It parses the `GEMINI.md` master document.
-- It automatically creates the `aim_master_directives` Knowledge Item (KI) inside your local AppData directory.
-- This ensures that every future prompt you issue is physically bounded by A.I.M.'s Sovereign Memory rules.
+**Obsidian (The Vault)**
+1. Download the Obsidian `.AppImage` to your Home (`~`) folder from [obsidian.md](https://obsidian.md/).
+2. Grant execution permissions and launch:
+```bash
+chmod +x ~/Obsidian-*.AppImage
+~/Obsidian-*.AppImage --no-sandbox
+```
 
-### 4. Advanced: Background Daemons (Optional)
-If you wish to run the Tier-1 to Tier-4 memory waterfall in the background (to squash tokens while you sleep), you will need:
-*   **Python 3.10+** (For running the `aim` python scripts).
-*   **Ollama Environment** (Optional: For zero-cost local `.engram` vector embedding).
+### 4. A.I.M. Installation
+```bash
+git clone https://github.com/BrianV1981/aim.git
+cd aim
+./setup.sh
+source ~/.bashrc
+aim init
+```
 
-Most frontline developers can simply rely on Antigravity's native KI contextual window without engaging the heavy Python SQLite processing.
+### 5. Final Configuration
+Launch the interactive dashboard to set your AI providers and secure your vault.
+
+```bash
+aim tui
+```
+
+---
+
+## 🏗️ Provider Pre-requisites
+*   **Google (Cloud):** A valid Gemini API Key stored in your System Vault.
+*   **Local (Ollama):** Ollama installed and running locally with the `nomic-embed-text` model.
+*   **Codex (CLI):** `codex-cli` installed via NPM and authenticated via `codex login`.
+*   **OpenAI-Compat:** A valid endpoint URL and API Key.
 
 ---
 
