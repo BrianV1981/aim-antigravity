@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.2.6] - 2026-04-02
+- Fix: Port aim_exchange.py from legacy WSL repository (Closes #42)
+
+
 ## [v1.2.5] - 2026-04-02
 - Fix: Implement TDD Architecture Purge & Isolation (Closes #46)
 
