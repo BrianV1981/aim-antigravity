@@ -22,7 +22,10 @@ DOCS_DIR = os.path.join(BASE_DIR, "docs")
 ARCHIVE_DIR = os.path.join(BASE_DIR, "archive")
 HOOKS_DIR = os.path.join(BASE_DIR, "hooks")
 SRC_DIR = os.path.join(BASE_DIR, "src")
-VENV_PYTHON = os.path.join(BASE_DIR, "venv/bin/python3")
+if sys.platform == "win32":
+    VENV_PYTHON = os.path.join(BASE_DIR, "venv", "Scripts", "python.exe")
+else:
+    VENV_PYTHON = os.path.join(BASE_DIR, "venv", "bin", "python3")
 
 # --- INTERNAL TEMPLATES ---
 
