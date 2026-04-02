@@ -72,7 +72,8 @@ def _parse_skill_manifest(skill_path: Path) -> dict:
     desc = content.split("**Description:**")[1].split("\n")[0].strip() if "**Description:**" in content else "No description"
     return {"name": name, "description": desc, "args": {}}
 
-def _build_sandbox_command(script_path: Path, args_dict: dict) -> list[str]:
+def _native_run(script_path: Path, args_dict: dict) -> str:
+    """Execute skill natively (sandboxing removed for Antigravity Windows)."""
     if script_path.suffix == ".sh":
         cmd_base = ["bash", str(script_path)]
     else:
@@ -81,32 +82,23 @@ def _build_sandbox_command(script_path: Path, args_dict: dict) -> list[str]:
     if args_dict:
         cmd_base.append(json.dumps(args_dict))
 
-    # Removed bwrap/timeout Linux-only constructs. 
-    # Skills run natively under the IDE permissions.
-    return cmd_base
-
-def _sandboxed_run(script_path: Path, args_dict: dict) -> str:
-    """Execute skill natively (sandboxing removed for Antigravity Windows)."""
-    cmd = _build_sandbox_command(script_path, args_dict)
-
     try:
         result = subprocess.run(
-            cmd,
+            cmd_base,
             capture_output=True,
             text=True,
-            timeout=65,
-            cwd=AIM_ROOT
+            timeout=60,
+            cwd=str(Path(script_path).parent)
         )
         return result.stdout.strip() or result.stderr.strip() or "Skill completed."
     except subprocess.TimeoutExpired:
-        return json.dumps({"error": "Skill timed out (65s limit)"})
+        return json.dumps({"error": "Skill timed out (60s limit)"})
     except Exception as e:
         return json.dumps({"error": f"Execution error: {str(e)}"})
 
 @mcp.tool()
 def run_skill(skill_name: str, args_json: str = "{}") -> str:
-    """Universal skill dispatcher — NOW SANDBOXED with bubblewrap.
-    All skills run with read-only system + no network + archive-only write."""
+    """Universal skill dispatcher. Runs natively under IDE permissions."""
     script_path = SKILLS_DIR / f"{skill_name}.py"
     if not script_path.exists():
         script_path = SKILLS_DIR / f"{skill_name}.sh"
@@ -115,7 +107,7 @@ def run_skill(skill_name: str, args_json: str = "{}") -> str:
 
     try:
         args_dict = json.loads(args_json) if args_json and args_json != "{}" else {}
-        return _sandboxed_run(script_path, args_dict)
+        return _native_run(script_path, args_dict)
     except Exception as e:
         return json.dumps({"error": str(e)})
 # ====================================================================================
