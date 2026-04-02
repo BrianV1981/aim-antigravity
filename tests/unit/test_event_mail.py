@@ -20,7 +20,7 @@ class TestCheckMailSilently:
     def test_successful_mail_check(self, mock_deps, mock_run):
         """Mail check should complete without raising when hub is available."""
         from aim_cli import check_mail_silently
-        mock_deps.return_value = "/fake/hub/scripts"
+        mock_deps.return_value = "/fake/hub"
         mock_run.return_value = MagicMock(returncode=0)
 
         # Should not raise
@@ -34,8 +34,8 @@ class TestCheckMailSilently:
         """Mail check should return False on timeout, never crash."""
         import subprocess
         from aim_cli import check_mail_silently
-        mock_deps.return_value = "/fake/hub/scripts"
-        mock_run.side_effect = subprocess.TimeoutExpired(cmd="mail", timeout=10)
+        mock_deps.return_value = "/fake/hub"
+        mock_run.side_effect = subprocess.TimeoutExpired(cmd=["bash", "mail.sh", "check", "aim-antigravity"], timeout=12)
 
         result = check_mail_silently()
         assert result is False
@@ -54,7 +54,7 @@ class TestCheckMailSilently:
     def test_generic_exception_returns_gracefully(self, mock_deps, mock_run):
         """Mail check should swallow any unexpected exception."""
         from aim_cli import check_mail_silently
-        mock_deps.return_value = "/fake/hub/scripts"
+        mock_deps.return_value = "/fake/hub"
         mock_run.side_effect = Exception("Network error")
 
         result = check_mail_silently()
@@ -66,8 +66,8 @@ class TestCheckMailSilently:
         """Mail check should handle non-zero exit codes without crashing."""
         import subprocess
         from aim_cli import check_mail_silently
-        mock_deps.return_value = "/fake/hub/scripts"
-        mock_run.side_effect = subprocess.CalledProcessError(1, "mail")
+        mock_deps.return_value = "/fake/hub"
+        mock_run.side_effect = subprocess.CalledProcessError(1, ["bash", "mail.sh", "check"])
 
         result = check_mail_silently()
         assert result is False

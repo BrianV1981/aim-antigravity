@@ -121,7 +121,7 @@ def cmd_bug(args):
 
 def ensure_chalkboard_dependencies():
     """Dynamically bootstraps the aim-chalkboard Swarm Hub repository if missing."""
-    hub_dir = os.path.join(AIM_ROOT, "archive", "swarm_hub")
+    hub_dir = os.path.join(AIM_ROOT, "workspace", "aim-chalkboard")
     if not os.path.exists(hub_dir):
         print("[*] Decoupled Architecture detected. Bootstrapping aim-chalkboard logic node...")
         try:
@@ -133,30 +133,41 @@ def ensure_chalkboard_dependencies():
                 print("[ERROR] 'hub_repo' not found in CONFIG.json! Cannot acquire chalkboard routing.")
                 sys.exit(1)
             subprocess.run(["git", "clone", f"https://github.com/{hub_repo}.git", hub_dir], check=True)
+            # Ensure safe line endings locally
+            subprocess.run(["git", "config", "--local", "core.autocrlf", "false"], cwd=hub_dir)
         except Exception as e:
             print(f"[ERROR] Failed to securely bootstrap Chalkboard Logic Node: {e}")
             sys.exit(1)
     
     # Return the explicit decoupled directory path
-    return os.path.join(hub_dir, "scripts")
+    return hub_dir
 
 
 def cmd_mail(args):
-    """Executes aim_mail.py directly from decoupled Chalkboard origin."""
-    hub_scripts = ensure_chalkboard_dependencies()
-    mail_args = [args.action]
+    """Executes mail.sh directly from decoupled Chalkboard origin."""
+    hub_dir = ensure_chalkboard_dependencies()
+    cmd = ["bash", "mail.sh", args.action]
     if args.action == "send":
-        mail_args.extend([args.team, args.subject, args.body])
-    run_script(os.path.join(hub_scripts, "aim_mail.py"), mail_args)
+        cmd.extend([args.team, args.subject, args.body])
+    elif args.action == "check":
+        # The script requires the team ID, which is the repository root name
+        cmd.append(os.path.basename(AIM_ROOT))
+    
+    try:
+        subprocess.run(cmd, cwd=hub_dir)
+    except FileNotFoundError:
+        print("[ERROR] 'bash' not found in PATH. Swarm Post Office requires Git Bash or WSL.")
 
 def check_mail_silently():
     """Non-blocking event-driven mail check. Piggybacks on lifecycle events.
     Returns True if check succeeded, False on any failure. Never crashes the parent operation."""
     try:
-        hub_scripts = ensure_chalkboard_dependencies()
+        hub_dir = ensure_chalkboard_dependencies()
+        team = os.path.basename(AIM_ROOT)
         result = subprocess.run(
-            [VENV_PYTHON, os.path.join(hub_scripts, "aim_mail.py"), "check"],
-            capture_output=True, text=True, timeout=10
+            ["bash", "mail.sh", "check", team],
+            cwd=hub_dir,
+            capture_output=True, text=True, timeout=12
         )
         if result.returncode == 0:
             # Check if any mail was found by scanning stdout
