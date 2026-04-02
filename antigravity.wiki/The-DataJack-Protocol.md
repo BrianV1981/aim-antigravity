@@ -1,5 +1,8 @@
 # Architectural Design: The DataJack Protocol
-**Status:** Live — v1.7.0
+
+> 🔴 **STATUS: DECAPITATED (TARGET ARCHITECTURE)** 
+> *The underlying `aim_exchange.py` script was lost during the OS migration to Windows. This feature is currently broken in `aim-antigravity`. Restoration is tracked in Issue #42. This document serves as the target blueprint for rebuilding DataJack in the Antigravity native environment.*
+
 **Goal:** Implement a zero-compute, instant-knowledge transfer system for A.I.M., allowing operators to share massive, pre-embedded datasets (Brain Plugins) without incurring API or CPU token taxes.
 
 ---
@@ -12,7 +15,7 @@ This is a direct nod to the concept of the *Construct* training programs. Instea
 Once "jacked in," the AI instantly possesses flawless semantic recall of that subject matter.
 
 ```text
-> aim jack-in python314.engram
+> aim-antigravity jack-in python314.engram
 [1/2] Unpacking cartridge...
 [2/2] Downloading Math (Nomic Embeddings) into Subconscious...
 [SUCCESS] I know Kung Fu. (503 knowledge sessions injected in 3.1s)
@@ -23,21 +26,20 @@ An `.engram` file is simply a compressed (zipped) directory containing:
 1. **`metadata.json`:** Defines the contents (e.g., "Python 3.14 Standard Library", "Solana Smart Contract Security").
 2. **`chunks/*.jsonl`:** The Sovereign Sync files containing the raw text *and* the pre-calculated high-dimensional float arrays (Nomic Embeddings).
 
-## 3. The Workflow
+## 3. The Target Workflow (Pending Restoration)
 
 ### Extracting a Cartridge (The Operator)
 If you spend an hour indexing the official React documentation into your local database, you can extract it to share with the community:
 ```bash
-aim exchange export "React 19 Docs" --out react19.engram
+python -m src.plugins.datajack.aim_exchange export "React 19 Docs" --out react19.engram
 ```
-*Behind the scenes:* A.I.M. queries the database, isolates all fragments where the `source` matches the React docs, exports them to JSONL, and zips them into the cartridge.
+*Behind the scenes:* A.I.M. queries the Deep Memory database, isolates all fragments where the `source` matches the React docs, exports them to JSONL, and zips them into the cartridge.
 
 ### Jacking In (The Receiver)
 When another developer downloads your `react19.engram` file, they drop it into their workspace and run:
 ```bash
-aim exchange import react19.engram
+python -m src.plugins.datajack.aim_exchange import react19.engram
 ```
-*(Or, if we want to be truly cinematic, we alias the command to `aim jack-in react19.engram`)*.
 
 *Behind the scenes:* 
 1. A.I.M. unzips the cartridge.
@@ -46,4 +48,4 @@ aim exchange import react19.engram
 4. The transfer takes ~3 seconds. Zero embedding API calls are made. 
 
 ## 4. The Value Proposition
-This completely changes how AI knowledge is distributed. Instead of sharing massive raw text files and forcing every developer on Earth to waste GPU cycles embedding them, one person embeds the knowledge once, compiles the `.engram` cartridge, and shares the mathematical "memories" infinitely.
+This completely changes how AI knowledge is distributed. Instead of sharing massive raw text files and forcing every developer on Earth to waste CPU/GPU cycles embedding them, one person embeds the knowledge once, compiles the `.engram` cartridge, and shares the mathematical "memories" infinitely.
