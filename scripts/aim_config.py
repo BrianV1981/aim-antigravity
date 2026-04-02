@@ -13,13 +13,10 @@ from rich import print as rprint
 # --- DYNAMIC ROOT DISCOVERY ---
 def find_aim_root():
     current = os.path.abspath(os.getcwd())
-    while True:
+    while current != os.path.dirname(current):
         if os.path.exists(os.path.join(current, "core", "CONFIG.json")):
             return current
-        parent = os.path.dirname(current)
-        if parent == current:  # reached filesystem root (Windows or Unix)
-            break
-        current = parent
+        current = os.path.dirname(current)
     return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 AIM_ROOT = find_aim_root()

@@ -21,9 +21,9 @@ def main():
 
     print(f"Found {len(branches)} issue branches to merge.")
 
-    print("\n[1/3] Preparing main branch...")
-    subprocess.run(["git", "checkout", "main"], check=True)
-    subprocess.run(["git", "pull", "origin", "main"], check=True)
+    print("\n[1/3] Preparing master branch...")
+    subprocess.run(["git", "checkout", "master"], check=True)
+    subprocess.run(["git", "pull", "origin", "master"], check=True)
 
     failed_merges = []
     successful_merges = []
@@ -58,11 +58,11 @@ def main():
             print(f"  - {f}")
 
     if successful_merges and args.push:
-        print("\n[3/3] Pushing unified main branch to origin...")
-        subprocess.run(["git", "push", "origin", "main"], check=True)
+        print("\n[3/3] Pushing unified master branch to origin...")
+        subprocess.run(["git", "push", "origin", "master"], check=True)
         print("[SUCCESS] All patches deployed to live repository.")
     elif successful_merges:
-        print("\n[3/3] Skipped push. Run 'git push origin main' manually when ready, or use --push flag next time.")
+        print("\n[3/3] Skipped push. Run 'git push origin master' manually when ready, or use --push flag next time.")
 
 if __name__ == "__main__":
     main()
