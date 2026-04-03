@@ -38,6 +38,8 @@ def _build_requests_stub():
 
     exc_sub.HTTPError = _HTTPError
     exc_sub.ConnectionError = ConnectionError
+    exc_sub.Timeout = TimeoutError
+    exc_sub.ReadTimeout = TimeoutError
     mod.exceptions = exc_sub
     return mod
 
@@ -207,6 +209,15 @@ class TestExecuteOllama(unittest.TestCase):
         with patch(_RU_REQUESTS_POST, side_effect=ConnectionError("refused")):
             result = ru.execute_ollama('p', 's', 'm', 'http://localhost:11434/api/generate')
         self.assertIn('FATAL', result)
+
+    def test_returns_error_on_read_timeout(self):
+        """Issue #28: Ollama hangs if model inference takes too long. Must not block."""
+        req = sys.modules['requests']
+        timeout_exc = req.exceptions.ReadTimeout("Read timed out")
+        with patch(_RU_REQUESTS_POST, side_effect=timeout_exc):
+            result = ru.execute_ollama('p', 's', 'm', 'http://localhost:11434/api/generate')
+        self.assertIn('FATAL', result)
+        self.assertIn('timed out', result.lower())
 
 
 # ===========================================================================

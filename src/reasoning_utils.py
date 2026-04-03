@@ -50,7 +50,7 @@ def generate_reasoning(prompt, system_instruction="You are a helpful assistant."
     if provider == "google":
         return execute_google(prompt, system_instruction, model, auth_type, timeout, brain_type=brain_type)
     elif provider == "local" or provider == "ollama":
-        return execute_ollama(prompt, system_instruction, model, endpoint)
+        return execute_ollama(prompt, system_instruction, model, endpoint, timeout=timeout)
     elif provider == "codex-cli":
         return execute_codex(prompt, system_instruction, model)
     elif provider == "openai-compat":
@@ -214,7 +214,7 @@ def execute_anthropic(prompt, system_instruction, model):
         return resp.json()['content'][0]['text']
     except Exception as e: return f"Anthropic API Exception: {e}"
 
-def execute_ollama(prompt, system_instruction, model, endpoint):
+def execute_ollama(prompt, system_instruction, model, endpoint, timeout=60):
     """Executes reasoning via Local Ollama."""
     url = endpoint or "http://localhost:11434/api/generate"
     payload = {
@@ -223,7 +223,7 @@ def execute_ollama(prompt, system_instruction, model, endpoint):
         "stream": False
     }
     try:
-        resp = requests.post(url, json=payload, timeout=60)
+        resp = requests.post(url, json=payload, timeout=timeout)
         if resp.status_code != 200:
             try:
                 err_msg = resp.json().get('error', resp.text)
@@ -233,6 +233,10 @@ def execute_ollama(prompt, system_instruction, model, endpoint):
         return resp.json().get('response', '')
     except requests.exceptions.ConnectionError:
         error_msg = f"\n[FATAL] Local Ollama service is unreachable at {url}. Please ensure Ollama is running.\n"
+        print(error_msg, file=sys.stderr)
+        return error_msg
+    except (requests.exceptions.Timeout, requests.exceptions.ReadTimeout):
+        error_msg = f"\n[FATAL] Local Ollama timed out after {timeout}s at {url}. The model may be loading or stuck.\n"
         print(error_msg, file=sys.stderr)
         return error_msg
     except Exception as e: return f"Ollama Error: {e}"
