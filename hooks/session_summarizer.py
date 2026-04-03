@@ -204,19 +204,24 @@ def main(args):
         print(json.dumps({"decision": "skip", "reason": "interval_not_met"}))
         return
 
-    transcripts = glob.glob(os.path.join(ARCHIVE_RAW_DIR, "*.json"))
+    transcripts = glob.glob(os.path.join(ARCHIVE_RAW_DIR, "*.json")) + glob.glob(os.path.join(ARCHIVE_RAW_DIR, "*.md"))
     if not transcripts:
         print(json.dumps({"decision": "proceed", "updated": 0}))
         return
 
+    # --- EMPTY-CHECK GATE (Issue #26 Guard Rail) ---
+    hourly_files = glob.glob(os.path.join(DAILY_LOG_DIR, "*.md"))
+    if not hourly_files and not is_light_mode:
+        print("[T1] No hourly files to summarize. Skipping LLM call.")
+        print(json.dumps({"decision": "skip", "reason": "empty_hourly_gate"}))
+        return
+
     latest_transcript = max(transcripts, key=os.path.getmtime)
-    updated = 1 if process_local_transcript(latest_transcript, is_light_mode) else 0
-    
-    # Trigger history scribe for full session mirroring
-    try:
-        subprocess.run([sys.executable, os.path.join(AIM_ROOT, "src", "history_scribe.py")], 
-                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    except: pass
+    # Only process JSON transcripts through the legacy pipeline
+    if latest_transcript.endswith(".json"):
+        updated = 1 if process_local_transcript(latest_transcript, is_light_mode) else 0
+    else:
+        updated = 0
 
     print(json.dumps({"decision": "proceed", "updated": updated}))
 
