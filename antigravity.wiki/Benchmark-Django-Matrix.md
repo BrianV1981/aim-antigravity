@@ -60,9 +60,9 @@ This proves that rigid GitOps hierarchies provide a critical layer of **Predicta
 
 ## 4. Transparency: System Prompts
 To ensure full transparency and reproducibility, the exact system prompts (`GEMINI.md`) used to constrain the agents during the initial "less direct" iterations (Run 1 & 2) and the final strict TDD loop (Run 4) have been physically extracted from the raw JSON session logs and permanently preserved in the repository:
-*   [Run 1 Control Prompt](raw_logs/CONTROL_GEMINI_RUN1.md)
-*   [Run 1 Matrix Prompt](raw_logs/MATRIX_GEMINI_RUN1.md)
-*   [Run 4 Matrix Prompt (Final)](raw_logs/MATRIX_GEMINI_RUN4.md)
+*   [Run 1 Control Prompt](https://github.com/BrianV1981/aim/tree/main/docs/benchmarks)
+*   [Run 1 Matrix Prompt](https://github.com/BrianV1981/aim/tree/main/docs/benchmarks)
+*   [Run 4 Matrix Prompt (Final)](https://github.com/BrianV1981/aim/tree/main/docs/benchmarks)
 
 ---
 

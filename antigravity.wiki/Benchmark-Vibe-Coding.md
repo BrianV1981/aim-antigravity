@@ -74,4 +74,4 @@ You can recreate this exact environment and run this benchmark (or any other com
 
 *Note: A.I.M. currently requires a Linux or WSL (Ubuntu) environment and minor technical knowledge to set up (e.g., managing Node versions and Python virtual environments).*
 
-👉 **[Read the Installation Guide Here](../GETTING_STARTED.md)**
+👉 **[Read the Installation Guide Here](Installation-Guide.md)**

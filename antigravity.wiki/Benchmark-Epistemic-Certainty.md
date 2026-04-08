@@ -55,4 +55,4 @@ We don't expect you to take our word for it. The raw JSON session logs generated
 You can recreate this exact environment and run this benchmark on your own machine. 
 *Note: A.I.M. currently requires a Linux or WSL (Ubuntu) environment and minor technical knowledge to set up.*
 
-👉 **[Read the Installation Guide Here](../GETTING_STARTED.md)**
+👉 **[Read the Installation Guide Here](Installation-Guide.md)**
