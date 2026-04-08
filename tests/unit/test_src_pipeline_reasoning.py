@@ -206,7 +206,8 @@ class TestExecuteOllama(unittest.TestCase):
         self.assertIn('503', result)
 
     def test_returns_error_on_exception(self):
-        with patch(_RU_REQUESTS_POST, side_effect=ConnectionError("refused")):
+        import requests
+        with patch(_RU_REQUESTS_POST, side_effect=requests.exceptions.ConnectionError("refused")):
             result = ru.execute_ollama('p', 's', 'm', 'http://localhost:11434/api/generate')
         self.assertIn('FATAL', result)
 
