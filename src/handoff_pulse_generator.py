@@ -135,13 +135,17 @@ def generate_handoff_pulse():
         conn.close()
         print(f"      [A.I.M] Archived {len(turns)} turns to SQLite Engram.")
         
-        # --- PIPELINE 4: HISTORY SCRIBE CHUNKER (Issues #22 + #26) ---
+        # --- PIPELINE 4: SINGLE-SHOT MEMORY COMPILER (Issue #55) ---
         try:
-            from history_scribe import scribe_session
-            scribe_session(archive_path)
+            print("      [A.I.M] Engaging Single-Shot Memory Compiler...")
+            import sys
+            import os
+            sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "hooks"))
+            from session_summarizer import compile_single_shot
+            compile_single_shot(archive_path)
         except Exception as e:
-            print(f"      [A.I.M] Warning: History Scribe chunker failed ({e}). Non-blocking.")
-        
+            print(f"      [A.I.M] Warning: Single-Shot Compiler failed ({e}). Non-blocking.")
+
         # --- PIPELINE 2: ZERO-API PROJECT EDGE SYNTHESIS ---
         pulse_output = f"---\ndate: {date_str}\ntime: \"{timestamp_str}\"\ntype: handoff\n---\n\n"
         pulse_output += f"# A.I.M. Context Pulse (Zero-Token Native OS Handoff)\n\n"

@@ -51,26 +51,19 @@ def check_failsafe():
     else:
         print_status("Failsafe Hook", "PASS", f"Active (Updated {age_hours:.1f} hours ago)")
 
-def check_memory_pipeline():
-    memory_dir = os.path.join(AIM_ROOT, "memory")
+def check_single_shot_compiler():
+    memory_doc = os.path.join(AIM_ROOT, "MEMORY.md")
     
-    # Check Hourly (Tier 1)
-    hourly_files = glob.glob(os.path.join(memory_dir, "hourly/*.md"))
-    # Check Daily (Tier 2)
-    daily_files = glob.glob(os.path.join(memory_dir, "daily/*.md"))
-    
-    all_logs = hourly_files + daily_files
-    if not all_logs:
-        print_status("Memory Pipeline", "WARN", "No hourly or daily logs found. Is the agent talking?")
+    if not os.path.exists(memory_doc):
+        print_status("Single-Shot Compiler", "FAIL", "MEMORY.md is completely missing.")
         return
         
-    latest_log = max(all_logs, key=os.path.getmtime)
-    age_hours = (time.time() - os.path.getmtime(latest_log)) / 3600
+    age_hours = (time.time() - os.path.getmtime(memory_doc)) / 3600
     
     if age_hours > 48:
-        print_status("Memory Pipeline", "WARN", f"Pipeline may be stalled. Last log was {age_hours:.1f} hours ago.")
+        print_status("Single-Shot Compiler", "WARN", f"Memory stale. Last Single-Shot distillation was {age_hours:.1f} hours ago.")
     else:
-        print_status("Memory Pipeline", "PASS", f"Logs cascading normally. Newest log: {os.path.basename(latest_log)}")
+        print_status("Single-Shot Compiler", "PASS", f"Active. MEMORY.md updated {age_hours:.1f} hours ago.")
 
 def check_sync():
     sync_dir = os.path.join(AIM_ROOT, "archive/sync")
@@ -85,7 +78,7 @@ def main():
     print("\n--- A.I.M. SYSTEM HEALTH CHECK ---")
     check_db()
     check_failsafe()
-    check_memory_pipeline()
+    check_single_shot_compiler()
     check_sync()
     print("-" * 34 + "\n")
 

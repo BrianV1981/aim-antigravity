@@ -29,9 +29,9 @@ def setup_directories():
 
 def run_memory_pipeline(session_file):
     """
-    Executes the 5-Tier Memory Pipeline (Scribe -> Proposer -> Refiner -> Consolidator -> Archivist).
-    In a full production setup, this would invoke the specific tier scripts.
-    For the Transport Layer MVP, we will simulate the pipeline parsing and engram generation.
+    Executes the Single-Shot Memory Pipeline.
+    In a full production setup, this would invoke the specific compiler script.
+    For the Transport Layer MVP, we will simulate the parsing and engram generation.
     """
     print(f"\n[{datetime.now().strftime('%H:%M:%S')}] 🧠 SIGNAL DETECTED: {os.path.basename(session_file)}")
     
@@ -40,10 +40,8 @@ def run_memory_pipeline(session_file):
             session_data = json.load(f)
             
         # Simulate processing time
-        print("  -> Engaging Tier 1 (Scribe): Extracting narratives...")
-        time.sleep(1)
-        print("  -> Engaging Tier 2 (Proposer): Identifying memory deltas...")
-        time.sleep(1)
+        print("  -> Engaging Single-Shot Compiler: Distilling session context...")
+        time.sleep(2)
         
         # Generate an Engram artifact
         session_id = session_data.get('sessionId', 'unknown_session')

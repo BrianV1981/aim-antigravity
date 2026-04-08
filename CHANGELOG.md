@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.2.9] - 2026-04-08
+- Fix: Deprecate 5-tier pipeline and implement Single-shot compiler (Closes #55)
+
+
 ## [v1.2.8] - 2026-04-02
 - Fix: Harden pre-flight lockout protocol in GEMINI.md (Closes #31)
 
