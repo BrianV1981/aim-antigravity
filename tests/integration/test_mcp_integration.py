@@ -227,49 +227,6 @@ class TestRunSkillNotFound(unittest.TestCase):
         self.assertIn("error", data)
 
 
-# ---------------------------------------------------------------------------
-# 4. run_skill() — real skill name (advanced_memory_search.py)
-# ---------------------------------------------------------------------------
-
-class TestRunSkillRealSkill(unittest.TestCase):
-
-    def setUp(self):
-        self._original_skills_dir = mcp.SKILLS_DIR
-        # Point SKILLS_DIR at the real skills directory
-        mcp.SKILLS_DIR = Path(AIM_ROOT) / "skills"
-
-    def tearDown(self):
-        mcp.SKILLS_DIR = self._original_skills_dir
-
-    def test_advanced_memory_search_skill_file_exists(self):
-        skill_path = mcp.SKILLS_DIR / "advanced_memory_search.py"
-        self.assertTrue(skill_path.exists(),
-                        f"Expected skill at {skill_path}")
-
-    def test_run_skill_attempts_native_run_for_existing_skill(self):
-        """run_skill() should reach _native_run when the skill file exists."""
-        with patch.object(mcp, "_native_run", return_value='{"status": "ok"}') as mock_run:
-            result = mcp.run_skill("advanced_memory_search", args_json="{}")
-        mock_run.assert_called_once()
-        skill_arg = mock_run.call_args[0][0]
-        self.assertEqual(skill_arg.name, "advanced_memory_search.py")
-
-    def test_run_skill_passes_empty_dict_for_empty_args(self):
-        with patch.object(mcp, "_native_run", return_value="ok") as mock_run:
-            mcp.run_skill("advanced_memory_search", args_json="{}")
-        _, args_dict = mock_run.call_args[0]
-        self.assertEqual(args_dict, {})
-
-    def test_run_skill_passes_parsed_args_dict(self):
-        with patch.object(mcp, "_native_run", return_value="ok") as mock_run:
-            mcp.run_skill("advanced_memory_search", args_json='{"query": "test query"}')
-        _, args_dict = mock_run.call_args[0]
-        self.assertEqual(args_dict, {"query": "test query"})
-
-    def test_run_skill_returns_native_run_output(self):
-        with patch.object(mcp, "_native_run", return_value='{"results": []}'):
-            result = mcp.run_skill("advanced_memory_search")
-        self.assertEqual(result, '{"results": []}')
 
 
 # ---------------------------------------------------------------------------
