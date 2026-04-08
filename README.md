@@ -13,6 +13,7 @@
 *   **The Zero-Token Python Engine (The Autonomic Layer):** Deterministic Python scripts parse raw IDE markdown exports into a clean "Signal Skeleton," stripping layout noise and reducing token weight before the LLM ever touches the data.
 *   **The Federated Brain (Archipelago Model):** Eliminates database bottlenecks by segregating memory across purpose-built SQLite databases (`project_core.db`, `global_skills.db`, `datajack_library.db`).
 *   **Strict GitOps Bridge (Atomic Deployments):** Forces agents to use `aim-antigravity fix <id>` and `aim-antigravity push`. Agents are instructed never to commit directly to `main`, ensuring every change is isolated and test-driven.
+*   **Autonomous Intelligence (GitHub Scraping):** Integrates directly with the GitOps lifecycle, querying the active repository to automatically assemble `MORNING_REPORT.md` and `ISSUE_TRACKER.md` on boot, ensuring incoming agents never have to guess their tasks.
 *   **The DataJack Protocol (.engram Cartridges):** Package thousands of pages of documentation into pre-vectorized `.engram` files.
 *   **Reincarnation & Crash Recovery:** Run `/reincarnate` via the Antigravity workflow hook to perform an automated context handoff to a fresh agent, bypassing extreme context windows.
 *   **Universal IDE Support:** Specifically tuned to run within the Antigravity IDE, integrating heavily into the local project file system.

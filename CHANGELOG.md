@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.3.0] - 2026-04-08
+- Feature: Phase 2 Autonomous Intelligence - Issue Tracker Sync and Morning Report (Closes #56, Closes #59)
+
+
 ## [v1.2.9] - 2026-04-08
 - Fix: Deprecate 5-tier pipeline and implement Single-shot compiler (Closes #55)
 

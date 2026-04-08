@@ -139,7 +139,6 @@ def generate_handoff_pulse():
         try:
             print("      [A.I.M] Engaging Single-Shot Memory Compiler...")
             import sys
-            import os
             sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "hooks"))
             from session_summarizer import compile_single_shot
             compile_single_shot(archive_path)
@@ -161,6 +160,15 @@ def generate_handoff_pulse():
         pulse_path = os.path.join(CONTINUITY_DIR, "CURRENT_PULSE.md")
         atomic_write(pulse_path, pulse_output)
             
+        # Phase 38: Autonomous Intelligence (Issue #56) - Sync Active GitHub Issues
+        print("      [A.I.M] Synchronizing Issue Tracker context...")
+        try:
+            tracker_script = os.path.join(AIM_ROOT, "scripts", "sync_issue_tracker.py")
+            subprocess.run(["python", tracker_script], check=True)
+            print("      [A.I.M] Local ISSUE_TRACKER.md updated.")
+        except Exception as e:
+            print(f"      [A.I.M] Warning: Could not sync issues ({e}).")
+
         # Phase 39: Context Preemption Fix (The Double-Bind Handoff)
         handoff_path = os.path.join(AIM_ROOT, "HANDOFF.md")
         handoff_content = f"""# A.I.M. Continuity Handoff

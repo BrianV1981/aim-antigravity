@@ -22,10 +22,13 @@ The Python pipeline writes `REINCARNATION_GAMEPLAN.md` from the Commander's Inte
 - **Content:** Explicit, rigid directives for the next agent (e.g., "1. Fix the SQL trigger in Tier 5. 2. Verify with pytest. 3. Do not refactor the CLI.")
 - **Benefit:** Bypasses the need for the new agent to analyze the previous agent's conversational drift.
 
-### 1.3 The Context Pulse
+### 1.3 The Context Pulse & Issue Sync
 Simultaneously, the pipeline creates `CURRENT_PULSE.md`.
 - **Function:** Extracts the **last 5 conversational turns** from the exported transcript — the immediate technical "Edge" of the session.
 - **Filtering:** Pure Python string parsing on the exported `.md` file. Zero API cost.
+
+**Autonomous Sync:** The `handoff_pulse_generator.py` uses the `sync_issue_tracker.py` tool to silently pull the active GitHub tickets into `continuity/ISSUE_TRACKER.md`. This gives the reincarnated agent a flawless view of what is natively assigned to it.
+
 
 ### 1.4 The Flight Recorder
 The full exported `.md` transcript is copied directly to `continuity/LAST_SESSION_FLIGHT_RECORDER.md`.
@@ -57,7 +60,8 @@ When the new agent boots in a fresh Antigravity chat window, it is governed by a
 1.  **Read `GEMINI.md`**: Acknowledge core constraints and GitOps rules (auto-loaded via KI system).
 2.  **Read `continuity/REINCARNATION_GAMEPLAN.md`**: Ingest immediate executive directives (The "Will").
 3.  **Read `continuity/CURRENT_PULSE.md`**: Locate the current technical edge (last 5 turns).
-4.  **(Optional) Read `continuity/LAST_SESSION_FLIGHT_RECORDER.md`**: Only if the Gameplan or Operator requires forensic recall.
+4.  **Read `continuity/ISSUE_TRACKER.md`**: Locate all Git-level tickets and assignments.
+5.  **(Optional) Morning Report**: The agent may fire `/morning` (via `hooks/morning_report.py`) to automatically generate and ingest `MORNING_REPORT.md` containing Git branch status, MEMORY.md deltas, and the tracker inside one briefing.
 
 This sequence ensures that the fresh agent achieves **Epistemic Certainty** before taking its first action.
 
