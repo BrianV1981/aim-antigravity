@@ -7,3 +7,5 @@ foundry/
 archive/
 *.db
 *Zone.Identifier
+*.py[cod]
+history/*.db

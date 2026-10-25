@@ -1159,21 +1159,21 @@ Point me to the original repo and I'll go read it before we touch anything.
 
 Let me map it out first, then go straight to the key files:
 
-*Listed directory [aim](file://wsl.localhost/Ubuntu/home/kingb/aim) *
+*Listed directory [aim](file://wsl.localhost/Ubuntu~/aim) *
 
-*Listed directory [scripts](file://wsl.localhost/Ubuntu/home/kingb/aim/scripts) *
+*Listed directory [scripts](file://wsl.localhost/Ubuntu~/aim/scripts) *
 
-*Viewed [aim_config.py](file://wsl.localhost/Ubuntu/home/kingb/aim/scripts/aim_config.py) *
+*Viewed [aim_config.py](file://wsl.localhost/Ubuntu~/aim/scripts/aim_config.py) *
 
 ### Planner Response
 
 The `aim_config.py` is byte-for-byte identical to the antigravity version — the stub was already there. The real logic lived in `reasoning_utils.py`. Let me check that and the vault:
 
-*Viewed [aim_vault.py](file://wsl.localhost/Ubuntu/home/kingb/aim/scripts/aim_vault.py) *
+*Viewed [aim_vault.py](file://wsl.localhost/Ubuntu~/aim/scripts/aim_vault.py) *
 
-*Listed directory [src](file://wsl.localhost/Ubuntu/home/kingb/aim/src) *
+*Listed directory [src](file://wsl.localhost/Ubuntu~/aim/src) *
 
-*Viewed [reasoning_utils.py](file://wsl.localhost/Ubuntu/home/kingb/aim/src/reasoning_utils.py) *
+*Viewed [reasoning_utils.py](file://wsl.localhost/Ubuntu~/aim/src/reasoning_utils.py) *
 
 ### Planner Response
 
@@ -1227,7 +1227,7 @@ lets repipe the TUI, Im not going to add another layer of complexity with a new 
 
 Good call. Let me do the research first — I need to see the full damage across all the memory pipeline files before writing a plan:
 
-*Listed directory [hooks](file://wsl.localhost/Ubuntu/home/kingb/aim/hooks) *
+*Listed directory [hooks](file://wsl.localhost/Ubuntu~/aim/hooks) *
 
 *Listed directory [hooks](file:///c:/Users/kingb/aim-antigravity/hooks) *
 
@@ -1348,7 +1348,7 @@ Both import clean. Push:
 |---|---|---|
 | `default_reasoning.provider` | `"disabled"` | `"google"` / gemini-2.5-flash / OAuth |
 | `tier1.provider` | `"disabled"` | `"google"` / gemini-2.5-flash / OAuth |
-| `allowed_root` | `/home/kingb/aim` (WSL) | `C:\Users\kingb\aim-antigravity` |
+| `allowed_root` | `~/aim` (WSL) | `C:\Users\kingb\aim-antigravity` |
 
 ### `src/reasoning_utils.py`
 - `find_aim_root()` — Windows-compatible root detection
@@ -1372,13 +1372,13 @@ I would like for you to review this testing suite for the aim-claude project and
 
 *User accepted the command `$env:PYTHONPATH="src;scripts"; python -m pytest tests/ --ignore=tests/test_datajack.py -v`*
 
-*Listed directory [tests](file://wsl.localhost/Ubuntu/home/kingb/aim-claude/tests) *
+*Listed directory [tests](file://wsl.localhost/Ubuntu~/aim-claude/tests) *
 
-*Listed directory [unit](file://wsl.localhost/Ubuntu/home/kingb/aim-claude/tests/unit) *
+*Listed directory [unit](file://wsl.localhost/Ubuntu~/aim-claude/tests/unit) *
 
-*Listed directory [integration](file://wsl.localhost/Ubuntu/home/kingb/aim-claude/tests/integration) *
+*Listed directory [integration](file://wsl.localhost/Ubuntu~/aim-claude/tests/integration) *
 
-*Listed directory [e2e](file://wsl.localhost/Ubuntu/home/kingb/aim-claude/tests/e2e) *
+*Listed directory [e2e](file://wsl.localhost/Ubuntu~/aim-claude/tests/e2e) *
 
 *Edited relevant file*
 
@@ -1386,7 +1386,7 @@ I would like for you to review this testing suite for the aim-claude project and
 
 I ran a check on the `aim-antigravity` testing suite to verify our TUI restoration, and out of 59 tests, 46 passed and 13 failed. The failures weren't related to the TUI (the new `aim_config` passes syntax and validation checks). Instead, the failures are mostly caused by the migration from Linux to Windows:
 - The sandbox tests fail because they look for `bwrap` (Bubblewrap), which doesn't exist on Windows.
-- Some tests look for hardcoded Unix paths (`/home/kingb/...`) that crash on `C:\`.
+- Some tests look for hardcoded Unix paths (`~/...`) that crash on `C:\`.
 - Others test legacy CLI commands (like `cmd_tokens`) that were removed.
 
 I then went over to `\\wsl.localhost\Ubuntu\home\kingb\aim-claude\tests` and mapped it out. The `aim-claude` test suite is massive and incredibly well-architected. It isn't a single flat directory like `aim-antigravity`; it's split cleanly into three tiers:
@@ -1412,13 +1412,13 @@ Before we start tearing into the `tests` directory, I have three quick questions
 
 *User accepted the command `Move-Item tests\test_*.py tests\unit\`*
 
-*Viewed [conftest.py](file://wsl.localhost/Ubuntu/home/kingb/aim-claude/tests/conftest.py) *
+*Viewed [conftest.py](file://wsl.localhost/Ubuntu~/aim-claude/tests/conftest.py) *
 
 *Edited relevant file*
 
 *Edited relevant file*
 
-*Viewed [test_src_pipeline_reasoning.py](file://wsl.localhost/Ubuntu/home/kingb/aim-claude/tests/unit/test_src_pipeline_reasoning.py) *
+*Viewed [test_src_pipeline_reasoning.py](file://wsl.localhost/Ubuntu~/aim-claude/tests/unit/test_src_pipeline_reasoning.py) *
 
 *User accepted the command `Copy-Item \\wsl.localhost\Ubuntu\home\kingb\aim-claude\tests\unit\test_src_pipeline_reasoning.py -Destination tests\unit\ -Force`*
 
@@ -1438,7 +1438,7 @@ Before we start tearing into the `tests` directory, I have three quick questions
 
 *Edited relevant file*
 
-*Viewed [test_mcp_integration.py](file://wsl.localhost/Ubuntu/home/kingb/aim-claude/tests/integration/test_mcp_integration.py) *
+*Viewed [test_mcp_integration.py](file://wsl.localhost/Ubuntu~/aim-claude/tests/integration/test_mcp_integration.py) *
 
 *Viewed [mcp_server.py](file:///c:/Users/kingb/aim-antigravity/src/mcp_server.py) *
 

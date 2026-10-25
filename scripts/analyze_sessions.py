@@ -57,9 +57,9 @@ def analyze_file(file_path):
             last_user_ts = None
 
 files = [
-    '/home/kingb/aim/archive/raw/session-2026-03-28T22-45-a03174d1.json',
-    '/home/kingb/aim/archive/raw/session-2026-03-28T06-41-6e8b78d8.json',
-    '/home/kingb/aim/archive/raw/session-2026-03-28T18-13-ff8aece5.json'
+    '~/aim/archive/raw/session-2026-03-28T22-45-a03174d1.json',
+    '~/aim/archive/raw/session-2026-03-28T06-41-6e8b78d8.json',
+    '~/aim/archive/raw/session-2026-03-28T18-13-ff8aece5.json'
 ]
 
 for f in files:
